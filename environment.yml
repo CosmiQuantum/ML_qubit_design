@@ -1,0 +1,24 @@
+name: cryo-modelling-env
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - nodejs
+  - jupyterlab
+  - jupyterlab-git
+  - jsonschema-with-format-nongpl
+  - pandas
+  - pydot
+  - graphviz
+  - scikit-learn
+  - matplotlib
+  - tensorflow-cpu==2.11.1
+  - tensorflow-datasets==4.8.3
+  - webcolors
+  - widgetsnbextension==3.6.0
+  - pip
+    #- pip:
+    #    - hls4ml[profiling]==0.7.1
+    #    - qkeras==0.9.0
+    #    - conifer==0.2b0
+
