@@ -1,4 +1,4 @@
-name: cryo-modelling-env
+name: qubit-design-env
 channels:
   - conda-forge
 dependencies:
