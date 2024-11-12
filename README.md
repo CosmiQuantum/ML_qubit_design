@@ -19,6 +19,6 @@ After cloning, unzip the "data_mc_data.zip" file which cointains all of the trai
 To open your JupyterLab and then the notebooks:
 
 ```
-conda activate cryo-modelling-env
+conda activate qubit-design-env
 jupyter-lab
 ```
