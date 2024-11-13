@@ -1,2 +1,3 @@
 data/*
 hyper_tuning/*
+model/*.h5
