@@ -2,7 +2,7 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
-#MYSTIC_MC=False
+MYSTIC_MC=False
 
 # Choose a parameter to train the model for (now we are training on all params, so just pass 'iv')
 PARAM='iv'
