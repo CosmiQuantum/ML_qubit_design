@@ -1,0 +1,5 @@
+data_param,data_augmentation,data_x_scaled, data_y_scaled,model_shape,test_loss,train_loss,train_dropout_rate,train_early_stop_patience,train_batch_size,train_val_split,lr_initial,lr_decay_step,lr_decay_rate,lr_stair_case
+iv,True,mlp_2_3300_200_4600_1700_45,0.023636670783162117,mean_squared_error,0.4,50,32,0.2,0.0014558,100,0.99,False
+iv,True,mlp_2_3300_200_4600_1700_45,0.023636670783162117,mean_squared_error,0.4,50,32,0.2,0.0014558,100,0.99,False
+iv,True,mlp_2_3300_200_4600_1700_45,0.023636670783162117,mean_squared_error,0.4,50,32,0.2,0.0014558,100,0.99,False
+iv,True,mlp_2_3300_200_4600_1700_45,0.023636670783162117,mean_squared_error,0.4,50,32,0.2,0.0014558,100,0.99,False
