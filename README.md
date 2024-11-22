@@ -26,3 +26,9 @@ To open your JupyterLab and then the notebooks:
 conda activate qubit-design-env
 jupyter-lab
 ```
+## ToDo
+- Update with reccomendations from Giuseppe to reduce randomness and introduce more determinicity into training
+- Make third set of scripts that take the "X" values and map to the basic "Top_level_X" values
+- Try to find other equations to map from "X" to "Top_level_X"
+- Get Simulator pipeline set up to take predicted "y" values to "X_2.0" values
+
