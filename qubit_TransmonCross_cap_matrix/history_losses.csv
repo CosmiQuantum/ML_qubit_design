@@ -1,0 +1,3 @@
+data_augmentation,model_shape,encoding_type,test_loss,train_loss,train_dropout_rate,train_early_stop_patience,train_batch_size,train_val_split,lr_initial,lr_decay_step,lr_decay_rate,lr_stair_case
+True,mlp_6_2500_300_4000_2700_29,One Hot,0.007091687526553869,mean_squared_error,0.4,50,32,0.15/0.15,0.00091204,100,0.99,False
+True,mlp_6_2500_300_4000_2700_29,Linear,0.007205532863736153,mean_squared_error,0.4,50,32,0.15/0.15,0.00091204,100,0.99,False
