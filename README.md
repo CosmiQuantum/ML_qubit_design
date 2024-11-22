@@ -14,7 +14,7 @@ See the documentation in the [data](data) directory.
 
 Below is the desired flow for the project:
 
-[Desired Flow](images/desired_flow.png)
+![Desired Flow](desired_flow.png)
 
 ## Quick Start
 
