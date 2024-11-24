@@ -26,6 +26,10 @@ To open your JupyterLab and then the notebooks:
 conda activate qubit-design-env
 jupyter-lab
 ```
+
+## Large Files
+To back up models that are to large for github, I use the drive [here](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing). Please email olivias@fnal.gov if you can't access it for some reason.
+
 ## ToDo
 - Update with reccomendations from Giuseppe to reduce randomness and introduce more determinicity into training
 - Make third set of scripts that take the "X" values and map to the basic "Top_level_X" values
