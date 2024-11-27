@@ -30,6 +30,12 @@ jupyter-lab
 ## Large Files
 To back up models that are to large for github, I use the drive [here](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing). Please email olivias@fnal.gov if you can't access it for some reason.
 
+## Completed
+- Three models have been trained with optimized hyperparameters from keras-tuner, each model predicting Qiskit metal parameters for various parts of a transmon cross chip/resonator design
+- Different encoding values were tested and optimized for the categorical y parameters in Qiskit Metal
+- Different scaling techniques were implemented, where both X and Y are scaled
+- Training and validation sets were explicitly seperated
+
 ## ToDo
 - Update with reccomendations from Giuseppe to reduce randomness and introduce more determinicity into training
 - Make third set of scripts that take the "X" values and map to the basic "Top_level_X" values
