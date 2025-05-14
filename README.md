@@ -26,14 +26,20 @@ To back up models that are to large for github, I use the drive [here](https://d
 
 ## Structure
 The following three folders contain scripts to use Machine Learning to predict Qiskit design parameters based on target hamiltonian values for each specified design part:
-*model_predict_cavity_claw_RouteMeander_eigenmode*
-*model_predict_coupler_NCap_cap_matrix*
-*model_predict_qubit_TransmonCross_cap_matrix*
 
-Within each folder there are three scripts:
-*ml_00_data_analysis*:loads the data and parses it into a format to use in the next script
-*ml_01_train_keras*: Trains the model using an MLP
-*ml_hyperparameter_search_analysis*: provides plots to visualize the hyperparameter search, so the user can easily see the best values
+- *model_predict_cavity_claw_RouteMeander_eigenmode*
+
+- *model_predict_coupler_NCap_cap_matrix*
+
+- *model_predict_qubit_TransmonCross_cap_matrix*
+
+### Within each folder there are three scripts:
+
+- *ml_00_data_analysis*:loads the data and parses it into a format to use in the next script
+
+- *ml_01_train_keras*: Trains the model using an MLP
+
+- *ml_hyperparameter_search_analysis*: provides plots to visualize the hyperparameter search, so the user can easily see the best values
 
 ## Completed
 - Three models have been trained with optimized hyperparameters from keras-tuner, each model predicting Qiskit metal parameters for various parts of a transmon cross chip/resonator design
