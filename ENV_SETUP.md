@@ -1,4 +1,5 @@
 # Environment setup
+(From Giuseppe DiGuglielmo)
 
 ## Python
 
