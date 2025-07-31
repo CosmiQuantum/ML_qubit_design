@@ -1,5 +1,10 @@
 # ML based Qubit Design
 
+Contributors:
+- Olivia Seidel (UT Arlington/Fermilab)
+- Sara Sussman (Fermilab)
+- Giuseppe Di Guglielmo (Fermilab)
+
 ## Environment Setup
 
 Do this first. See the [ENV_SETUP](ENV_SETUP.md) documentation.
