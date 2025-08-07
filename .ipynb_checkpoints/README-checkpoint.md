@@ -1,14 +1,13 @@
 # ML based Qubit Design
 
+Contributors:
+- Olivia Seidel (UT Arlington/Fermilab)
+- Sara Sussman (Fermilab)
+- Giuseppe Di Guglielmo (Fermilab)
+
 ## Environment Setup
 
 Do this first. See the [ENV_SETUP](ENV_SETUP.md) documentation.
-
-## Data Setup
-
-Do this second :-) 
-
-See the documentation in the [data](data) directory.
 
 ## Quick Start
 
@@ -22,7 +21,12 @@ jupyter-lab
 ```
 
 ## Large Files
-To back up models that are to large for github, I use the drive [here](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing). Please email olivias@fnal.gov if you can't access it for some reason.
+
+Some model checkpoints and intermediate datasets are too big for GitHub. You can grab everything you need from this Google Drive folder **[here](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing)**.
+
+The folder contains three directories—simply copy them into the root of your cloned repo. They’re already in `.gitignore`, so you won’t accidentally commit them, and you can dive straight into the notebooks without rerunning Keras Tuner or the data-processing steps.
+
+If you have any access issues please send me a quick note at **olivias@fnal.gov**.
 
 ## Structure
 The following three folders contain scripts to use Machine Learning to predict Qiskit design parameters based on target hamiltonian values for each specified design part:
@@ -33,13 +37,16 @@ The following three folders contain scripts to use Machine Learning to predict Q
 
 - *model_predict_qubit_TransmonCross_cap_matrix*
 
-### Within each folder there are three scripts:
+## Within each folder there are three scripts:
 
 - *ml_00_data_analysis*:loads the data and parses it into a format to use in the next script
 
 - *ml_01_train_keras*: Trains the model using an MLP
 
 - *ml_hyperparameter_search_analysis*: provides plots to visualize the hyperparameter search, so the user can easily see the best values
+
+## Reccomended optimization strategy:
+In the *parameters.py* file start off with KERAS_TUNER=True, and after doing an automated hyperparameter search, grab the best hyperparameter values and update the *parameters.py* file. Then rerun with KERAS_TUNER=False to see how the model learns over epoch number.
 
 ## Completed
 - Three models have been trained with optimized hyperparameters from keras-tuner, each model predicting Qiskit metal parameters for various parts of a transmon cross chip/resonator design
