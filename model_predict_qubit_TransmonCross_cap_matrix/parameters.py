@@ -2,7 +2,7 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
-KERAS_TUNER = False
+KERAS_TUNER = True
 KERAS_TUNER_TRIALS = 30
 KERAS_DIR = 'keras'
 

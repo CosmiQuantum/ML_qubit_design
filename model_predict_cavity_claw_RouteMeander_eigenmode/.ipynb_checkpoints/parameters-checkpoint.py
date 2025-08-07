@@ -2,8 +2,8 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
-KERAS_TUNER = False
-KERAS_TUNER_TRIALS = 2
+KERAS_TUNER = True
+KERAS_TUNER_TRIALS = 20
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'Try Both' # need to pass 'One Hot' or 'Linear' or 'Try Both'
