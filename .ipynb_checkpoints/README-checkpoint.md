@@ -25,6 +25,18 @@ This repo has tools/options to experiment with different configurations of a Mul
 
 Do this first. See the [ENV_SETUP](ENV_SETUP.md) documentation.
 
+##  Fermilab Elastic Analysis Facility (EAF) setup
+A GPU is reccomended. If you have a Fermilab services account, you can use it to run jupyter notebooks on the EAF using the following instructions:
+
+1. Navigate to [https://eafdocs.fnal.gov/master/index.html](https://eafdocs.fnal.gov/master/index.html) and sign in with your credentials
+2. Follow the three steps under **Quickstart**. When navigating to the link in step two, enter your credentials again
+3. Click on 'Add New Server'
+4. Scroll to the bottom of server options and chose the one that says "Fermilab generic notebooks"
+5. Select the middle of the three options to choose a GPU, and from the drop down menue chose the largest slot
+6. Clone the repo there
+
+Please feel free to contribute instructions if you use a GPU elsewhere.
+
 ## Quick Start
 
 If you have set up the environment and data, then move to the data analysis notebook (`00_`), then the model training (`01_`), etc.
