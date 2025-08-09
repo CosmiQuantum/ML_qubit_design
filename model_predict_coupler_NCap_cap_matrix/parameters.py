@@ -6,7 +6,7 @@ KERAS_TUNER = True
 KERAS_TUNER_TRIALS = 30
 KERAS_DIR = 'keras'
 
-ENCODING_TYPE = 'One Hot' # need to pass 'One Hot' or 'Linear' or 'Try Both'
+ENCODING_TYPE = 'Try Both' # need to pass 'One Hot' or 'Linear' or 'Try Both'
 
 # Enable data augmentation/scaling, etc
 DATA_AUGMENTATION = True

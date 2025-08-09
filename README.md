@@ -30,8 +30,8 @@ A GPU is reccomended. If you have a Fermilab services account, you can use it to
 
 1. Navigate to [https://eafdocs.fnal.gov/master/index.html](https://eafdocs.fnal.gov/master/index.html) and sign in with your credentials
 2. Follow the three steps under **Quickstart**. When navigating to the link in step two, enter your credentials again
-3. Click on 'Add New Server'
-4. Scroll to the bottom of server options and chose the one that says "Fermilab generic notebooks"
+3. Click on **Add New Server**
+4. Scroll to the bottom of server options and chose the one that says **Fermilab generic notebooks**
 5. Select the middle of the three options to choose a GPU, and from the drop down menue chose the largest slot
 6. Clone the repo there
 
@@ -49,10 +49,11 @@ jupyter-lab
 ```
 
 ## Large Files
+If you aren't planning on rerunning all of the notebooks and parsing data/retraining things, you will need some additional files and saved models that were already trained.
 
 Some model checkpoints and intermediate datasets are too big for GitHub. You can grab everything you need from this Google Drive folder **[here](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing)**.
 
-The folder contains three directories—simply copy them into the root of your cloned repo. They’re already in `.gitignore`, so you won’t accidentally commit them, and you can dive straight into the notebooks without rerunning Keras Tuner or the data-processing steps.
+The drive contains three directories, each containing a zip file—simply unzip them into each respective folder of your cloned repo. They’re already in `.gitignore`, so you won’t accidentally commit them after adding them, and you can dive straight into the notebooks without rerunning model training or the data-processing steps.
 
 If you have any access issues please send me a quick note at **olivias@fnal.gov**.
 
