@@ -5,6 +5,22 @@ Contributors:
 - Sara Sussman (Fermilab)
 - Giuseppe Di Guglielmo (Fermilab)
 
+## Features
+
+This repo has tools/options to experiment with different configurations of a Multi-Layer Perceptron (MLP) for Qiskit Metal parameter prediction, when given a desired set of hamiltonian parameters. You can use the contained notebooks to explore the following options:
+
+1. **Hyperparameter Optimization**  
+   - Compare using **Keras Tuner** to automatically search for and return the best hyperparameters vs. using a predefined set.  
+
+2. **Feature Scaling (0–1 normalization)**  
+   - Option to scale all features to the range `[0, 1]` or leave them unscaled.  
+   - I strongly recommended scaling because input values can vary drastically in magnitude for these Qiskit metal design parameters, and proper scaling often improves prediction accuracy across all parameters.  
+   - Scaling amounts are saved, allowing you to safely reverse the scaling later and recover accurate/real-world predicted values.  
+
+3. **Categorical Data Encoding**  
+   - Compare **one-hot encoding** vs. **linear encoding** for categorical Qiskit Metal parameters.  
+   - Since an MLP predicts numeric values rather than categories directly, categorical features must be converted into numeric form. These experiments help determine which encoding method gives better performance.
+
 ## Environment Setup
 
 Do this first. See the [ENV_SETUP](ENV_SETUP.md) documentation.
