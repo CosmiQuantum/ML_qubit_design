@@ -1,13 +1,19 @@
 # ML based Qubit Design
-Please contact Olivia Seidel at **olivias@fnal.gov** with any questions or comments.
 
-**Contributors:**
-- Sara Sussman (Fermilab): Project visionary
-- Giuseppe Di Guglielmo (Fermilab): ML expert and advice giver
-- Firas Abouzahr (Northwestern): Code tester/bug finder
+## Contents
+- [Features](#features)
+- [Contributions](#contributions)
+- [Environment Setup](#environment-setup)
+- [Fermilab Elastic Analysis Facility (EAF) setup](#fermilab-elastic-analysis-facility-eaf-setup)
+- [Quick Start](#quick-start)
+- [Large Files](#large-files)
+- [Structure](#structure)
+- [Within each folder there are three scripts](#within-each-folder-there-are-three-scripts)
+- [Reccomended optimization strategy](#reccomended-optimization-strategy)
+- [Completed](#completed)
+- [Desired Flow](#desired-flow)
 
 ## Features
-
 This repo has tools/options to experiment with different configurations of a Multi-Layer Perceptron (MLP) for Qiskit Metal parameter prediction, when given a desired set of hamiltonian parameters. You can use the contained notebooks to explore the following options:
 
 1. **Hyperparameter Optimization**  
@@ -22,6 +28,14 @@ This repo has tools/options to experiment with different configurations of a Mul
    - Compare **one-hot encoding** vs. **linear encoding** for categorical Qiskit Metal parameters.  
    - Since an MLP predicts numeric values rather than categories directly, categorical features must be converted into numeric form. These experiments help determine which encoding method gives better performance.
    - Initial experimentation says one-hot encoding is better across the board
+
+## Contributions
+Please contact Olivia Seidel at **olivias@fnal.gov** with any questions or comments.
+
+**Contributors:**
+- Sara Sussman (Fermilab): Project visionary
+- Giuseppe Di Guglielmo (Fermilab): ML expert and advice giver
+- Firas Abouzahr (Northwestern): Code tester/bug finder
 
 ## Environment Setup
 
