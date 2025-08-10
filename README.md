@@ -1,15 +1,17 @@
 # ML based Qubit Design
 
 ## Contents
+## Contents
 - [Features](#features)
 - [Contributions](#contributions)
-- [Environment Setup](#environment-setup)
-- [Fermilab Elastic Analysis Facility (EAF) setup](#fermilab-elastic-analysis-facility-eaf-setup)
 - [Quick Start](#quick-start)
-- [Large Files](#large-files)
+  - [Environment Setup](#environment-setup)
+  - [Fermilab Elastic Analysis Facility (EAF) setup](#fermilab-elastic-analysis-facility-eaf-setup)
+  - [Large Files](#large-files)
+  - [Notebooks](#notebooks)
+  - [Potential optimization strategy](#potential-optimization-strategy)
 - [Structure](#structure)
 - [Within each folder there are three scripts](#within-each-folder-there-are-three-scripts)
-- [Reccomended optimization strategy](#reccomended-optimization-strategy)
 - [Completed](#completed)
 - [Desired Flow](#desired-flow)
 
@@ -37,11 +39,13 @@ Please contact Olivia Seidel at **olivias@fnal.gov** with any questions or comme
 - Giuseppe Di Guglielmo (Fermilab): ML expert and advice giver
 - Firas Abouzahr (Northwestern): Code tester/bug finder
 
-## Environment Setup
+## Quick Start
+
+### Environment Setup
 
 Do this first. See the [ENV_SETUP](ENV_SETUP.md) documentation.
 
-##  Fermilab Elastic Analysis Facility (EAF) setup
+###  Fermilab Elastic Analysis Facility (EAF) setup
 A GPU is reccomended. If you have a Fermilab services account, you can use it to run jupyter notebooks on the EAF using the following instructions:
 
 1. Navigate to [https://eafdocs.fnal.gov/master/index.html](https://eafdocs.fnal.gov/master/index.html) and sign in with your credentials
@@ -53,7 +57,16 @@ A GPU is reccomended. If you have a Fermilab services account, you can use it to
 
 Please feel free to contribute instructions if you use a GPU elsewhere.
 
-## Quick Start
+### Large Files
+If you aren't planning on rerunning all of the notebooks and parsing data/retraining things, you will need some additional files and saved models that were already trained.
+
+Some model checkpoints and intermediate datasets are too big for GitHub. You can grab everything you need from this Google Drive folder **[here](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing)**.
+
+The drive contains three directories, each containing a zip file—simply unzip them into each respective folder of your cloned repo. They’re already in `.gitignore`, so you won’t accidentally commit them after adding them, and you can dive straight into the notebooks without rerunning model training or the data-processing steps.
+
+If you have any access issues please send me a quick note at **olivias@fnal.gov**.
+
+### Notebooks
 
 If you have set up the environment and data, then move to the data analysis notebook (`00_`), then the model training (`01_`), etc.
 
@@ -64,14 +77,8 @@ conda activate qubit-design-env
 jupyter-lab
 ```
 
-## Large Files
-If you aren't planning on rerunning all of the notebooks and parsing data/retraining things, you will need some additional files and saved models that were already trained.
-
-Some model checkpoints and intermediate datasets are too big for GitHub. You can grab everything you need from this Google Drive folder **[here](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing)**.
-
-The drive contains three directories, each containing a zip file—simply unzip them into each respective folder of your cloned repo. They’re already in `.gitignore`, so you won’t accidentally commit them after adding them, and you can dive straight into the notebooks without rerunning model training or the data-processing steps.
-
-If you have any access issues please send me a quick note at **olivias@fnal.gov**.
+### Potential optimization strategy:
+In the *parameters.py* file start off with KERAS_TUNER=True, and after doing an automated hyperparameter search, grab the best hyperparameter values and update the *parameters.py* file. Then rerun with KERAS_TUNER=False to see how the model learns over epoch number. You can also add more epochs here and fine tune hyperparameters.
 
 ## Structure
 The following three folders contain scripts to use Machine Learning to predict Qiskit design parameters based on target hamiltonian values for each specified design part:
@@ -90,8 +97,6 @@ The following three folders contain scripts to use Machine Learning to predict Q
 
 - *ml_hyperparameter_search_analysis*: provides plots to visualize the hyperparameter search, so the user can easily see the best values
 
-## Reccomended optimization strategy:
-In the *parameters.py* file start off with KERAS_TUNER=True, and after doing an automated hyperparameter search, grab the best hyperparameter values and update the *parameters.py* file. Then rerun with KERAS_TUNER=False to see how the model learns over epoch number.
 
 ## Completed
 - Three models have been trained with optimized hyperparameters from keras-tuner, each model predicting Qiskit metal parameters for various parts of a transmon cross chip/resonator design
