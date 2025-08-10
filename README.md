@@ -35,7 +35,7 @@ This repo has tools/options to experiment with different configurations of a Mul
 Please contact Olivia Seidel at **olivias@fnal.gov** with any questions or comments.
 
 **Contributors:**
-- Sara Sussman (Fermilab): Project visionary
+- Sara Sussman (Fermilab): Ideas Contributor
 - Giuseppe Di Guglielmo (Fermilab): ML expert and advice giver
 - Firas Abouzahr (Northwestern): Code tester/bug finder
 
