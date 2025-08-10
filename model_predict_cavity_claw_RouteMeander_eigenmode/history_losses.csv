@@ -2,3 +2,4 @@ data_augmentation,model_shape,encoding_type,test_loss,train_loss,train_dropout_r
 True,mlp_2_1500_2800_1300_2100_45,One Hot,0.026580166071653366,mean_squared_error,0.4,50,32,0.15/0.15,0.0014558,100,0.99,False
 True,mlp_2_600_100_2600_5000_45,Linear,0.027197198942303658,mean_squared_error,0.4,50,32,0.15/0.15,0.0014558,100,0.99,False
 True,mlp_2_1500_2800_1300_2100_45,one hot,0.026580534875392914,mean_squared_error,0.4,50,32,0.15/0.15,0.0014558,100,0.99,False
+True,mlp_2_3300_200_4600_1700_45,one hot,0.023183807730674744,mean_squared_error,0.4,50,32,0.15/0.15,0.0014558,100,0.99,False
