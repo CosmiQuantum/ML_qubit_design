@@ -1,9 +1,10 @@
 # ML based Qubit Design
+Please contact Olivia Seidel at **olivias@fnal.gov** with any questions or comments.
 
-Contributors:
-- Olivia Seidel (UT Arlington/Fermilab)
-- Sara Sussman (Fermilab)
-- Giuseppe Di Guglielmo (Fermilab)
+**Contributors:**
+- Sara Sussman (Fermilab): Project visionary
+- Giuseppe Di Guglielmo (Fermilab): ML expert and advice giver
+- Firas Abouzahr (Northwestern): Code tester/bug finder
 
 ## Features
 
@@ -20,6 +21,7 @@ This repo has tools/options to experiment with different configurations of a Mul
 3. **Categorical Data Encoding**  
    - Compare **one-hot encoding** vs. **linear encoding** for categorical Qiskit Metal parameters.  
    - Since an MLP predicts numeric values rather than categories directly, categorical features must be converted into numeric form. These experiments help determine which encoding method gives better performance.
+   - Initial experimentation says one-hot encoding is better across the board
 
 ## Environment Setup
 

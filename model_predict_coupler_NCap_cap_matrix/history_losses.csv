@@ -2,3 +2,8 @@ data_augmentation,model_shape,encoding_type,test_loss,train_loss,train_dropout_r
 True,mlp_6_1600_1300_700_600_12,One Hot,0.04994342103600502,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
 True,mlp_6_3700_700_200_2800_12,One Hot,0.15836068987846375,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
 True,mlp_6_900_1300_200_1900_12,Linear,0.047749340534210205,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
+True,mlp_6_3700_700_200_2800_12,One Hot,0.15836068987846375,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
+True,mlp_6_900_1300_200_1900_12,Linear,0.047749340534210205,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
+True,mlp_6_3700_700_200_2800_12,One Hot,0.15836068987846375,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
+True,mlp_6_900_1300_200_1900_12,Linear,0.047749340534210205,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
+True,mlp_6_2100_1100_200_3200_12,one hot,0.08227096498012543,mean_squared_error,0.4,50,32,0.15/0.15,0.001,100,0.99,False
