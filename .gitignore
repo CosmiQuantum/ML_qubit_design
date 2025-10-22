@@ -25,3 +25,6 @@ model_predict_coupler_NCap_cap_matrix/*.pyc
 model_predict_qubit_TransmonCross_cap_matrix/.ipynb_checkpoints/
 model_predict_qubit_TransmonCross_cap_matrix/__pycache__/
 model_predict_qubit_TransmonCross_cap_matrix/*.pyc
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
