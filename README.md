@@ -97,6 +97,8 @@ The following three folders contain scripts to use Machine Learning to predict Q
 
 - *ml_hyperparameter_search_analysis*: provides plots to visualize the hyperparameter search, so the user can easily see the best values
 
+- *ml_02_print_results*: Loads the model and makes predictions with it
+
 
 ## Completed
 - Three models have been trained with optimized hyperparameters from keras-tuner, each model predicting Qiskit metal parameters for various parts of a transmon cross chip/resonator design
