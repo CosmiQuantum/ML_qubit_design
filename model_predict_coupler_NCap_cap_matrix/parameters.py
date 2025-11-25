@@ -2,15 +2,14 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
-KERAS_TUNER = False
-KERAS_TUNER_TRIALS = 30
+KERAS_TUNER = True
+KERAS_TUNER_TRIALS = 50
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
 
 # Enable data augmentation/scaling, etc
 DATA_AUGMENTATION = True
-LOG_DRAIN_CURRENT = True
 
 # We use a simple fully connected network (MLP) 
 # 4 layers because deeper NNs can capture more complex patterns
