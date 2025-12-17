@@ -1,2 +1,2 @@
 Encoding Type,Train Loss Metric,Test Loss
-one hot Encoding,mean_squared_error,0.08059017360210419
+one hot Encoding,mean_squared_error,0.08677002042531967
