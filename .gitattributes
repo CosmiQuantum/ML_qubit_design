@@ -11,3 +11,4 @@
 /model_predict_qubit_TransmonCross_cap_matrix/qubit-TransmonCross-cap_matrix.json filter=lfs diff=lfs merge=lfs -text
 /model_predict_cavity_claw_RouteMeander_eigenmode/model/best_keras_model_linear_encoding.keras filter=lfs diff=lfs merge=lfs -text
 /model_predict_cavity_claw_RouteMeander_eigenmode/model/best_keras_model_one_hot_encoding.keras filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/qubit-TransmonCross-Hamiltonian_params.json filter=lfs diff=lfs merge=lfs -text
