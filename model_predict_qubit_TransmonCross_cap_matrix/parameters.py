@@ -3,7 +3,7 @@ DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
 KERAS_TUNER = False
-KERAS_TUNER_TRIALS = 175
+KERAS_TUNER_TRIALS = 157
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
@@ -14,14 +14,14 @@ DATA_AUGMENTATION = True
 # We use a simple fully connected network (MLP) 
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
-NEURONS_PER_LAYER = [1000, 3800, 300, 400]
+NEURONS_PER_LAYER = [2900, 1400, 1200, 1800]
 TRAIN_DROPOUT_RATE = 0.4
 
 # Training hyper-parameters
 
 # Learning Rate gives the step size that the optimizer takes while learning, 
 # smaller step size means slower convergence but more accuracy
-LR_INITIAL = 0.00098201
+LR_INITIAL = 0.0014041690155863762
 
 # Learning rate decay helps the model become refined as it gets closer to a minimum
 # The learning rate decay steps desides how many steps the learning rate will decay after
