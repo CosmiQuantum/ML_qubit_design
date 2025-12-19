@@ -2,8 +2,8 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
-KERAS_TUNER = False
-KERAS_TUNER_TRIALS = 157
+KERAS_TUNER = True
+KERAS_TUNER_TRIALS = 200
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
@@ -15,7 +15,7 @@ DATA_AUGMENTATION = True
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
 NEURONS_PER_LAYER = [2900, 1400, 1200, 1800]
-TRAIN_DROPOUT_RATE = 0.4
+TRAIN_DROPOUT_RATE = 0 #lower bound for tuning dropout rate in keras
 
 # Training hyper-parameters
 
