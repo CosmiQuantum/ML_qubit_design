@@ -25,7 +25,7 @@ LR_INITIAL = 0.000982
 
 # Learning rate decay helps the model become refined as it gets closer to a minimum
 # The learning rate decay steps desides how many steps the learning rate will decay after
-LR_DECAY_STEPS = 100  # 100 best for log phig1 cadence data
+LR_DECAY_STEPS = 35  # 100 best for log phig1 cadence data
 
 # LR_INITIAL * LR_DECAY_RATE after each number of LR_DECAY_STEPS
 LR_DECAY_RATE = 0.99
@@ -34,7 +34,7 @@ LR_DECAY_RATE = 0.99
 LR_STAIRCASE = False
 
 TRAIN_EARLY_STOPPING_PATIENCE = 50
-TRAIN_BATCH_SIZE = 32 # 32 default
+TRAIN_BATCH_SIZE = 128 # 32 default
 #TRAIN_VALIDATION_SPLIT = 0.2
 
 TRAIN_LOSS = 'mean_squared_error'
