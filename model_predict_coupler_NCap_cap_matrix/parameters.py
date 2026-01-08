@@ -18,12 +18,13 @@ DATA_AUGMENTATION = True
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
 NEURONS_PER_LAYER = [1000,3800,300,400]
-TRAIN_DROPOUT_RATE = 0.4
+TRAIN_DROPOUT_RATE = 0.05
 
 # Training hyper-parameters
 
 # Learning Rate gives the step size that the optimizer takes while learning, 
 # smaller step size means slower convergence but more accuracy
+# learning rate is=LR_INITIAL×(LR_DECAY_RATE)^(t/LR_DECAY_STEPS)
 LR_INITIAL = 0.000982
 
 # Learning rate decay helps the model become refined as it gets closer to a minimum
