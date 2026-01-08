@@ -1,0 +1,11 @@
+{
+  "plot_name": "best_val_loss_vs_model_size_orig_plus_wide",
+  "n_points": 65,
+  "columns_saved": [
+    "sweep",
+    "total_params",
+    "best_val_loss",
+    "total_params",
+    "best_val_loss"
+  ]
+}
