@@ -41,8 +41,8 @@ TRAIN_EARLY_STOPPING_PATIENCE = 50
 TRAIN_BATCH_SIZE = 128 # 32 default
 #TRAIN_VALIDATION_SPLIT = 0.2
 
-TRAIN_LOSS = 'mean_squared_error'
-#TRAIN_LOSS = 'mae' # mean absolute error
+#TRAIN_LOSS = 'mean_squared_error'
+TRAIN_LOSS = 'mae' # mean absolute error
 #TRAIN_LOSS = 'mean_squared_logarithmic_error'
 
 
