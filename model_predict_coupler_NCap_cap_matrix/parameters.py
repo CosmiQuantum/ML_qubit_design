@@ -2,6 +2,8 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
+SWEEP_PARAM_NUM = True
+
 KERAS_TUNER = False
 KERAS_TUNER_TRIALS = 170
 KERAS_DIR = 'keras'
@@ -38,6 +40,7 @@ TRAIN_BATCH_SIZE = 128 # 32 default
 #TRAIN_VALIDATION_SPLIT = 0.2
 
 TRAIN_LOSS = 'mean_squared_error'
+#TRAIN_LOSS = 'mae' # mean absolute error
 #TRAIN_LOSS = 'mean_squared_logarithmic_error'
 
 
