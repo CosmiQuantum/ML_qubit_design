@@ -5,8 +5,8 @@ DATASETS_JSON = DATA_DIR + '/datasets.json'
 SWEEP_PARAM_NUM = False
 SWEEP_DATA_AMOUNT = False
 
-KERAS_TUNER = False
-KERAS_TUNER_TRIALS = 1000
+KERAS_TUNER = True
+KERAS_TUNER_TRIALS = 854
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
@@ -37,7 +37,7 @@ LR_DECAY_RATE = 0.99
 # Staircase or continuous?
 LR_STAIRCASE = False
 
-TRAIN_EARLY_STOPPING_PATIENCE = 50
+TRAIN_EARLY_STOPPING_PATIENCE = 400
 TRAIN_BATCH_SIZE = 128 # 32 default
 #TRAIN_VALIDATION_SPLIT = 0.2
 
