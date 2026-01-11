@@ -3,11 +3,11 @@ DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
 SWEEP_PARAM_NUM = False
-SWEEP_DATA_AMOUNT = False
-VISUALIZE_GRADIENTS = True
+SWEEP_DATA_AMOUNT = True
+VISUALIZE_GRADIENTS = False
 
-KERAS_TUNER = True
-KERAS_TUNER_TRIALS = 854
+KERAS_TUNER = False
+KERAS_TUNER_TRIALS = 1000
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
