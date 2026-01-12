@@ -21,7 +21,7 @@ DATA_AUGMENTATION = True
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
 NEURONS_PER_LAYER = [1024]
-TRAIN_DROPOUT_RATE = 0.05
+TRAIN_DROPOUT_RATE = 0 #0.05
 
 # Training hyper-parameters
 
@@ -32,7 +32,8 @@ LR_INITIAL = 0.000982
 
 # Learning rate decay helps the model become refined as it gets closer to a minimum
 # The learning rate decay steps desides how many steps the learning rate will decay after
-LR_DECAY_STEPS = 35  # 100 best for log phig1 cadence data
+
+# LR_DECAY_STEPS = 35  # 100 best for log phig1 cadence data
 
 # LR_INITIAL * LR_DECAY_RATE after each number of LR_DECAY_STEPS
 LR_DECAY_RATE = 0.99
