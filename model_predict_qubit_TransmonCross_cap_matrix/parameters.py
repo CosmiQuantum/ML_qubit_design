@@ -8,7 +8,7 @@ SWEEP_PARAM_NUM = False
 SWEEP_DATA_AMOUNT = False
 VISUALIZE_GRADIENTS = False
 
-KERAS_TUNER = True
+KERAS_TUNER = False
 KERAS_TUNER_TRIALS = 1658
 KERAS_DIR = 'keras'
 
@@ -20,7 +20,7 @@ DATA_AUGMENTATION = True
 # We use a simple fully connected network (MLP) 
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
-NEURONS_PER_LAYER = [1024]
+NEURONS_PER_LAYER = [64,64,64,64,64]
 TRAIN_DROPOUT_RATE = 0 #0.05
 
 # Training hyper-parameters
@@ -43,7 +43,7 @@ LR_STAIRCASE = False
 
 EPOCHS = 400
 
-TRAIN_EARLY_STOPPING_PATIENCE = 400
+TRAIN_EARLY_STOPPING_PATIENCE = 60
 TRAIN_BATCH_SIZE = 128 # 32 default
 #TRAIN_VALIDATION_SPLIT = 0.2
 

@@ -21,7 +21,7 @@ DATA_AUGMENTATION = True
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
 NEURONS_PER_LAYER = [1024]
-TRAIN_DROPOUT_RATE = 0 #0.05
+TRAIN_DROPOUT_RATE = 0.05
 
 # Training hyper-parameters
 
@@ -35,12 +35,12 @@ LR_INITIAL = 0.000982
 #LR_DECAY_STEPS = 35  # 100 best for log phig1 cadence data
 
 # LR_INITIAL * LR_DECAY_RATE after each number of LR_DECAY_STEPS
-LR_DECAY_RATE = 0.99
+LR_DECAY_RATE = 0.9
 
 # Staircase or continuous?
 LR_STAIRCASE = False
 
-TRAIN_EARLY_STOPPING_PATIENCE = 400
+TRAIN_EARLY_STOPPING_PATIENCE = 60
 TRAIN_BATCH_SIZE = 128 # 32 default
 #TRAIN_VALIDATION_SPLIT = 0.2
 
