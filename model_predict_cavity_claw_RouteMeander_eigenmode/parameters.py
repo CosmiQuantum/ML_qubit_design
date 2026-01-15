@@ -4,12 +4,12 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
-SWEEP_PARAM_NUM = True
+SWEEP_PARAM_NUM = False
 SWEEP_DATA_AMOUNT = False
 VISUALIZE_GRADIENTS = False
 
-KERAS_TUNER = False
-KERAS_TUNER_TRIALS = 865
+KERAS_TUNER = True
+KERAS_TUNER_TRIALS = 67
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
@@ -20,8 +20,8 @@ DATA_AUGMENTATION = True
 # We use a simple fully connected network (MLP) 
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
-NEURONS_PER_LAYER = [1024]
-TRAIN_DROPOUT_RATE = 0.05
+NEURONS_PER_LAYER = [256, 256, 256, 256, 256]
+TRAIN_DROPOUT_RATE = 0#0.05
 
 # Training hyper-parameters
 
@@ -35,7 +35,7 @@ LR_INITIAL = 0.000982
 #LR_DECAY_STEPS = 35  # 100 best for log phig1 cadence data
 
 # LR_INITIAL * LR_DECAY_RATE after each number of LR_DECAY_STEPS
-LR_DECAY_RATE = 0.9
+LR_DECAY_RATE = 0.99
 
 # Staircase or continuous?
 LR_STAIRCASE = False
