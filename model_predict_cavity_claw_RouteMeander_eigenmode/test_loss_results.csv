@@ -1,2 +1,2 @@
 Encoding Type,Train Loss Metric,Test Loss
-one hot Encoding,mae,0.11775779724121094
+one hot Encoding,mae,0.09331876039505005
