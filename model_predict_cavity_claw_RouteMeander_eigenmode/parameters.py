@@ -5,10 +5,10 @@ DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
 SWEEP_PARAM_NUM = False
-SWEEP_DATA_AMOUNT = False
+SWEEP_DATA_AMOUNT = True
 VISUALIZE_GRADIENTS = False
 
-KERAS_TUNER = True
+KERAS_TUNER = False
 KERAS_TUNER_TRIALS = 42
 KERAS_DIR = 'keras'
 
@@ -20,7 +20,7 @@ DATA_AUGMENTATION = True
 # We use a simple fully connected network (MLP) 
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
-NEURONS_PER_LAYER = [512,512,512,512,512]
+NEURONS_PER_LAYER = [570,510,250,440,480]
 TRAIN_DROPOUT_RATE = 0#0.05
 
 # Training hyper-parameters

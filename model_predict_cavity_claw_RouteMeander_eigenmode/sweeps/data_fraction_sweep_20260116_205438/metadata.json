@@ -1,0 +1,31 @@
+{
+  "run_id": "20260116_205438",
+  "fixed_depth": 5,
+  "fixed_width": 512,
+  "fixed_neurons": [
+    512,
+    512,
+    512,
+    512,
+    512
+  ],
+  "train_fractions": [
+    0.3,
+    0.37777777777777777,
+    0.45555555555555555,
+    0.5333333333333333,
+    0.6111111111111112,
+    0.6888888888888889,
+    0.7666666666666666,
+    0.8444444444444446,
+    0.9222222222222223,
+    1.0
+  ],
+  "seeds": [
+    0,
+    1
+  ],
+  "batch_size": 128,
+  "early_stopping_patience": 60,
+  "notes": "Subset sampling only on TRAIN split. value_out loss is masked using y_exists via sample_weight."
+}
