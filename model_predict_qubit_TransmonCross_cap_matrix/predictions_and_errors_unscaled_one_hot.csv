@@ -1,10 +1,10 @@
 sample_idx,qubit_frequency_GHz,anharmonicity_MHz,param,ref_unscaled,pred_unscaled,abs_error_unscaled,sq_error_unscaled
-0,133.517,96.703,design_options.connection_pads.readout.claw_length,0.00018,0.000180483,4.82864e-07,2.33158e-13
+0,133.517,96.703,design_options.connection_pads.readout.claw_length,0.00018,0.00017941,5.90019e-07,3.48123e-13
 0,133.517,96.703,design_options.connection_pads.readout.ground_spacing,5e-06,4.94719e-06,5.28145e-08,2.78937e-15
-0,133.517,96.703,design_options.cross_length,0.00026,0.00026083,8.29926e-07,6.88776e-13
-1,148.829,69.9119,design_options.connection_pads.readout.claw_length,0.0001,9.95398e-05,4.60243e-07,2.11824e-13
+0,133.517,96.703,design_options.cross_length,0.00026,0.000260353,3.53088e-07,1.24671e-13
+1,148.829,69.9119,design_options.connection_pads.readout.claw_length,0.0001,9.87053e-05,1.29471e-06,1.67627e-12
 1,148.829,69.9119,design_options.connection_pads.readout.ground_spacing,1e-05,9.89437e-06,1.05629e-07,1.11575e-14
-1,148.829,69.9119,design_options.cross_length,0.00029,0.000288725,1.2751e-06,1.62588e-12
-2,87.3543,68.8291,design_options.connection_pads.readout.claw_length,0.00011,0.000109553,4.46663e-07,1.99508e-13
+1,148.829,69.9119,design_options.cross_length,0.00029,0.000288248,1.75194e-06,3.06929e-12
+2,87.3543,68.8291,design_options.connection_pads.readout.claw_length,0.00011,0.000109375,6.25477e-07,3.91221e-13
 2,87.3543,68.8291,design_options.connection_pads.readout.ground_spacing,4.1e-06,4.11272e-06,1.27205e-08,1.61811e-16
-2,87.3543,68.8291,design_options.cross_length,0.00018,0.000179887,1.13182e-07,1.28102e-14
+2,87.3543,68.8291,design_options.cross_length,0.00018,0.000179291,7.09229e-07,5.03005e-13
