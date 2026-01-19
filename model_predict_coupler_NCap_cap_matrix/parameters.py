@@ -20,7 +20,7 @@ DATA_AUGMENTATION = True
 # We use a simple fully connected network (MLP) 
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
-NEURONS_PER_LAYER = [264,964,764,664]#[1024]
+NEURONS_PER_LAYER = [264,964,764,664]
 TRAIN_DROPOUT_RATE = 0
 
 # Training hyper-parameters
@@ -41,7 +41,7 @@ LR_DECAY_RATE = 0.99
 LR_STAIRCASE = False
 
 TRAIN_EARLY_STOPPING_PATIENCE = 60
-TRAIN_BATCH_SIZE = 128 # 32 default
+TRAIN_BATCH_SIZE = 90 #128 # 32 default
 #TRAIN_VALIDATION_SPLIT = 0.2
 
 #TRAIN_LOSS = 'mean_squared_error'
