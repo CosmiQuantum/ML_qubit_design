@@ -4,7 +4,7 @@
 DATA_DIR = 'data'
 DATASETS_JSON = DATA_DIR + '/datasets.json'
 
-SWEEP_PARAM_NUM = False
+SWEEP_PARAM_NUM = True
 SWEEP_DATA_AMOUNT = False
 VISUALIZE_GRADIENTS = False
 
