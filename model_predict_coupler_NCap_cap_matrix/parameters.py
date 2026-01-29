@@ -21,7 +21,7 @@ DATA_AUGMENTATION = True
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
 NEURONS_PER_LAYER = [264,964,764,664]
-TRAIN_DROPOUT_RATE = 0
+TRAIN_DROPOUT_RATE = 0.3
 
 # Training hyper-parameters
 
