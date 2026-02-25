@@ -1,0 +1,7 @@
+sample_idx,param,ref_unscaled,pred_unscaled,abs_error_unscaled,sq_error_unscaled
+0,cavity_frequency,6.19193e+09,6.19979e+09,7.85882e+06,6.1761e+13
+0,kappa,24653.2,23811.4,841.849,708710
+1,cavity_frequency,8.34374e+09,8.35583e+09,1.20888e+07,1.4614e+14
+1,kappa,166528,174477,7949.5,6.31945e+07
+2,cavity_frequency,7.67436e+09,7.67678e+09,2.42097e+06,5.86111e+12
+2,kappa,498701,500649,1948.77,3.7977e+06
