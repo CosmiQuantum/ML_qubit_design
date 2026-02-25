@@ -2,3 +2,4 @@ data_augmentation,model_shape,model_type,test_loss,train_loss,train_dropout_rate
 True,model2_mlp_4_480_6,Model2_QiskitToCapacitance,0.018913429230451584,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
 True,model2_mlp_4_672_6,Model2_QiskitToCapacitance,0.015743490308523178,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
 True,model2_mlp_4_672_6,Model2_QiskitToCapacitance,0.015743490308523178,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
+True,model2_mlp_4_800_6,Model2_QiskitToCapacitance,0.015949824824929237,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
