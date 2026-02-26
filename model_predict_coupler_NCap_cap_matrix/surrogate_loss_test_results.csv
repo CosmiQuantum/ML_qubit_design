@@ -1,2 +1,2 @@
-Model,Train Loss Metric,Reconstruction Loss,Qiskit Param MSE (OH)
-Inverse (Surrogate-Defined Loss),mae,0.00789081584662199,0.17115765541002792
+Model,Train Loss Metric,Reconstruction Loss,Penalty Loss,Penalty Weight,Total Loss,Qiskit Param MSE (OH),Out of Range %
+Inverse (Surrogate-Defined Loss + Range Penalty),mae,0.02053018845617771,0.006190249230712652,0.1,0.0227982085198164,0.17161277582089077,15.7396449704142
