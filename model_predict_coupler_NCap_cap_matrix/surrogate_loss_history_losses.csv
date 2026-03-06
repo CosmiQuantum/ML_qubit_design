@@ -3,3 +3,4 @@ True,surrogate_loss_model,InverseModel_SurrogateLoss,0.016600729897618294,mae,0.
 True,surrogate_loss_model,InverseModel_SurrogateLoss,0.016600729897618294,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
 True,surrogate_loss_model,InverseModel_SurrogateLoss,0.00789081584662199,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
 True,surrogate_loss_model,InverseModel_SurrogateLoss,0.02053018845617771,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.02053018845617771,mae,0.06,60,90,0.15/0.15,0.00092875,80,0.99,False
