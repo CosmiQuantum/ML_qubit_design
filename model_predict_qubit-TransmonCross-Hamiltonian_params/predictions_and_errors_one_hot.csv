@@ -1,0 +1,10 @@
+sample_idx,qubit_frequency_GHz,anharmonicity_MHz,param,ref,pred,abs_error,sq_error
+0,0.229409,0.858338,design_options.connection_pads.readout.claw_length,0.333333,0.27193,0.0614034,0.00377037
+0,0.229409,0.858338,design_options.connection_pads.readout.ground_spacing,0.152542,0.815122,0.66258,0.439012
+0,0.229409,0.858338,design_options.cross_length,0.515152,0.537285,0.0221333,0.000489885
+1,0.189596,0.886036,design_options.connection_pads.readout.claw_length,0.0909091,0.308223,0.217314,0.0472254
+1,0.189596,0.886036,design_options.connection_pads.readout.ground_spacing,1,0.832745,0.167255,0.0279743
+1,0.189596,0.886036,design_options.cross_length,0.606061,0.60083,0.00523059,2.7359e-05
+2,0.467938,0.662521,design_options.connection_pads.readout.claw_length,0.121212,0.128124,0.00691186,4.77738e-05
+2,0.467938,0.662521,design_options.connection_pads.readout.ground_spacing,0,0.393724,0.393724,0.155018
+2,0.467938,0.662521,design_options.cross_length,0.272727,0.260457,0.0122708,0.000150572

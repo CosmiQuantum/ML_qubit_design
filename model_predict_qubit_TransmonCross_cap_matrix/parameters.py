@@ -8,8 +8,8 @@ SWEEP_PARAM_NUM = False
 SWEEP_DATA_AMOUNT = False
 VISUALIZE_GRADIENTS = False
 
-KERAS_TUNER = True
-KERAS_TUNER_TRIALS = 100
+KERAS_TUNER = False
+KERAS_TUNER_TRIALS = 1658
 KERAS_DIR = 'keras'
 
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'

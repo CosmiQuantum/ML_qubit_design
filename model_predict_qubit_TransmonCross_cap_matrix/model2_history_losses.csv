@@ -1,5 +1,2 @@
 data_augmentation,model_shape,model_type,test_loss,train_loss,train_dropout_rate,train_early_stop_patience,train_batch_size,train_val_split,lr_initial,lr_decay_step,lr_decay_rate,lr_stair_case
 True,model2_mlp_3_160_6,Model2_QiskitToCapacitance,0.005309374071657658,mae,0,60,128,0.15/0.15,0.000982,220,0.99,False
-True,model2_mlp_3_768_2,Model2_QiskitToCapacitance,0.0019858237355947495,mae,0,60,128,0.15/0.15,0.000982,220,0.99,False
-True,model2_mlp_3_736_2,Model2_QiskitToCapacitance,0.001969812670722604,mae,0,60,128,0.15/0.15,0.000982,220,0.99,False
-True,model2_mlp_3_64_64_64_64_64_2,Model2_QiskitToCapacitance,0.01143599022179842,mae,0,60,128,0.15/0.15,0.000982,220,0.99,False
