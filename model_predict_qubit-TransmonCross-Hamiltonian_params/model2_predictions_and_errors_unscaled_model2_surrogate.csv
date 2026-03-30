@@ -1,0 +1,7 @@
+sample_idx,param,ref_unscaled,pred_unscaled,abs_error_unscaled,sq_error_unscaled
+0,qubit_frequency_GHz,4.11508,4.11339,0.00168564,2.84139e-06
+0,anharmonicity_MHz,-150.844,-150.675,0.169404,0.0286977
+1,qubit_frequency_GHz,3.95949,3.95654,0.00294859,8.69418e-06
+1,anharmonicity_MHz,-138.744,-138.609,0.135584,0.0183831
+2,qubit_frequency_GHz,5.04726,5.0403,0.00695672,4.8396e-05
+2,anharmonicity_MHz,-236.389,-235.592,0.796565,0.634516
