@@ -58,3 +58,15 @@
 /model_predict_qubit_TransmonCross_cap_matrix/kt_dir/transmon_cross_surrogate_loss/trial_34/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
 /model_predict_qubit_TransmonCross_cap_matrix/kt_dir/transmon_cross_surrogate_loss/trial_37/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
 /model_predict_qubit_TransmonCross_cap_matrix/kt_dir/transmon_cross_surrogate_loss/trial_38/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_002/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_019/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_020/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_023/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_025/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_027/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_028/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_029/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_153/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_163/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_165/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
+/model_predict_qubit_TransmonCross_cap_matrix/kt_dir2/transmon_cross_surrogate_loss2/trial_190/checkpoint.weights.h5 filter=lfs diff=lfs merge=lfs -text
