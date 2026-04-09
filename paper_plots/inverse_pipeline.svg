@@ -75,7 +75,7 @@
         marker-end="url(#arrowMain)"/>
 
   <!-- ── Best Qiskit Metal Parameter guess ──────────────────────── -->
-  <rect x="100" y="248" width="360" height="52" rx="10" ry="10"
+  <rect x="120" y="248" width="320" height="52" rx="10" ry="10"
         fill="#E8E8E8" stroke="#999999" stroke-width="2"/>
   <text x="280" y="280" text-anchor="middle"
         font-size="16" font-weight="bold" fill="#333333">
@@ -102,7 +102,7 @@
 
   <!-- ── Hamiltonian Reconstruction ─────────────────────────────── -->
   <rect x="170" y="444" width="220" height="68" rx="10" ry="10"
-        fill="#F0E6F6" stroke="#6A0DAD" stroke-width="2"/>
+        fill="#E8E4F0" stroke="#7B68AE" stroke-width="2"/>
   <text x="280" y="471" text-anchor="middle"
         font-size="16" font-weight="bold" fill="#333333">Hamiltonian</text>
   <text x="280" y="494" text-anchor="middle"
@@ -111,10 +111,10 @@
   <!-- ── Loss line ─────────────────────────────────────────────── -->
   <text x="100" y="548" text-anchor="start"
         font-size="14" fill="#333333">
-    Loss = MAE(<tspan font-weight="bold" fill="#E87A00">Hamiltonian Input</tspan>, <tspan font-weight="bold" fill="#6A0DAD">Hamiltonian</tspan>
+    Loss = MAE(<tspan font-weight="bold" fill="#E87A00">Hamiltonian Input</tspan>, <tspan font-weight="bold" fill="#7B68AE">Hamiltonian</tspan>
   </text>
   <text x="100" y="568" text-anchor="start"
-        font-size="14" font-weight="bold" fill="#6A0DAD">
+        font-size="14" font-weight="bold" fill="#7B68AE">
     Reconstructed<tspan font-weight="normal" fill="#333333"> )</tspan>
   </text>
 

@@ -33,9 +33,9 @@ ORANGE_LIGHT  = "#FFF4E6"
 ORANGE_DARK   = "#A85600"
 
 # Purple — validation / EM-simulation stages (CPW Cavity accent)
-PURPLE        = "#6A0DAD"
-PURPLE_LIGHT  = "#F0E6F6"
-PURPLE_DARK   = "#4A0A78"
+PURPLE        = "#7B68AE"
+PURPLE_LIGHT  = "#E8E4F0"
+PURPLE_DARK   = "#4A3D78"
 
 # Neutral utility box (the initial "Inputs" target row)
 NEUTRAL_FILL  = "#F5F5F5"

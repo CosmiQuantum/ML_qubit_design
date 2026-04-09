@@ -51,10 +51,10 @@ SURR_TEXT       = "#333333"
 SURR_TITLE      = "#E87A00"
 
 # Reconstruction node — purple, matching CPW Cavity Subsystem accent
-RECON_FILL      = "#F0E6F6"
-RECON_STROKE    = "#6A0DAD"
+RECON_FILL      = "#E8E4F0"
+RECON_STROKE    = "#7B68AE"
 RECON_TEXT      = "#333333"
-RECON_TITLE     = "#6A0DAD"
+RECON_TITLE     = "#7B68AE"
 
 # Arrows
 ARROW_MAIN      = "#555555"   # neutral grey arrows on the forward path
@@ -64,7 +64,7 @@ FEEDBACK        = GREEN       # green feedback loop (primary highlight)
 # Loss text
 LOSS_TEXT       = "#333333"
 LOSS_HL_IN      = "#E87A00"   # orange — ties to "input" side (Qubit accent)
-LOSS_HL_OUT     = "#6A0DAD"   # purple — ties to "reconstruction" side (Cavity accent)
+LOSS_HL_OUT     = "#7B68AE"   # purple — ties to "reconstruction" side (Cavity accent)
 
 SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 560 760"
@@ -143,7 +143,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
         marker-end="url(#arrowMain)"/>
 
   <!-- ── Best Qiskit Metal Parameter guess ──────────────────────── -->
-  <rect x="100" y="248" width="360" height="52" rx="10" ry="10"
+  <rect x="120" y="248" width="320" height="52" rx="10" ry="10"
         fill="{PARAM_FILL}" stroke="{PARAM_STROKE}" stroke-width="2"/>
   <text x="280" y="280" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{PARAM_TEXT}">

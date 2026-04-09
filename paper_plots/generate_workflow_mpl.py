@@ -32,9 +32,9 @@ ORANGE        = "#E87A00"
 ORANGE_LIGHT  = "#FFF4E6"
 ORANGE_DARK   = "#A85600"
 
-PURPLE        = "#6A0DAD"
-PURPLE_LIGHT  = "#F0E6F6"
-PURPLE_DARK   = "#4A0A78"
+PURPLE        = "#7B68AE"
+PURPLE_LIGHT  = "#E8E4F0"
+PURPLE_DARK   = "#4A3D78"
 
 NEUTRAL_FILL  = "#F5F5F5"
 NEUTRAL_STROKE = "#999999"
@@ -81,9 +81,9 @@ STAGES = [
 
     ("fwd",
      "Forward validation",
-     [r"Assemble design in Qiskit Metal; run Ansys Q3D",
-      r"(capacitance) and HFSS eigenmode (resonator)",
-      r"to extract physical quantities."],
+     [r"Look up closest design via SQuADDS; assemble layout",
+      r"in Qiskit Metal; run pyEPR $\rightarrow$ PyAEDT $\rightarrow$",
+      r"Ansys Q3D (cap. matrix) and HFSS eigenmode (resonator)."],
      "valid"),
 
     ("back",
@@ -95,7 +95,8 @@ STAGES = [
 
     ("cmp",
      "Compare and iterate",
-     [r"RMSPE between target and achieved Hamiltonian values;",
+     [r"Validation loss: RMSPE between reference (SQuADDS)",
+      r"and predicted (forward-pass) Hamiltonian values;",
       r"optionally refine features and rerun the pipeline."],
      "valid"),
 ]
