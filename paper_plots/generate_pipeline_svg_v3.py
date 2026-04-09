@@ -11,8 +11,12 @@ Usage:
     # => produces pipeline_updated.svg
 """
 import base64
+import io
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPDF
 
-with open("fig9_color-1.png", "rb") as f:
+# Use the rasterised PNG for embedding in the SVG
+with open("paper_plots/fig9_color-1.png", "rb") as f:
     b64data = base64.b64encode(f.read()).decode()
 
 GREEN       = "#3D8B3D"
@@ -22,7 +26,7 @@ FIG_PURPLE  = "#6A0DAD"
 PIPELINE_SHIFT = 46
 
 # Key y-coordinates for the top pipeline section
-# Title at y=36. Cross at cy=105. Pipeline boxes at y=175.
+# Title at y=36. Cross at cy=105. Pipeline boxes at  y=175.
 # Reference/Predicted labels at y=155 (below arrow, above boxes).
 # Separator at y=330. Bottom title at y=360. Image at y=378.
 
@@ -244,7 +248,23 @@ svg = SVG_TEMPLATE % {
     "B64DATA":        b64data,
 }
 
-with open("pipeline_updated.svg", "w") as f:
+with open("paper_plots/pipeline_updated.svg", "w") as f:
     f.write(svg)
 
 print("Written pipeline_updated.svg")
+
+# Convert SVG to PDF using svglib and reportlab
+# as cairosvg requires system-level libcairo
+try:
+    import cairosvg
+
+    with open("paper_plots/pipeline_updated.svg", "w", encoding="utf-8") as f:
+        f.write(svg)
+
+    cairosvg.svg2pdf(
+        url="paper_plots/pipeline_updated.svg",
+        write_to="paper_plots/pipeline_updated.pdf"
+    )
+    print("Written pipeline_updated.pdf")
+except Exception as e:
+    print(f"Error converting SVG to PDF: {e}")
