@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 980 848"
+     font-family="'Helvetica Neue', Arial, Helvetica, sans-serif">
+  <rect width="980" height="848" fill="#FFFFFF"/>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+    </marker>
+    <marker id="arrowFb" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3D8B3D"/>
+    </marker>
+    <marker id="tick" viewBox="0 0 10 10" refX="5" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto">
+      <circle cx="5" cy="5" r="2.5" fill="#555555"/>
+    </marker>
+  </defs>
+  <rect x="100" y="108" width="490" height="186" rx="16" ry="16" fill="#FFF4E6" fill-opacity="0.45" stroke="#E87A00" stroke-width="1.5" stroke-opacity="0.55" stroke-dasharray="6,4"/>
+  <text x="92" y="201.0" text-anchor="middle" font-size="12" font-weight="bold" font-style="italic" fill="#E87A00" transform="rotate(-90 92 201.0)">Physics</text>
+  <rect x="100" y="296" width="490" height="218" rx="16" ry="16" fill="#E8F5E8" fill-opacity="0.45" stroke="#3D8B3D" stroke-width="1.5" stroke-opacity="0.55" stroke-dasharray="6,4"/>
+  <text x="92" y="405.0" text-anchor="middle" font-size="12" font-weight="bold" font-style="italic" fill="#3D8B3D" transform="rotate(-90 92 405.0)">ML surrogate</text>
+  <rect x="100" y="516" width="490" height="280" rx="16" ry="16" fill="#E8E4F0" fill-opacity="0.45" stroke="#7B68AE" stroke-width="1.5" stroke-opacity="0.55" stroke-dasharray="6,4"/>
+  <text x="92" y="656.0" text-anchor="middle" font-size="12" font-weight="bold" font-style="italic" fill="#7B68AE" transform="rotate(-90 92 656.0)">Validation</text>
+  <rect x="130" y="40" width="430" height="56" rx="10" ry="10" fill="#F5F5F5" stroke="#999999" stroke-width="2"/>
+  <text x="144" y="62" font-size="14" font-weight="bold" fill="#222222">Inputs — target Hamiltonian</text>
+  <text x="144" y="82" font-size="12" fill="#555555" font-family="inherit">ω_q, α, ω_r, g, κ, …   (user-specified targets)</text>
+  <rect x="130" y="118" width="430" height="72" rx="10" ry="10" fill="#FFF4E6" stroke="#E87A00" stroke-width="2"/>
+  <text x="144" y="140" font-size="14" font-weight="bold" fill="#A85600">Physics mapping</text>
+  <text x="144" y="160" font-size="12" fill="#222222" font-family="inherit">Convert Hamiltonian targets to ML-friendly features</text>
+  <text x="144" y="176" font-size="12" fill="#222222" font-family="inherit">using analytic relations (e.g. α ≈ −E_C, ω_q ≈ √(8 E_J E_C) − E_C).</text>
+  <rect x="130" y="212" width="430" height="72" rx="10" ry="10" fill="#FFF4E6" stroke="#E87A00" stroke-width="2"/>
+  <text x="144" y="234" font-size="14" font-weight="bold" fill="#A85600">Preprocessing</text>
+  <text x="144" y="254" font-size="12" fill="#222222" font-family="inherit">Scale features (min–max fit on train set);</text>
+  <text x="144" y="270" font-size="12" fill="#222222" font-family="inherit">one-hot encode categoricals and “exists” masks.</text>
+  <rect x="130" y="306" width="430" height="104" rx="10" ry="10" fill="#E8F5E8" stroke="#3D8B3D" stroke-width="2"/>
+  <text x="144" y="328" font-size="14" font-weight="bold" fill="#2E6B2E">Three trained inverse MLPs</text>
+  <text x="144" y="348" font-size="12" fill="#444444" font-family="Menlo, Consolas, monospace">• TransmonCross  (cap_matrix):       x_q → y_q</text>
+  <text x="144" y="364" font-size="12" fill="#444444" font-family="Menlo, Consolas, monospace">• Coupler / NCap (cap_matrix):       x_c → y_c</text>
+  <text x="144" y="380" font-size="12" fill="#444444" font-family="Menlo, Consolas, monospace">• Cavity / resonator (eigenmode):    x_r → y_r</text>
+  <rect x="130" y="432" width="430" height="72" rx="10" ry="10" fill="#E8F5E8" stroke="#3D8B3D" stroke-width="2"/>
+  <text x="144" y="454" font-size="14" font-weight="bold" fill="#2E6B2E">Postprocessing</text>
+  <text x="144" y="474" font-size="12" fill="#222222" font-family="inherit">Unscale predictions back to physical units;</text>
+  <text x="144" y="490" font-size="12" fill="#222222" font-family="inherit">decode categorical outputs and apply “exists” masks.</text>
+  <rect x="130" y="526" width="430" height="72" rx="10" ry="10" fill="#E8E4F0" stroke="#7B68AE" stroke-width="2"/>
+  <text x="144" y="548" font-size="14" font-weight="bold" fill="#4A3D78">Forward validation</text>
+  <text x="144" y="568" font-size="12" fill="#222222" font-family="inherit">Assemble design in Qiskit Metal; run Ansys Q3D (capacitance)</text>
+  <text x="144" y="584" font-size="12" fill="#222222" font-family="inherit">and HFSS eigenmode (resonator) to extract physical quantities.</text>
+  <rect x="130" y="620" width="430" height="72" rx="10" ry="10" fill="#E8E4F0" stroke="#7B68AE" stroke-width="2"/>
+  <text x="144" y="642" font-size="14" font-weight="bold" fill="#4A3D78">Map back to Hamiltonian space</text>
+  <text x="144" y="662" font-size="12" fill="#222222" font-family="inherit">Convert extracted capacitances and mode frequencies</text>
+  <text x="144" y="678" font-size="12" fill="#222222" font-family="inherit">back to achieved ω_q, α, ω_r, g via the inverse physics map.</text>
+  <rect x="130" y="714" width="430" height="72" rx="10" ry="10" fill="#E8E4F0" stroke="#7B68AE" stroke-width="2"/>
+  <text x="144" y="736" font-size="14" font-weight="bold" fill="#4A3D78">Compare and iterate</text>
+  <text x="144" y="756" font-size="12" fill="#222222" font-family="inherit">RMSPE between target and achieved Hamiltonian values;</text>
+  <text x="144" y="772" font-size="12" fill="#222222" font-family="inherit">optionally refine features and rerun the pipeline.</text>
+  <line x1="345.0" y1="96" x2="345.0" y2="118" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="345.0" y1="190" x2="345.0" y2="212" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="345.0" y1="284" x2="345.0" y2="306" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="345.0" y1="410" x2="345.0" y2="432" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="345.0" y1="504" x2="345.0" y2="526" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="345.0" y1="598" x2="345.0" y2="620" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="345.0" y1="692" x2="345.0" y2="714" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="620" y="118" width="320" height="40" rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="630" y="133" font-size="11" font-weight="bold" fill="#222222">target vector</text>
+  <text x="630" y="148" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">H_target = (ω_q, α, ω_r, g, …)</text>
+  <line x1="560" y1="138.0" x2="620" y2="138.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="620" y="212" width="320" height="54" rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="630" y="227" font-size="11" font-weight="bold" fill="#222222">feature vector</text>
+  <text x="630" y="242" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">x_raw  ∈  R^d_in</text>
+  <text x="630" y="256" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">physically-meaningful quantities</text>
+  <line x1="560" y1="239.0" x2="620" y2="239.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="620" y="306" width="320" height="54" rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="630" y="321" font-size="11" font-weight="bold" fill="#222222">scaled features</text>
+  <text x="630" y="336" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">x  =  scaler(x_raw)</text>
+  <text x="630" y="350" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">ready for NN input</text>
+  <line x1="560" y1="333.0" x2="620" y2="333.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="620" y="432" width="320" height="54" rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="630" y="447" font-size="11" font-weight="bold" fill="#222222">raw NN outputs</text>
+  <text x="630" y="462" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">y_q(pred), y_c(pred), y_r(pred)</text>
+  <text x="630" y="476" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">in scaled / encoded form</text>
+  <line x1="560" y1="459.0" x2="620" y2="459.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="620" y="526" width="320" height="54" rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="630" y="541" font-size="11" font-weight="bold" fill="#222222">Qiskit Metal params</text>
+  <text x="630" y="556" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">y_q, y_c, y_r   (µm, counts, …)</text>
+  <text x="630" y="570" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">+ categorical design choices</text>
+  <line x1="560" y1="553.0" x2="620" y2="553.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="620" y="620" width="320" height="54" rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="630" y="635" font-size="11" font-weight="bold" fill="#222222">extracted quantities</text>
+  <text x="630" y="650" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">C_ij   (capacitance matrix)</text>
+  <text x="630" y="664" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">f_mode (HFSS eigenmode)</text>
+  <line x1="560" y1="647.0" x2="620" y2="647.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="620" y="714" width="320" height="40" rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="630" y="729" font-size="11" font-weight="bold" fill="#222222">achieved Hamiltonian</text>
+  <text x="630" y="744" font-size="11" font-family="Menlo, Consolas, monospace" fill="#555555">H_pred = (ω_q, α, ω_r, g, …)_achieved</text>
+  <line x1="560" y1="734.0" x2="620" y2="734.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
+  <path d="M 130,750.0 L 80,750.0 L 80,154.0 L 130,154.0" fill="none" stroke="#3D8B3D" stroke-width="2.5" stroke-dasharray="7,4" marker-end="url(#arrowFb)"/>
+  <text x="74" y="452.0" text-anchor="middle" font-size="11" font-style="italic" font-weight="bold" fill="#3D8B3D" transform="rotate(-90 74 452.0)">refined targets / retry</text>
+</svg>
