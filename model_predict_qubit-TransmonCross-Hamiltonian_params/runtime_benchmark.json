@@ -1,0 +1,16 @@
+{
+  "hardware": "x86_64",
+  "system": "Linux 6.3.12-200.fc38.x86_64",
+  "python": "3.10.13",
+  "tf": "2.20.0",
+  "n_test": 291,
+  "inverse_batch_total_ms": 93.77898640930653,
+  "inverse_per_sample_ms": 0.3222645581075826,
+  "inverse_single_call_ms": 83.95097330212593,
+  "combined_batch_total_ms": 94.04516067355871,
+  "combined_per_sample_ms": 0.32317924630088907,
+  "combined_single_call_ms": 84.51076600700617,
+  "ansys_min_per_sample": 10.0,
+  "speedup_combined_per_sample": 1856554.8588518675,
+  "speedup_combined_single_call": 7099.687156429968
+}
