@@ -1,0 +1,4 @@
+ref_cavity_frequency,pred_cavity_frequency,ref_kappa,pred_kappa,ref_claw_opts.connection_pads.readout.claw_length,pred_claw_opts.connection_pads.readout.claw_length,ref_claw_opts.connection_pads.readout.ground_spacing,pred_claw_opts.connection_pads.readout.ground_spacing,ref_cpw_opts.total_length,pred_cpw_opts.total_length,ref_cpw_opts.meander.asymmetry,pred_cpw_opts.meander.asymmetry,ref_cplr_opts.coupling_length,pred_cplr_opts.coupling_length
+6172914368.493957,6173233700.0,24653.2103228,26748.348,0.00036,0.0003688477,4.1e-06,5.1149386e-06,0.0039,0.0038111864,-4.999999999999999e-05,8.513298e-05,0.0001,0.00010586222
+8296634137.210443,8281324000.0,166527.8790458,168888.86,0.00028,0.00013549296,4.1e-06,5.9654785e-06,0.0027,0.0030887292,-9.999999999999999e-05,8.2469516e-05,0.0002,0.00016922556
+7635989932.310852,7641672700.0,498700.54419,498787.6,0.00036,0.00012863326,4.1e-06,5.6646354e-06,0.0027,0.0032171763,0.00011666666666700002,0.000113686,0.00035,0.00034652068
