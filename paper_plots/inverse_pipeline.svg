@@ -39,7 +39,7 @@
         fill="#E8F5E8" stroke="#3D8B3D" stroke-width="2"
         filter="url(#softShadow)"/>
   <text x="280" y="56" text-anchor="middle"
-        font-size="17" font-weight="bold" fill="#222222">
+        font-size="14" font-weight="bold" fill="#222222">
     Desired Hamiltonian Input
   </text>
 
@@ -58,16 +58,16 @@
 
   <!-- "Training" label, top-right of container -->
   <text x="480" y="146" text-anchor="end"
-        font-size="16" font-style="italic" font-weight="bold"
+        font-size="13" font-style="italic" font-weight="bold"
         fill="#2E6B2E">Training</text>
 
   <!-- ── Inverse MLP node ───────────────────────────────────────── -->
   <rect x="210" y="150" width="140" height="60" rx="10" ry="10"
         fill="#3D8B3D" stroke="#2E6B2E" stroke-width="2"/>
   <text x="280" y="176" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="#FFFFFF">Inverse</text>
+        font-size="14" font-weight="bold" fill="#FFFFFF">Inverse</text>
   <text x="280" y="196" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="#FFFFFF">MLP</text>
+        font-size="14" font-weight="bold" fill="#FFFFFF">MLP</text>
 
   <!-- Arrow: Inverse MLP -> Qiskit params -->
   <line x1="280" y1="212" x2="280" y2="244"
@@ -78,7 +78,7 @@
   <rect x="120" y="248" width="320" height="52" rx="10" ry="10"
         fill="#E8E8E8" stroke="#999999" stroke-width="2"/>
   <text x="280" y="280" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="#333333">
+        font-size="14" font-weight="bold" fill="#333333">
     Best Qiskit Metal Parameter guess
   </text>
 
@@ -91,9 +91,9 @@
   <rect x="170" y="338" width="220" height="68" rx="10" ry="10"
         fill="#FFF4E6" stroke="#E87A00" stroke-width="2"/>
   <text x="280" y="365" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="#333333">Ansys Surrogate</text>
+        font-size="14" font-weight="bold" fill="#333333">Ansys Surrogate</text>
   <text x="280" y="388" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="#333333">MLP</text>
+        font-size="14" font-weight="bold" fill="#333333">MLP</text>
 
   <!-- Arrow: Surrogate -> Reconstruction -->
   <line x1="280" y1="408" x2="280" y2="440"
@@ -104,17 +104,17 @@
   <rect x="170" y="444" width="220" height="68" rx="10" ry="10"
         fill="#E8E4F0" stroke="#7B68AE" stroke-width="2"/>
   <text x="280" y="471" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="#333333">Hamiltonian</text>
+        font-size="14" font-weight="bold" fill="#333333">Hamiltonian</text>
   <text x="280" y="494" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="#333333">Reconstruction</text>
+        font-size="14" font-weight="bold" fill="#333333">Reconstruction</text>
 
   <!-- ── Loss line ─────────────────────────────────────────────── -->
   <text x="100" y="548" text-anchor="start"
-        font-size="14" fill="#333333">
+        font-size="12" fill="#333333">
     Loss = MAE(<tspan font-weight="bold" fill="#E87A00">Hamiltonian Input</tspan>, <tspan font-weight="bold" fill="#7B68AE">Hamiltonian</tspan>
   </text>
   <text x="100" y="568" text-anchor="start"
-        font-size="14" font-weight="bold" fill="#7B68AE">
+        font-size="12" font-weight="bold" fill="#7B68AE">
     Reconstructed<tspan font-weight="normal" fill="#333333"> )</tspan>
   </text>
 
@@ -143,7 +143,7 @@
         fill="#E8F5E8" stroke="#3D8B3D" stroke-width="2"
         filter="url(#softShadow)"/>
   <text x="280" y="708" text-anchor="middle"
-        font-size="17" font-weight="bold" fill="#222222">
+        font-size="14" font-weight="bold" fill="#222222">
     Best Qiskit Metal Design Output
   </text>
 
