@@ -49,95 +49,98 @@ ARROW         = "#555555"
 FEEDBACK      = GREEN
 
 # ---- Layout -------------------------------------------------------------
-W = 980
-H = 960
+W = 490
+H = 680
 
 # Pipeline column
-BOX_X     = 130        # left edge of pipeline boxes
-BOX_W     = 430        # pipeline box width (wider to fit longest lines)
-BOX_R     = 10         # corner radius
+BOX_X     = 55
+BOX_W     = 225
+BOX_R     = 6
 
 # Annotation column (to the right of pipeline)
-ANN_X     = 620
-ANN_W     = 320
+ANN_X     = 310
+ANN_W     = 170
 
 # Stages: (id, title, body_lines, category, height)
-# category controls color: 'neutral' | 'physics' | 'ml' | 'valid'
 STAGES = [
     ("inputs",
      "Inputs — target Hamiltonian",
-     [r"ω_q, α, ω_r, g, κ, …   (user-specified targets)"],
-     "neutral", 56),
+     ["ω_q, α, ω_r, g, κ, …",
+      "(user-specified targets)"],
+     "neutral", 60),
 
     ("map",
      "Physics mapping",
-     ["Convert Hamiltonian targets to ML-friendly features",
-      "using analytic relations (e.g. α ≈ −E_C, ω_q ≈ √(8 E_J E_C) − E_C)."],
-     "physics", 72),
+     ["Convert Hamiltonian targets to",
+      "ML-friendly features using",
+      "analytic relations (e.g. α ≈ −E_C)."],
+     "physics", 75),
 
     ("pre",
      "Preprocessing",
-     ["Scale features (min–max fit on train set);",
-      "one-hot encode categoricals and “exists” masks."],
-     "physics", 72),
+     ["Scale features (min–max fit",
+      "on train set); one-hot encode",
+      "categoricals and “exists” masks."],
+     "physics", 75),
 
     ("mlps",
      "Three trained inverse MLPs",
-     ["• TransmonCross  (cap_matrix):       x_q → y_q",
-      "• Coupler / NCap (cap_matrix):       x_c → y_c",
-      "• Cavity / resonator (eigenmode):    x_r → y_r"],
-     "ml", 104),
+     ["• TransmonCross: x_q → a_q",
+      "• Coupler / NCap: x_c → a_c",
+      "• Cavity / res: x_r → a_r"],
+     "ml", 75),
 
     ("post",
      "Postprocessing",
-     ["Unscale predictions back to physical units;",
-      "decode categorical outputs and apply “exists” masks."],
-     "ml", 72),
+     ["Unscale predictions back to",
+      "physical units; decode rules",
+      "and apply “exists” masks."],
+     "ml", 75),
 
     ("fwd",
      "Forward validation",
-     ["Assemble design in Qiskit Metal; run Ansys Q3D (capacitance)",
-      "and HFSS eigenmode (resonator) to extract physical quantities."],
-     "valid", 72),
+     ["Assemble design in Qiskit Metal;",
+      "run Ansys Q3D (capacitance) and",
+      "HFSS to extract physical values."],
+     "valid", 75),
 
     ("back",
-     "Map back to Hamiltonian space",
-     ["Convert extracted capacitances and mode frequencies",
-      "back to achieved ω_q, α, ω_r, g via the inverse physics map."],
-     "valid", 72),
+     "Map back to Hamiltonian",
+     ["Convert capacitances & modes",
+      "back to achieved ω_q, α, ω_r, g",
+      "via inverse physics map."],
+     "valid", 75),
 
     ("cmp",
      "Compare and iterate",
-     ["RMSPE between target and achieved Hamiltonian values;",
-      "optionally refine features and rerun the pipeline."],
-     "valid", 72),
+     ["RMSPE between target",
+      "and achieved Hamiltonian;",
+      "optionally refine targets."],
+     "valid", 75),
 ]
 
-# Annotations: data object that flows INTO each stage (except the first).
-# Keyed by stage id.  Each entry: (short_label, detail_lines)
 ANNOTATIONS = {
     "map":  ("target vector",
-             ["H_target = (ω_q, α, ω_r, g, …)"]),
+             ["H_target = (ω_q, α, …)"]),
     "pre":  ("feature vector",
-             ["x_raw  ∈  R^d_in",
-              "physically-meaningful quantities"]),
+             ["x_raw ∈ R^d_in",
+              "physical quantities"]),
     "mlps": ("scaled features",
-             ["x  =  scaler(x_raw)",
-              "ready for NN input"]),
+             ["x = scaler(x_raw)"]),
     "post": ("raw NN outputs",
-             ["y_q(pred), y_c(pred), y_r(pred)",
-              "in scaled / encoded form"]),
+             ["a_q, a_c, a_r",
+              "in scaled form"]),
     "fwd":  ("Qiskit Metal params",
-             ["y_q, y_c, y_r   (µm, counts, …)",
-              "+ categorical design choices"]),
+             ["y_q, y_c, y_r",
+              "+ design choices"]),
     "back": ("extracted quantities",
-             ["C_ij   (capacitance matrix)",
-              "f_mode (HFSS eigenmode)"]),
+             ["C_ij matrix",
+              "f_mode (HFSS)"]),
     "cmp":  ("achieved Hamiltonian",
-             ["H_pred = (ω_q, α, ω_r, g, …)_achieved"]),
+             ["H_pred = (ω_q, α, …)"]),
 }
 
-# Feedback annotation (on the return arrow)
+# Feedback annotation
 FEEDBACK_LABEL = "refined targets / retry"
 
 CATEGORY_STYLE = {
@@ -154,13 +157,13 @@ CATEGORY_BADGE = {
 }
 
 # ---- Precompute y-coordinates for each stage ----------------------------
-Y_START = 40
-GAP     = 22
+Y_START = 20
+GAP     = 16
 
 stage_y = {}
 y = Y_START
 for sid, _, _, _, h in STAGES:
-    stage_y[sid] = (y, y + h)   # (top, bottom)
+    stage_y[sid] = (y, y + h)
     y += h + GAP
 TOTAL_H = y
 
@@ -168,9 +171,9 @@ TOTAL_H = y
 out = io.StringIO()
 
 out.write(f'''<svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 {W} {TOTAL_H + 40}"
+     viewBox="0 0 {W} {TOTAL_H + 20}"
      font-family="'Helvetica Neue', Arial, Helvetica, sans-serif">
-  <rect width="{W}" height="{TOTAL_H + 40}" fill="{BG}"/>
+  <rect width="{W}" height="{TOTAL_H + 20}" fill="{BG}"/>
 
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
@@ -181,16 +184,11 @@ out.write(f'''<svg xmlns="http://www.w3.org/2000/svg"
             markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="{FEEDBACK}"/>
     </marker>
-    <marker id="tick" viewBox="0 0 10 10" refX="5" refY="5"
-            markerWidth="5" markerHeight="5" orient="auto">
-      <circle cx="5" cy="5" r="2.5" fill="{ARROW}"/>
-    </marker>
   </defs>
 ''')
 
-# ---- Lane backgrounds (grouped color bands behind the pipeline) ---------
-# Group consecutive stages with the same category to form a shaded lane.
-lanes = []  # list of (category, y_top, y_bot)
+# ---- Lane backgrounds ---------------------------------------------------
+lanes = []
 cur_cat = None
 lane_top = None
 for sid, _, _, cat, _ in STAGES:
@@ -203,27 +201,26 @@ for sid, _, _, cat, _ in STAGES:
     prev_bot = bot
 lanes.append((cur_cat, lane_top, prev_bot))
 
-LANE_X = BOX_X - 30
-LANE_W = BOX_W + 60
+LANE_X = BOX_X - 22
+LANE_W = BOX_W + 44
 
 for cat, top, bot in lanes:
     if cat == "neutral":
-        continue  # skip the neutral "inputs" lane
+        continue
     fill, stroke, _, _ = CATEGORY_STYLE[cat]
     badge, badge_col = CATEGORY_BADGE[cat]
     out.write(
-        f'  <rect x="{LANE_X}" y="{top - 10}" width="{LANE_W}" '
-        f'height="{bot - top + 20}" rx="16" ry="16" '
+        f'  <rect x="{LANE_X}" y="{top - 8}" width="{LANE_W}" '
+        f'height="{bot - top + 16}" rx="10" ry="10" '
         f'fill="{fill}" fill-opacity="0.45" '
         f'stroke="{stroke}" stroke-width="1.5" stroke-opacity="0.55" '
-        f'stroke-dasharray="6,4"/>\n'
+        f'stroke-dasharray="4,3"/>\n'
     )
-    # Badge label, vertical, on left side of the lane
     badge_cx = LANE_X - 8
     badge_cy = (top + bot) / 2
     out.write(
         f'  <text x="{badge_cx}" y="{badge_cy}" '
-        f'text-anchor="middle" font-size="12" font-weight="bold" '
+        f'text-anchor="middle" font-size="10" font-weight="bold" '
         f'font-style="italic" fill="{badge_col}" '
         f'transform="rotate(-90 {badge_cx} {badge_cy})">{badge}</text>\n'
     )
@@ -236,41 +233,36 @@ for sid, title, body, cat, h in STAGES:
     out.write(
         f'  <rect x="{BOX_X}" y="{top}" width="{BOX_W}" height="{h}" '
         f'rx="{BOX_R}" ry="{BOX_R}" '
-        f'fill="{fill}" stroke="{stroke}" stroke-width="2"/>\n'
+        f'fill="{fill}" stroke="{stroke}" stroke-width="1.5"/>\n'
     )
-    # Title
     out.write(
-        f'  <text x="{BOX_X + 14}" y="{top + 22}" '
-        f'font-size="14" font-weight="bold" fill="{title_col}">{title}</text>\n'
+        f'  <text x="{BOX_X + 10}" y="{top + 18}" '
+        f'font-size="12" font-weight="bold" fill="{title_col}">{title}</text>\n'
     )
-    # Body lines
-    line_y = top + 42
+    line_y = top + 34
     for line in body:
-        # Use a monospace-feeling weight for bullet / equation lines
         is_mono = line.startswith("•") or "→" in line
         fcol = TEXT_MONO if is_mono else body_col
-        fsize = 12 if is_mono else 12
+        fsize = 9 if is_mono else 10
         fam = "Menlo, Consolas, monospace" if is_mono else "inherit"
         out.write(
-            f'  <text x="{BOX_X + 14}" y="{line_y}" '
+            f'  <text x="{BOX_X + 10}" y="{line_y}" '
             f'font-size="{fsize}" fill="{fcol}" '
             f'font-family="{fam}">{line}</text>\n'
         )
-        line_y += 16
+        line_y += 14
 
-# ---- Forward arrows between pipeline boxes ------------------------------
+# ---- Forward arrows -----------------------------------------------------
 for i in range(len(STAGES) - 1):
     _, bot = stage_y[STAGES[i][0]]
     top, _ = stage_y[STAGES[i + 1][0]]
     cx = BOX_X + BOX_W / 2
     out.write(
         f'  <line x1="{cx}" y1="{bot}" x2="{cx}" y2="{top}" '
-        f'stroke="{ARROW}" stroke-width="2" marker-end="url(#arrow)"/>\n'
+        f'stroke="{ARROW}" stroke-width="1.5" marker-end="url(#arrow)"/>\n'
     )
 
 # ---- Annotations (right column) -----------------------------------------
-# For each forward arrow, attach a small labeled card beside the arrow's
-# destination stage showing what data flows in.
 for i in range(1, len(STAGES)):
     sid = STAGES[i][0]
     if sid not in ANNOTATIONS:
@@ -278,55 +270,49 @@ for i in range(1, len(STAGES)):
     label, details = ANNOTATIONS[sid]
     top, _ = stage_y[sid]
 
-    card_h = 18 + 14 * len(details) + 8
+    card_h = 16 + 12 * len(details) + 6
     card_y = top
-    # Card
     out.write(
         f'  <rect x="{ANN_X}" y="{card_y}" width="{ANN_W}" height="{card_h}" '
-        f'rx="6" ry="6" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>\n'
+        f'rx="4" ry="4" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>\n'
     )
-    # Label
     out.write(
-        f'  <text x="{ANN_X + 10}" y="{card_y + 15}" '
-        f'font-size="11" font-weight="bold" fill="{TEXT_MAIN}">{label}</text>\n'
+        f'  <text x="{ANN_X + 8}" y="{card_y + 14}" '
+        f'font-size="10" font-weight="bold" fill="{TEXT_MAIN}">{label}</text>\n'
     )
-    # Detail lines (monospace, dim)
-    dy = card_y + 30
+    dy = card_y + 28
     for d in details:
         out.write(
-            f'  <text x="{ANN_X + 10}" y="{dy}" font-size="11" '
+            f'  <text x="{ANN_X + 8}" y="{dy}" font-size="9" '
             f'font-family="Menlo, Consolas, monospace" '
             f'fill="{TEXT_DIM}">{d}</text>\n'
         )
-        dy += 14
-    # Short connector dashed line from pipeline box edge to card left edge
+        dy += 12
     out.write(
         f'  <line x1="{BOX_X + BOX_W}" y1="{card_y + card_h/2}" '
         f'x2="{ANN_X}" y2="{card_y + card_h/2}" '
         f'stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>\n'
     )
 
-# ---- Feedback loop: cmp → map -------------------------------------------
+# ---- Feedback loop ------------------------------------------------------
 map_top, _ = stage_y["map"]
 _, cmp_bot = stage_y["cmp"]
 cmp_mid_y = (stage_y["cmp"][0] + stage_y["cmp"][1]) / 2
 map_mid_y = (stage_y["map"][0] + stage_y["map"][1]) / 2
 
-# Path: from left edge of cmp, out to x=80, up to map's left edge
-FB_X = 80
+FB_X = 18
 out.write(
     f'  <path d="M {BOX_X},{cmp_mid_y} '
     f'L {FB_X},{cmp_mid_y} '
     f'L {FB_X},{map_mid_y} '
     f'L {BOX_X},{map_mid_y}" '
-    f'fill="none" stroke="{FEEDBACK}" stroke-width="2.5" '
-    f'stroke-dasharray="7,4" marker-end="url(#arrowFb)"/>\n'
+    f'fill="none" stroke="{FEEDBACK}" stroke-width="2" '
+    f'stroke-dasharray="5,3" marker-end="url(#arrowFb)"/>\n'
 )
-# Label on feedback arm, rotated
 fb_label_y = (cmp_mid_y + map_mid_y) / 2
 out.write(
     f'  <text x="{FB_X - 6}" y="{fb_label_y}" '
-    f'text-anchor="middle" font-size="11" font-style="italic" '
+    f'text-anchor="middle" font-size="9" font-style="italic" '
     f'font-weight="bold" fill="{FEEDBACK}" '
     f'transform="rotate(-90 {FB_X - 6} {fb_label_y})">{FEEDBACK_LABEL}</text>\n'
 )
@@ -335,15 +321,16 @@ out.write("</svg>\n")
 
 SVG = out.getvalue()
 
-# ---- Write SVG ----------------------------------------------------------
+# ---- Write files -------------------------------------------------------
 with open("paper_plots/workflow.svg", "w") as f:
     f.write(SVG)
 print("Written paper_plots/workflow.svg")
 
-# ---- Write PDF via svglib (pure-Python, no Cairo needed) ---------------
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPDF
-
-drawing = svg2rlg(io.StringIO(SVG))
-renderPDF.drawToFile(drawing, "paper_plots/workflow.pdf")
-print("Written paper_plots/workflow.pdf")
+try:
+    from svglib.svglib import svg2rlg
+    from reportlab.graphics import renderPDF
+    drawing = svg2rlg(io.StringIO(SVG))
+    renderPDF.drawToFile(drawing, "paper_plots/workflow.pdf")
+    print("Written paper_plots/workflow.pdf")
+except ImportError:
+    print("svglib / reportlab missing, could not write workflow.pdf")
