@@ -118,7 +118,7 @@ ax.text(
     W / 2, TITLE_Y,
     r"Gaussian stress-test methodology",
     ha="center", va="center",
-    fontsize=15, fontweight="bold", color=TEXT_MAIN,
+    fontsize=12, fontweight="bold", color=TEXT_MAIN,
 )
 
 # ---- Goal banner (neutral card with green label) ------------------------
@@ -228,7 +228,7 @@ ax.text(
     r"Surrogate evaluates all 30,000 samples in seconds "
     r"($\sim$5000 Ansys-hours equivalent).",
     ha="center", va="center",
-    fontsize=11.5, fontweight="bold", color=ORANGE_DARK,
+    fontsize=12, fontweight="bold", color=ORANGE_DARK,
 )
 
 # ---- Save ---------------------------------------------------------------
