@@ -49,16 +49,16 @@ ARROW         = "#555555"
 FEEDBACK      = GREEN
 
 # ---- Layout -------------------------------------------------------------
-W = 490
+W = 540
 H = 680
 
 # Pipeline column
-BOX_X     = 55
+BOX_X     = 95
 BOX_W     = 225
 BOX_R     = 6
 
 # Annotation column (to the right of pipeline)
-ANN_X     = 310
+ANN_X     = 350
 ANN_W     = 170
 
 # Stages: (id, title, body_lines, category, height)
@@ -201,8 +201,8 @@ for sid, _, _, cat, _ in STAGES:
     prev_bot = bot
 lanes.append((cur_cat, lane_top, prev_bot))
 
-LANE_X = BOX_X - 22
-LANE_W = BOX_W + 44
+LANE_X = BOX_X - 16
+LANE_W = BOX_W + 32
 
 for cat, top, bot in lanes:
     if cat == "neutral":
@@ -216,7 +216,7 @@ for cat, top, bot in lanes:
         f'stroke="{stroke}" stroke-width="1.5" stroke-opacity="0.55" '
         f'stroke-dasharray="4,3"/>\n'
     )
-    badge_cx = LANE_X - 8
+    badge_cx = LANE_X - 12
     badge_cy = (top + bot) / 2
     out.write(
         f'  <text x="{badge_cx}" y="{badge_cy}" '
@@ -300,7 +300,7 @@ _, cmp_bot = stage_y["cmp"]
 cmp_mid_y = (stage_y["cmp"][0] + stage_y["cmp"][1]) / 2
 map_mid_y = (stage_y["map"][0] + stage_y["map"][1]) / 2
 
-FB_X = 18
+FB_X = 44
 out.write(
     f'  <path d="M {BOX_X},{cmp_mid_y} '
     f'L {FB_X},{cmp_mid_y} '
