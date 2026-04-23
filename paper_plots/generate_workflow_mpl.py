@@ -142,17 +142,17 @@ CATEGORY_BADGE = {
 # ---- Layout (in figure data coordinates, arbitrary units) ---------------
 # We use a plain (0..100, 0..100) coordinate system and size the figure to
 # match the aspect ratio we want.
-FIG_W_IN = 12
+FIG_W_IN = 13
 FIG_H_IN = 13
 
 BOX_X      = 14      # left edge of pipeline boxes
-BOX_W      = 60      # pipeline box width — wider to fit long lines
+BOX_W      = 64      # pipeline box width — wider to fit long lines at 9-12pt
 TITLE_DY   = 3.2     # vertical offset from box top to title baseline
 LINE_DY    = 2.6     # vertical spacing between body lines
 TITLE_PAD  = 1.6     # space from title to first body line
 
 ANN_X      = 78      # annotation cards
-ANN_W      = 28
+ANN_W      = 30
 
 # Stage heights are computed from number of body lines.
 def stage_height(body_lines):

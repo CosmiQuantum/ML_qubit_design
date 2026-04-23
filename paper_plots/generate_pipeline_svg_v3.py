@@ -39,7 +39,7 @@ SVG_TEMPLATE = """\
   <!-- transparent background -->
 
   <text x="560" y="32"
-        text-anchor="middle" font-size="22" font-weight="bold" fill="#333">
+        text-anchor="middle" font-size="16" font-weight="bold" fill="#333">
     Transmon&#x2013;Resonator System: Parameter Identification
   </text>
 
@@ -57,38 +57,38 @@ SVG_TEMPLATE = """\
   <rect x="22" y="552" width="270" height="62" rx="5" ry="5"
         fill="#FFF4E6" stroke="%(FIG_ORANGE)s" stroke-width="1.5"/>
   <text x="157" y="576" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="%(FIG_ORANGE)s">
+        font-size="14" font-weight="bold" fill="%(FIG_ORANGE)s">
     &#x03B1; (anharmonicity)
   </text>
   <text x="157" y="600" text-anchor="middle"
-        font-size="16" fill="#555">&#x2248; &#x2212;E_C from Q3D</text>
+        font-size="13" fill="#555">&#x2248; &#x2212;E_C from Q3D</text>
 
   <rect x="298" y="552" width="270" height="62" rx="5" ry="5"
         fill="#FFF4E6" stroke="%(FIG_ORANGE)s" stroke-width="1.5"/>
   <text x="433" y="576" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="%(FIG_ORANGE)s">
+        font-size="14" font-weight="bold" fill="%(FIG_ORANGE)s">
     f_qubit (qubit frequency)
   </text>
   <text x="433" y="600" text-anchor="middle"
-        font-size="16" fill="#555">&#x2248; &#x221A;(8 E_J E_C) &#x2212; E_C from Q3D</text>
+        font-size="13" fill="#555">&#x2248; &#x221A;(8 E_J E_C) &#x2212; E_C from Q3D</text>
 
   <rect x="574" y="552" width="270" height="62" rx="5" ry="5"
         fill="#E8E4F0" stroke="%(FIG_PURPLE)s" stroke-width="1.5"/>
   <text x="709" y="576" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="%(FIG_PURPLE)s">
+        font-size="14" font-weight="bold" fill="%(FIG_PURPLE)s">
     f_res (resonator freq.)
   </text>
   <text x="709" y="600" text-anchor="middle"
-        font-size="16" fill="#555">HFSS eigenmode solver</text>
+        font-size="13" fill="#555">HFSS eigenmode solver</text>
 
   <rect x="850" y="552" width="258" height="62" rx="5" ry="5"
         fill="#E8E4F0" stroke="%(FIG_PURPLE)s" stroke-width="1.5"/>
   <text x="979" y="576" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="%(FIG_PURPLE)s">
+        font-size="14" font-weight="bold" fill="%(FIG_PURPLE)s">
     &#x03BA; (resonator linewidth)
   </text>
   <text x="979" y="600" text-anchor="middle"
-        font-size="16" fill="#555">HFSS via 50&#x2126; port loss</text>
+        font-size="13" fill="#555">HFSS via 50&#x2126; port loss</text>
 </svg>
 """
 
