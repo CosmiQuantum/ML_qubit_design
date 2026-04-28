@@ -14,3 +14,45 @@ experiments/*/kt_dir*/
 experiments/*/kt_dir*/*
 experiments/*/model/*
 experiments/*/scalers/*
+
+# ML model artifacts and tuner outputs
+*.h5
+*.keras
+*.weights.h5
+*.zip
+kt_dir/
+kt_dir2/
+keras/hyper_tuning*/
+*/kt_dir/
+*/kt_dir2/
+*/keras/hyper_tuning*/
+.ipynb_checkpoints/
+__pycache__/
+
+# ML model artifacts and tuner outputs
+*.h5
+*.keras
+*.weights.h5
+*.zip
+kt_dir/
+kt_dir2/
+keras/hyper_tuning*/
+*/kt_dir/
+*/kt_dir2/
+*/keras/hyper_tuning*/
+.ipynb_checkpoints/
+__pycache__/
+
+# ML model artifacts and tuner outputs
+*.h5
+*.keras
+*.weights.h5
+*.zip
+kt_dir/
+kt_dir2/
+keras/hyper_tuning*/
+*/kt_dir/
+*/kt_dir2/
+*/keras/hyper_tuning*/
+.ipynb_checkpoints/
+__pycache__/
