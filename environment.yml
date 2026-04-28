@@ -2,23 +2,32 @@ name: cryo-modelling-env
 channels:
   - conda-forge
 dependencies:
-  - python
+  - python=3.9
+  - numpy
+  - scipy
   - nodejs
+  - ipython
   - jupyterlab
   - jupyterlab-git
   - jsonschema-with-format-nongpl
   - pandas
+  - joblib
   - pydot
   - graphviz
   - scikit-learn
   - matplotlib
+  - reportlab
+  - svglib
+  - cairosvg
+  - pymupdf
   - tensorflow-cpu==2.11.1
   - tensorflow-datasets==4.8.3
   - webcolors
   - widgetsnbextension==3.6.0
   - pip
-    #- pip:
-    #    - hls4ml[profiling]==0.7.1
-    #    - qkeras==0.9.0
-    #    - conifer==0.2b0
-
+  - pip:
+      - keras-tuner
+    # Validation notebooks also depend on the SQuADDS / Qiskit Metal /
+    # Ansys toolchain, which is not pinned here because those installs are
+    # environment-specific and often require external desktop software.
+    # Add those separately if you plan to run the validation notebooks.
