@@ -18,6 +18,10 @@ Usage:
     python3 generate_gaussian_stress_test_methodology_figure.py
 """
 
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle
 
@@ -29,7 +33,7 @@ plt.rcParams["mathtext.fontset"] = "cm"
 plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Helvetica", "Arial", "DejaVu Sans"]
 
-# ---- Color palette (same family as generate_workflow_mpl.py) ------------
+# Color palette (same family as generate_workflow_mpl.py)
 GREEN         = "#3D8B3D"
 GREEN_LIGHT   = "#E8F5E8"
 GREEN_DARK    = "#2E6B2E"
@@ -50,7 +54,7 @@ TEXT_DIM      = "#555555"
 
 ARROW         = "#555555"
 
-# Step cards rotate through physics -> ml -> validation accents, so each
+# Step cards rotate through physics > ml > validation accents, so each
 # step feels visually distinct but all three live in the same family.
 STEP_STYLES = [
     dict(title="1. Pick seeds",
@@ -59,7 +63,7 @@ STEP_STYLES = [
              r"Choose 30 held-out test samples",
              r"from SQuADDS and treat each one",
              r"as the center of a Gaussian ball",
-             r"in Qiskit Metal parameter space.",
+             r"in Quantum Metal parameter space.",
          ]),
     dict(title="2. Add Gaussian noise",
          fill=GREEN_LIGHT, stroke=GREEN, accent=GREEN_DARK,
@@ -81,7 +85,7 @@ STEP_STYLES = [
          ]),
 ]
 
-# ---- Layout --------------------------------------------------------------
+# Layout
 FIG_W_IN = 12
 FIG_H_IN = 7.8
 
@@ -111,14 +115,14 @@ CARDS_LEFT = (W - CARDS_TOTAL_W) / 2
 PUNCH_X, PUNCH_Y = 0.5, 4
 PUNCH_W, PUNCH_H = 99, 8
 
-# ---- Build figure --------------------------------------------------------
+# Build figure
 fig, ax = plt.subplots(figsize=(FIG_W_IN, FIG_H_IN))
 ax.set_xlim(0, W)
 ax.set_ylim(0, H)
 ax.set_aspect("equal")
 ax.axis("off")
 
-# ---- Title above the banner ---------------------------------------------
+# Title above the banner
 ax.text(
     W / 2, TITLE_Y,
     r"Gaussian stress-test methodology",
@@ -126,7 +130,7 @@ ax.text(
     fontsize=20, fontweight="bold", color=TEXT_MAIN,
 )
 
-# ---- Goal banner (neutral card with green label) ------------------------
+# Goal banner (neutral card with green label)
 banner = FancyBboxPatch(
     (BANNER_X, BANNER_Y), BANNER_W, BANNER_H,
     boxstyle="round,pad=0,rounding_size=1.2",
@@ -136,7 +140,7 @@ banner = FancyBboxPatch(
 )
 ax.add_patch(banner)
 
-# Bold "Goal:" label + wrapped question + italic subtitle.
+# Bold "Goal" label + wrapped question + italic subtitle.
 ax.text(
     W / 2, BANNER_Y + BANNER_H * 0.78,
     r"$\bf{Goal:}$  How well does the inverse + surrogate pipeline generalize to",
@@ -145,7 +149,7 @@ ax.text(
 )
 ax.text(
     W / 2, BANNER_Y + BANNER_H * 0.52,
-    r"Qiskit Metal parameters it has never seen before",
+    r"Quantum Metal parameters it has never seen before",
     ha="center", va="center",
     fontsize=16, color=TEXT_MAIN,
 )
@@ -157,7 +161,7 @@ ax.text(
     fontsize=12, fontstyle="italic", color=TEXT_DIM,
 )
 
-# ---- Three step cards ----------------------------------------------------
+# Three step cards
 card_centers_x = []
 for i, style in enumerate(STEP_STYLES):
     x = CARDS_LEFT + i * (CARD_W + CARD_GAP)
@@ -186,7 +190,7 @@ for i, style in enumerate(STEP_STYLES):
     ax.add_patch(title_bar)
 
     # Title text (dark accent color). 15 pt fits "2. Add Gaussian noise"
-    # (the longest title) inside a 30-unit wide card with margin to spare.
+    # (the longest title) inside a 30unit wide card with margin to spare.
     ax.text(
         x + CARD_W / 2, y + CARD_H - title_bar_h / 2,
         style["title"],
@@ -194,7 +198,7 @@ for i, style in enumerate(STEP_STYLES):
         fontsize=15, fontweight="bold", color=style["accent"],
     )
 
-    # Body text: left-aligned, one line per entry.
+    # Body text leftaligned, one line per entry.
     # 11 pt keeps the math formula from overflowing card width.
     body_top = y + CARD_H - title_bar_h - 2.0
     line_dy = 2.5
@@ -206,7 +210,7 @@ for i, style in enumerate(STEP_STYLES):
             fontsize=11, color=TEXT_MAIN,
         )
 
-# ---- Arrows between cards ------------------------------------------------
+# Arrows between cards
 # Larger arrowhead and thicker line to stand out between the cards. With
 # CARD_GAP=3.5 the arrow has roughly 3.3 units of horizontal run.
 for i in range(2):
@@ -223,7 +227,7 @@ for i in range(2):
     )
     ax.add_patch(arrow)
 
-# ---- Punchline strip at the bottom --------------------------------------
+# Punchline strip at the bottom
 punch = FancyBboxPatch(
     (PUNCH_X, PUNCH_Y), PUNCH_W, PUNCH_H,
     boxstyle="round,pad=0,rounding_size=1.1",
@@ -233,7 +237,7 @@ punch = FancyBboxPatch(
 )
 ax.add_patch(punch)
 
-# 13 pt bold fits the 85-character sentence in the widened punch box.
+# 13 pt bold fits the 85character sentence in the widened punch box.
 ax.text(
     PUNCH_X + PUNCH_W / 2, PUNCH_Y + PUNCH_H / 2,
     r"Surrogate evaluates all 30,000 samples in seconds "
@@ -242,7 +246,7 @@ ax.text(
     fontsize=13, fontweight="bold", color=ORANGE_DARK,
 )
 
-# ---- Save ---------------------------------------------------------------
+# Save
 stress_test_pdf = OUTPUTS_DIR / "stress_test_methodology.pdf"
 stress_test_svg = OUTPUTS_DIR / "stress_test_methodology.svg"
 

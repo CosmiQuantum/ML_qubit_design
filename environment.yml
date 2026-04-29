@@ -27,7 +27,6 @@ dependencies:
   - pip
   - pip:
       - keras-tuner
-    # Validation notebooks also depend on the SQuADDS / Qiskit Metal /
-    # Ansys toolchain, which is not pinned here because those installs are
-    # environment-specific and often require external desktop software.
+    # Validation notebooks also depend on the external design and Ansys stack
+    # These packages are not pinned here because they often require external desktop software.
     # Add those separately if you plan to run the validation notebooks.

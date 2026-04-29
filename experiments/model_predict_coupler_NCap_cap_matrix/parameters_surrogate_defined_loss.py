@@ -17,22 +17,22 @@ ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
 # Enable data augmentation/scaling, etc
 DATA_AUGMENTATION = True
 
-# We use a simple fully connected network (MLP) 
+# We use a simple fully connected network (MLP)
 # 4 layers because deeper NNs can capture more complex patterns
 # Gradually decrease the neuron size to better capture patterns while avoiding overfitting
 NEURONS_PER_LAYER = [264,464,364,364,864]
 TRAIN_DROPOUT_RATE = 0.06
 
-# Training hyper-parameters
+# Training hyperparameters
 
-# Learning Rate gives the step size that the optimizer takes while learning, 
+# Learning Rate gives the step size that the optimizer takes while learning,
 # smaller step size means slower convergence but more accuracy
 # learning rate is=LR_INITIAL×(LR_DECAY_RATE)^(t/LR_DECAY_STEPS)
 LR_INITIAL = 0.00092875
 
 # Learning rate decay helps the model become refined as it gets closer to a minimum
 # The learning rate decay steps desides how many steps the learning rate will decay after
-# LR_DECAY_STEPS = 35  # 100 best for log phig1 cadence data
+# LR_DECAY_STEPS = 35 # 100 best for log phig1 cadence data
 
 # LR_INITIAL * LR_DECAY_RATE after each number of LR_DECAY_STEPS
 LR_DECAY_RATE = 0.99

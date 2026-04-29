@@ -45,7 +45,7 @@
   <text x="105" y="431" font-size="10" fill="#222222" font-family="inherit">and apply “exists” masks.</text>
   <rect x="95" y="460" width="225" height="75" rx="6" ry="6" fill="#E8E4F0" stroke="#7B68AE" stroke-width="1.5"/>
   <text x="105" y="478" font-size="12" font-weight="bold" fill="#4A3D78">Forward validation</text>
-  <text x="105" y="494" font-size="10" fill="#222222" font-family="inherit">Assemble design in Qiskit Metal;</text>
+  <text x="105" y="494" font-size="10" fill="#222222" font-family="inherit">Assemble design in Quantum Metal;</text>
   <text x="105" y="508" font-size="10" fill="#222222" font-family="inherit">run Ansys Q3D (capacitance) and</text>
   <text x="105" y="522" font-size="10" fill="#222222" font-family="inherit">HFSS to extract physical values.</text>
   <rect x="95" y="551" width="225" height="75" rx="6" ry="6" fill="#E8E4F0" stroke="#7B68AE" stroke-width="1.5"/>
@@ -84,7 +84,7 @@
   <text x="358" y="409" font-size="9" font-family="Menlo, Consolas, monospace" fill="#555555">in scaled form</text>
   <line x1="320" y1="392.0" x2="350" y2="392.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>
   <rect x="350" y="460" width="170" height="46" rx="4" ry="4" fill="#FAFAFA" stroke="#CCCCCC" stroke-width="1"/>
-  <text x="358" y="474" font-size="10" font-weight="bold" fill="#222222">Qiskit Metal params</text>
+  <text x="358" y="474" font-size="10" font-weight="bold" fill="#222222">Quantum Metal params</text>
   <text x="358" y="488" font-size="9" font-family="Menlo, Consolas, monospace" fill="#555555">y_q, y_c, y_r</text>
   <text x="358" y="500" font-size="9" font-family="Menlo, Consolas, monospace" fill="#555555">+ design choices</text>
   <line x1="320" y1="483.0" x2="350" y2="483.0" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>

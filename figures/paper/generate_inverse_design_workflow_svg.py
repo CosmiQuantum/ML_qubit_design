@@ -21,20 +21,20 @@ import io
 
 from _paths import OUTPUTS_DIR
 
-# ---- Color palette (same family as inverse_pipeline figure) -------------
+# Color palette (same family as inverse_pipeline figure)
 BG            = "#FFFFFF"
 
-# Green — ML / trained-model stages
+# Green ML / trainedmodel stages
 GREEN         = "#3D8B3D"
 GREEN_LIGHT   = "#E8F5E8"
 GREEN_DARK    = "#2E6B2E"
 
-# Orange — physics / domain-knowledge stages (Qubit Subsystem accent)
+# Orange physics / domainknowledge stages (Qubit Subsystem accent)
 ORANGE        = "#E87A00"
 ORANGE_LIGHT  = "#FFF4E6"
 ORANGE_DARK   = "#A85600"
 
-# Purple — validation / EM-simulation stages (CPW Cavity accent)
+# Purple validation / EMsimulation stages (CPW Cavity accent)
 PURPLE        = "#7B68AE"
 PURPLE_LIGHT  = "#E8E4F0"
 PURPLE_DARK   = "#4A3D78"
@@ -50,7 +50,7 @@ TEXT_MONO     = "#444444"
 ARROW         = "#555555"
 FEEDBACK      = GREEN
 
-# ---- Layout -------------------------------------------------------------
+# Layout
 W = 540
 H = 680
 
@@ -63,7 +63,7 @@ BOX_R     = 6
 ANN_X     = 350
 ANN_W     = 170
 
-# Stages: (id, title, body_lines, category, height)
+# Stages (id, title, body_lines, category, height)
 STAGES = [
     ("inputs",
      "Inputs — target Hamiltonian",
@@ -101,7 +101,7 @@ STAGES = [
 
     ("fwd",
      "Forward validation",
-     ["Assemble design in Qiskit Metal;",
+     ["Assemble design in Quantum Metal;",
       "run Ansys Q3D (capacitance) and",
       "HFSS to extract physical values."],
      "valid", 75),
@@ -132,7 +132,7 @@ ANNOTATIONS = {
     "post": ("raw NN outputs",
              ["a_q, a_c, a_r",
               "in scaled form"]),
-    "fwd":  ("Qiskit Metal params",
+    "fwd":  ("Quantum Metal params",
              ["y_q, y_c, y_r",
               "+ design choices"]),
     "back": ("extracted quantities",
@@ -158,7 +158,7 @@ CATEGORY_BADGE = {
     "valid":   ("Validation",  PURPLE),
 }
 
-# ---- Precompute y-coordinates for each stage ----------------------------
+# Precompute ycoordinates for each stage
 Y_START = 20
 GAP     = 16
 
@@ -169,7 +169,7 @@ for sid, _, _, _, h in STAGES:
     y += h + GAP
 TOTAL_H = y
 
-# ---- SVG construction ---------------------------------------------------
+# SVG construction
 out = io.StringIO()
 
 out.write(f'''<svg xmlns="http://www.w3.org/2000/svg"
@@ -189,7 +189,7 @@ out.write(f'''<svg xmlns="http://www.w3.org/2000/svg"
   </defs>
 ''')
 
-# ---- Lane backgrounds ---------------------------------------------------
+# Lane backgrounds
 lanes = []
 cur_cat = None
 lane_top = None
@@ -227,7 +227,7 @@ for cat, top, bot in lanes:
         f'transform="rotate(-90 {badge_cx} {badge_cy})">{badge}</text>\n'
     )
 
-# ---- Pipeline boxes -----------------------------------------------------
+# Pipeline boxes
 for sid, title, body, cat, h in STAGES:
     top, bot = stage_y[sid]
     fill, stroke, title_col, body_col = CATEGORY_STYLE[cat]
@@ -254,7 +254,7 @@ for sid, title, body, cat, h in STAGES:
         )
         line_y += 14
 
-# ---- Forward arrows -----------------------------------------------------
+# Forward arrows
 for i in range(len(STAGES) - 1):
     _, bot = stage_y[STAGES[i][0]]
     top, _ = stage_y[STAGES[i + 1][0]]
@@ -264,7 +264,7 @@ for i in range(len(STAGES) - 1):
         f'stroke="{ARROW}" stroke-width="1.5" marker-end="url(#arrow)"/>\n'
     )
 
-# ---- Annotations (right column) -----------------------------------------
+# Annotations (right column)
 for i in range(1, len(STAGES)):
     sid = STAGES[i][0]
     if sid not in ANNOTATIONS:
@@ -296,7 +296,7 @@ for i in range(1, len(STAGES)):
         f'stroke="#BBBBBB" stroke-width="1" stroke-dasharray="3,3"/>\n'
     )
 
-# ---- Feedback loop ------------------------------------------------------
+# Feedback loop
 map_top, _ = stage_y["map"]
 _, cmp_bot = stage_y["cmp"]
 cmp_mid_y = (stage_y["cmp"][0] + stage_y["cmp"][1]) / 2
@@ -323,7 +323,7 @@ out.write("</svg>\n")
 
 SVG = out.getvalue()
 
-# ---- Write files -------------------------------------------------------
+# Write files
 workflow_svg = OUTPUTS_DIR / "workflow.svg"
 workflow_pdf = OUTPUTS_DIR / "workflow.pdf"
 

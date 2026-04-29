@@ -19,13 +19,13 @@ from matplotlib.transforms import Bbox
 
 from _paths import OUTPUTS_DIR
 
-# Use mathtext (built in, ships with matplotlib) — NOT full LaTeX
+# Use mathtext (built in, ships with matplotlib) NOT full LaTeX
 plt.rcParams["text.usetex"] = False
 plt.rcParams["mathtext.fontset"] = "cm"       # Computer Modern look for math
 plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Helvetica", "Arial", "DejaVu Sans"]
 
-# ---- Color palette (same family as inverse_pipeline figure) -------------
+# Color palette (same family as inverse_pipeline figure)
 GREEN         = "#3D8B3D"
 GREEN_LIGHT   = "#E8F5E8"
 GREEN_DARK    = "#2E6B2E"
@@ -47,8 +47,8 @@ TEXT_DIM      = "#555555"
 ARROW         = "#555555"
 FEEDBACK      = GREEN
 
-# ---- Stage content ------------------------------------------------------
-# Each stage: id, title, body lines (mathtext allowed via $...$), category, height
+# Stage content
+# Each stage id, title, body lines (mathtext allowed via $...$), category, height
 STAGES = [
     ("inputs",
      "Inputs — target Hamiltonian",
@@ -84,7 +84,7 @@ STAGES = [
     ("fwd",
      "Forward validation",
      [r"Look up closest design via SQuADDS; assemble layout",
-      r"in Qiskit Metal; run pyEPR $\rightarrow$ PyAEDT $\rightarrow$",
+      r"in Quantum Metal; run pyEPR $\rightarrow$ PyAEDT $\rightarrow$",
       r"Ansys Q3D (cap. matrix) and HFSS eigenmode (resonator)."],
      "valid"),
 
@@ -103,7 +103,7 @@ STAGES = [
      "valid"),
 ]
 
-# Annotations: data object flowing INTO each stage (except the first).
+# Annotations data object flowing INTO each stage (except the first).
 ANNOTATIONS = {
     "map":  ("target vector",
              [r"$\mathbf{H}_{\mathrm{target}} = (\omega_q,\ \alpha,\ \omega_r,\ g,\ \ldots)$"]),
@@ -116,7 +116,7 @@ ANNOTATIONS = {
     "post": ("raw NN outputs",
              [r"$\hat{\mathbf{y}}_q,\ \hat{\mathbf{y}}_c,\ \hat{\mathbf{y}}_r$",
               r"in scaled / encoded form"]),
-    "fwd":  ("Qiskit Metal params",
+    "fwd":  ("Quantum Metal params",
              [r"$\mathbf{y}_q,\ \mathbf{y}_c,\ \mathbf{y}_r$   ($\mu$m, counts, …)",
               r"+ categorical design choices"]),
     "back": ("extracted quantities",
@@ -141,14 +141,14 @@ CATEGORY_BADGE = {
     "valid":   ("Validation",   PURPLE),
 }
 
-# ---- Layout (in figure data coordinates, arbitrary units) ---------------
+# Layout (in figure data coordinates, arbitrary units)
 # We use a plain (0..100, 0..100) coordinate system and size the figure to
 # match the aspect ratio we want.
 FIG_W_IN = 13
 FIG_H_IN = 13
 
 BOX_X      = 14      # left edge of pipeline boxes
-BOX_W      = 64      # pipeline box width — wider to fit long lines at 9-12pt
+BOX_W      = 64      # pipeline box width wider to fit long lines at 912pt
 TITLE_DY   = 3.2     # vertical offset from box top to title baseline
 LINE_DY    = 2.6     # vertical spacing between body lines
 TITLE_PAD  = 1.6     # space from title to first body line
@@ -160,11 +160,11 @@ ANN_W      = 30
 def stage_height(body_lines):
     return 2.0 + TITLE_PAD + TITLE_DY + LINE_DY * len(body_lines) + 1.5
 
-# Y layout — top-down
+# Y layout topdown
 Y_TOP = 97
 GAP = 1.8
 
-stage_rects = {}  # id -> (x, y_top, w, h)
+stage_rects = {}  # id > (x, y_top, w, h)
 y_cursor = Y_TOP
 for sid, title, body, cat in STAGES:
     h = stage_height(body)
@@ -172,15 +172,15 @@ for sid, title, body, cat in STAGES:
     y_cursor -= (h + GAP)
 Y_BOTTOM = y_cursor + GAP   # bottom of last box
 
-# ---- Build figure -------------------------------------------------------
+# Build figure
 fig, ax = plt.subplots(figsize=(FIG_W_IN, FIG_H_IN))
 ax.set_xlim(0, ANN_X + ANN_W + 4)
 ax.set_ylim(Y_BOTTOM - 2, 100)
 ax.set_aspect("equal")
 ax.axis("off")
 
-# ---- Draw category lane backgrounds ------------------------------------
-# Group consecutive same-category stages into a lane rectangle.
+# Draw category lane backgrounds
+# Group consecutive samecategory stages into a lane rectangle.
 lanes = []
 cur_cat = None
 lane_top = None
@@ -226,7 +226,7 @@ for cat, top, bot in lanes:
         color=badge_col,
     )
 
-# ---- Draw pipeline boxes ------------------------------------------------
+# Draw pipeline boxes
 for sid, title, body, cat in STAGES:
     x, y_top, w, h = stage_rects[sid]
     y_bot = y_top - h
@@ -260,7 +260,7 @@ for sid, title, body, cat in STAGES:
             color=style["body"],
         )
 
-# ---- Forward arrows between pipeline boxes ------------------------------
+# Forward arrows between pipeline boxes
 for i in range(len(STAGES) - 1):
     _, y_top_a, w, h_a = stage_rects[STAGES[i][0]]
     _, y_top_b, _, _   = stage_rects[STAGES[i + 1][0]]
@@ -276,7 +276,7 @@ for i in range(len(STAGES) - 1):
     )
     ax.add_patch(arrow)
 
-# ---- Annotation cards ---------------------------------------------------
+# Annotation cards
 for i in range(1, len(STAGES)):
     sid = STAGES[i][0]
     if sid not in ANNOTATIONS:
@@ -324,7 +324,7 @@ for i in range(1, len(STAGES)):
         color="#BBBBBB", linewidth=0.8, linestyle=(0, (3, 3)),
     )
 
-# ---- Feedback loop: compare/iterate -> physics mapping ------------------
+# Feedback loop compare/iterate > physics mapping
 map_x, map_y_top, map_w, map_h = stage_rects["map"]
 cmp_x, cmp_y_top, cmp_w, cmp_h = stage_rects["cmp"]
 
@@ -357,7 +357,7 @@ ax.text(
     color=FEEDBACK,
 )
 
-# ---- Save ---------------------------------------------------------------
+# Save
 workflow_pdf = OUTPUTS_DIR / "workflow.pdf"
 workflow_svg = OUTPUTS_DIR / "workflow.svg"
 
