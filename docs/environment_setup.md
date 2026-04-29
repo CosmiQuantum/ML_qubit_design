@@ -82,7 +82,7 @@ This repo currently installs `tensorflow-cpu` from `environment.yml`, so GPU usa
 
 ## Validation Notebook Caveat
 
-The validation notebooks are not fully covered by `environment.yml`. They also import the SQuADDS / Qiskit Metal / Ansys stack, including packages such as `squadds` and `qiskit_metal`, and some of those workflows depend on external Ansys tooling as well.
+The validation notebooks are not fully covered by `environment.yml`. They also import the SQuADDS and Ansys stack, including packages such as `squadds` and `qiskit_metal`, and some of those workflows depend on external Ansys tooling as well.
 
 That means:
 

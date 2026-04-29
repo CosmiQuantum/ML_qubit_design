@@ -2,16 +2,11 @@
      viewBox="0 0 1120 640"
      width="1120" height="640"
      font-family="Arial, Helvetica, sans-serif">
-
-  <!-- transparent background -->
-
-  <text x="560" y="32"
+<text x="560" y="32"
         text-anchor="middle" font-size="16" font-weight="bold" fill="#333">
     Transmon&#x2013;Resonator System: Parameter Identification
   </text>
-
-  <!-- leader lines from figure to annotation boxes -->
-  <line x1="269" y1="307" x2="157" y2="552"
+<line x1="269" y1="307" x2="157" y2="552"
         stroke="#E87A00" stroke-width="1.5" stroke-dasharray="5,3"/>
   <line x1="399" y1="307" x2="433" y2="552"
         stroke="#E87A00" stroke-width="1.5" stroke-dasharray="5,3"/>
@@ -19,9 +14,7 @@
         stroke="#7B68AE" stroke-width="1.5" stroke-dasharray="5,3"/>
   <line x1="850" y1="298" x2="979" y2="552"
         stroke="#7B68AE" stroke-width="1.5" stroke-dasharray="5,3"/>
-
-  <!-- annotation boxes -->
-  <rect x="22" y="552" width="270" height="62" rx="5" ry="5"
+<rect x="22" y="552" width="270" height="62" rx="5" ry="5"
         fill="#FFF4E6" stroke="#E87A00" stroke-width="1.5"/>
   <text x="157" y="576" text-anchor="middle"
         font-size="14" font-weight="bold" fill="#E87A00">

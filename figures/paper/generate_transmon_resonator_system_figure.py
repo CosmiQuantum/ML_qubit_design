@@ -36,16 +36,11 @@ SVG_TEMPLATE = """\
      viewBox="0 0 %(PAGE_W)s %(PAGE_H)s"
      width="%(PAGE_W)s" height="%(PAGE_H)s"
      font-family="Arial, Helvetica, sans-serif">
-
-  <!-- transparent background -->
-
-  <text x="560" y="32"
+<text x="560" y="32"
         text-anchor="middle" font-size="16" font-weight="bold" fill="#333">
     Transmon&#x2013;Resonator System: Parameter Identification
   </text>
-
-  <!-- leader lines from figure to annotation boxes -->
-  <line x1="269" y1="307" x2="157" y2="552"
+<line x1="269" y1="307" x2="157" y2="552"
         stroke="%(FIG_ORANGE)s" stroke-width="1.5" stroke-dasharray="5,3"/>
   <line x1="399" y1="307" x2="433" y2="552"
         stroke="%(FIG_ORANGE)s" stroke-width="1.5" stroke-dasharray="5,3"/>
@@ -53,9 +48,7 @@ SVG_TEMPLATE = """\
         stroke="%(FIG_PURPLE)s" stroke-width="1.5" stroke-dasharray="5,3"/>
   <line x1="850" y1="298" x2="979" y2="552"
         stroke="%(FIG_PURPLE)s" stroke-width="1.5" stroke-dasharray="5,3"/>
-
-  <!-- annotation boxes -->
-  <rect x="22" y="552" width="270" height="62" rx="5" ry="5"
+<rect x="22" y="552" width="270" height="62" rx="5" ry="5"
         fill="#FFF4E6" stroke="%(FIG_ORANGE)s" stroke-width="1.5"/>
   <text x="157" y="576" text-anchor="middle"
         font-size="14" font-weight="bold" fill="%(FIG_ORANGE)s">
@@ -115,14 +108,14 @@ overlay_doc = fitz.open(str(OVERLAY_PDF))
 final_doc = fitz.open()
 page = final_doc.new_page(width=PAGE_W, height=PAGE_H)
 
-# Layer 1: white background
+# Layer 1 white background
 page.draw_rect(fitz.Rect(0, 0, PAGE_W, PAGE_H), color=None, fill=(1, 1, 1))
 
-# Layer 2: fragments.pdf image placed in the target rectangle
+# Layer 2 fragments.pdf image placed in the target rectangle
 target_rect = fitz.Rect(FIG_X, FIG_Y, FIG_X + FIG_W, FIG_Y + FIG_H)
 page.show_pdf_page(target_rect, fragments_doc, 0, keep_proportion=True, overlay=True)
 
-# Layer 3: SVG overlay (title, leaders, annotation boxes) on top
+# Layer 3 SVG overlay (title, leaders, annotation boxes) on top
 full_rect = fitz.Rect(0, 0, PAGE_W, PAGE_H)
 page.show_pdf_page(full_rect, overlay_doc, 0, keep_proportion=True, overlay=True)
 
