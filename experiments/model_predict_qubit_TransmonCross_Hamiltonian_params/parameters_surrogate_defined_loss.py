@@ -4,7 +4,7 @@ from pathlib import Path
 
 EXPERIMENT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = EXPERIMENT_DIR.parents[1]
-ARTIFACT_DIR = REPO_ROOT / 'experiments' / 'model_predict_qubit-TransmonCross-Hamiltonian_params'
+ARTIFACT_DIR = REPO_ROOT / 'experiments' / 'model_predict_qubit_TransmonCross_Hamiltonian_params'
 if not ARTIFACT_DIR.exists():
     ARTIFACT_DIR = EXPERIMENT_DIR
 
