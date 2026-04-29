@@ -26,7 +26,8 @@ EXPORT_DIR = PAPER_DIR / "manuscript_exports"
 HYPER_DIR = EXPORT_DIR / "hypertuner_search_metrics"
 SIM_RESULTS_DIR = EXPORT_DIR / "simulated_results"
 
-TRANSMON_DIR = REPO_ROOT / "experiments" / "model_predict_qubit-TransmonCross-Hamiltonian_params"
+TRANSMON_DIR = REPO_ROOT / "experiments" / "model_predict_qubit_TransmonCross_Hamiltonian_params"
+TRANSMON_ARTIFACT_DIR = REPO_ROOT / "experiments" / "model_predict_qubit-TransmonCross-Hamiltonian_params"
 NCAP_DIR = REPO_ROOT / "experiments" / "model_predict_coupler_NCap_cap_matrix"
 RESONATOR_DIR = REPO_ROOT / "experiments" / "model_predict_cavity_claw_RouteMeander_eigenmode"
 
@@ -99,6 +100,9 @@ def save_figure(fig: plt.Figure, out_path: Path) -> None:
 
 
 def crop_pdf_page(page_number: int, clip_rect: tuple[float, float, float, float], out_path: Path) -> None:
+    if not COMPILED_PDF.exists() and out_path.exists():
+        print(f"reused existing {out_path.relative_to(REPO_ROOT)}")
+        return
     src_doc = fitz.open(COMPILED_PDF)
     src_page = src_doc.load_page(page_number - 1)
     clip = fitz.Rect(*clip_rect)
@@ -112,6 +116,9 @@ def crop_pdf_page(page_number: int, clip_rect: tuple[float, float, float, float]
 
 
 def crop_png_page(page_number: int, clip_rect: tuple[float, float, float, float], out_path: Path, zoom: float = 2.5) -> None:
+    if not COMPILED_PDF.exists() and out_path.exists():
+        print(f"reused existing {out_path.relative_to(REPO_ROOT)}")
+        return
     src_doc = fitz.open(COMPILED_PDF)
     src_page = src_doc.load_page(page_number - 1)
     clip = fitz.Rect(*clip_rect)
@@ -122,7 +129,7 @@ def crop_png_page(page_number: int, clip_rect: tuple[float, float, float, float]
 
 
 def load_transmon_trials() -> pd.DataFrame:
-    trial_dir = TRANSMON_DIR / "kt_dir2" / "transmon_cross_surrogate_loss2"
+    trial_dir = TRANSMON_ARTIFACT_DIR / "kt_dir2" / "transmon_cross_surrogate_loss2"
     rows: list[dict[str, float | int | bool | str]] = []
     for trial_path in sorted(trial_dir.glob("trial_*/trial.json")):
         data = json.loads(trial_path.read_text())
@@ -189,9 +196,10 @@ def draw_binned_median(ax: plt.Axes, x: np.ndarray, y: np.ndarray, *, bins: int 
 def plot_dataset_distributions() -> None:
     use_paper_style()
 
-    y_train = np.load(TRANSMON_DIR / "data" / "npy" / "y_train_linear_encoding.npy")
-    y_val = np.load(TRANSMON_DIR / "data" / "npy" / "y_val_linear_encoding.npy")
-    y_test = np.load(TRANSMON_DIR / "data" / "npy" / "y_test_linear_encoding.npy")
+    data_dir = TRANSMON_ARTIFACT_DIR / "data" / "npy"
+    y_train = np.load(data_dir / "y_train_linear_encoding.npy")
+    y_val = np.load(data_dir / "y_val_linear_encoding.npy")
+    y_test = np.load(data_dir / "y_test_linear_encoding.npy")
     Y = np.vstack([y_train, y_val, y_test]) * 1e6
 
     labels = np.load(TRANSMON_DIR / "metadata" / "y_columns.npy", allow_pickle=True).tolist()

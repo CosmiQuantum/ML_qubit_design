@@ -1,8 +1,22 @@
+from pathlib import Path
+
 # transmon cross cap matrix
 
-# Where the datasets are
-DATA_DIR = 'data'
-DATASETS_JSON = DATA_DIR + '/datasets.json'
+EXPERIMENT_DIR = Path(__file__).resolve().parent
+REPO_ROOT = EXPERIMENT_DIR.parents[1]
+ARTIFACT_DIR = REPO_ROOT / 'model_predict_qubit_TransmonCross_cap_matrix'
+if not ARTIFACT_DIR.exists():
+    ARTIFACT_DIR = EXPERIMENT_DIR
+
+DATA_DIR = str(ARTIFACT_DIR / 'data')
+SCALERS_DIR = str(ARTIFACT_DIR / 'scalers')
+MODEL_DIR = str(ARTIFACT_DIR / 'model')
+KERAS_DIR = str(ARTIFACT_DIR / 'keras')
+KT_DIR = str(EXPERIMENT_DIR / 'kt_dir')
+METADATA_DIR = str(EXPERIMENT_DIR / 'metadata')
+RESULTS_DIR = str(EXPERIMENT_DIR / 'results')
+PLOTS_DIR = str(EXPERIMENT_DIR / 'plots')
+DATASETS_JSON = str(Path(DATA_DIR) / 'datasets.json')
 
 SWEEP_PARAM_NUM = False
 SWEEP_DATA_AMOUNT = False
@@ -10,8 +24,6 @@ VISUALIZE_GRADIENTS = False
 
 KERAS_TUNER = False
 KERAS_TUNER_TRIALS = 1658
-KERAS_DIR = 'keras'
-
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
 
 # Enable data augmentation/scaling, etc
