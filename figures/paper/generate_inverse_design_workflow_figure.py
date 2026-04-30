@@ -13,9 +13,12 @@ Usage:
     python3 generate_inverse_design_workflow_figure.py
 """
 
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle
-from matplotlib.transforms import Bbox
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Polygon
 
 from _paths import OUTPUTS_DIR
 
@@ -47,86 +50,60 @@ TEXT_DIM      = "#555555"
 ARROW         = "#555555"
 FEEDBACK      = GREEN
 
-# Stage content
-# Each stage id, title, body lines (mathtext allowed via $...$), category, height
+# Stage content.
+# Keep the figure terse. The manuscript text explains the details.
 STAGES = [
     ("inputs",
-     "Inputs — target Hamiltonian",
-     [r"$\omega_q,\ \alpha,\ \omega_r,\ g,\ \kappa,\ \ldots$   (user-specified targets)"],
+     "Target Hamiltonian",
+     [r"$\omega_q,\ \alpha$",
+      r"$\omega_r,\ g,\ \kappa$"],
      "neutral"),
 
     ("map",
-     "Physics mapping",
-     [r"Convert Hamiltonian targets to ML-friendly features",
-      r"using analytic relations, e.g. $\alpha \approx -E_C$ and",
-      r"$\omega_q \approx \sqrt{8 E_J E_C} - E_C$."],
+     "Physics features",
+     [r"$\alpha \approx -E_C$",
+      r"$\omega_q(E_J,E_C)$"],
      "physics"),
 
     ("pre",
-     "Preprocessing",
-     [r"Scale features (min–max fit on training set);",
-      r'one-hot encode categoricals and "exists" masks.'],
+     "Scale and encode",
+     [r"Min-max scaling",
+      r"Categorical masks"],
      "physics"),
 
     ("mlps",
-     "Three trained inverse MLPs",
-     [r"$\bullet$  TransmonCross  (cap$\_$matrix):     $\mathbf{x}_q \rightarrow \mathbf{y}_q$",
-      r"$\bullet$  Coupler / NCap  (cap$\_$matrix):     $\mathbf{x}_c \rightarrow \mathbf{y}_c$",
-      r"$\bullet$  Cavity / resonator  (eigenmode):  $\mathbf{x}_r \rightarrow \mathbf{y}_r$"],
+     "Inverse MLPs",
+     [r"TransmonCross",
+      r"NCap Coupler",
+      r"Resonator"],
      "ml"),
 
     ("post",
-     "Postprocessing",
-     [r"Unscale predictions back to physical units;",
-      r'decode categorical outputs and apply "exists" masks.'],
+     "Decode predictions",
+     [r"Physical units",
+      r"Valid design fields"],
      "ml"),
 
     ("fwd",
-     "Forward validation",
-     [r"Look up closest design via SQuADDS; assemble layout",
-      r"in Quantum Metal; run pyEPR $\rightarrow$ PyAEDT $\rightarrow$",
-      r"Ansys Q3D (cap. matrix) and HFSS eigenmode (resonator)."],
+     "Forward check",
+     [r"Quantum Metal layout",
+      r"Ansys or surrogate"],
      "valid"),
 
     ("back",
-     "Map back to Hamiltonian space",
-     [r"Convert extracted capacitances and mode frequencies",
-      r"back to achieved $\omega_q,\ \alpha,\ \omega_r,\ g$",
-      r"via the inverse physics map."],
+     "Recovered Hamiltonian",
+     [r"$\hat{\omega}_q,\ \hat{\alpha}$",
+      r"$\hat{\omega}_r,\ \hat{g}$"],
      "valid"),
 
     ("cmp",
-     "Compare and iterate",
-     [r"Validation loss: RMSPE between reference (SQuADDS)",
-      r"and predicted (forward-pass) Hamiltonian values;",
-      r"optionally refine features and rerun the pipeline."],
+     "Compare",
+     [r"Percent error",
+      r"Iterate if needed"],
      "valid"),
 ]
 
-# Annotations data object flowing INTO each stage (except the first).
-ANNOTATIONS = {
-    "map":  ("target vector",
-             [r"$\mathbf{H}_{\mathrm{target}} = (\omega_q,\ \alpha,\ \omega_r,\ g,\ \ldots)$"]),
-    "pre":  ("feature vector",
-             [r"$\mathbf{x}_{\mathrm{raw}} \in \mathbb{R}^{d_{\mathrm{in}}}$",
-              r"physically-meaningful quantities"]),
-    "mlps": ("scaled features",
-             [r"$\mathbf{x} = \mathrm{scaler}(\mathbf{x}_{\mathrm{raw}})$",
-              r"ready for NN input"]),
-    "post": ("raw NN outputs",
-             [r"$\hat{\mathbf{y}}_q,\ \hat{\mathbf{y}}_c,\ \hat{\mathbf{y}}_r$",
-              r"in scaled / encoded form"]),
-    "fwd":  ("Quantum Metal params",
-             [r"$\mathbf{y}_q,\ \mathbf{y}_c,\ \mathbf{y}_r$   ($\mu$m, counts, …)",
-              r"+ categorical design choices"]),
-    "back": ("extracted quantities",
-             [r"$C_{ij}$   (capacitance matrix)",
-              r"$f_{\mathrm{mode}}$  (HFSS eigenmode)"]),
-    "cmp":  ("achieved Hamiltonian",
-             [r"$\mathbf{H}_{\mathrm{achieved}} = (\hat{\omega}_q,\ \hat{\alpha},\ \hat{\omega}_r,\ \hat{g},\ \ldots)$"]),
-}
-
-FEEDBACK_LABEL = "refined targets / retry"
+FEEDBACK_LABEL = "Iterate"
 
 CATEGORY_STYLE = {
     "neutral": dict(fill=NEUTRAL_FILL, stroke=NEUTRAL_STROKE, title=TEXT_MAIN, body=TEXT_DIM),
@@ -136,231 +113,223 @@ CATEGORY_STYLE = {
 }
 
 CATEGORY_BADGE = {
-    "physics": ("Physics",      ORANGE),
-    "ml":      ("ML surrogate", GREEN),
-    "valid":   ("Validation",   PURPLE),
+    "physics": ("Physics", ORANGE),
+    "ml":      ("ML", GREEN),
+    "valid":   ("Validation", PURPLE),
 }
 
-# Layout (in figure data coordinates, arbitrary units)
-# We use a plain (0..100, 0..100) coordinate system and size the figure to
-# match the aspect ratio we want.
-FIG_W_IN = 13
-FIG_H_IN = 13
+# Compact two-row layout. The path runs left to right across the top row,
+# then down and right to left across the bottom row.
+FIG_W_IN = 8.7
+FIG_H_IN = 3.15
 
-BOX_X      = 14      # left edge of pipeline boxes
-BOX_W      = 64      # pipeline box width wider to fit long lines at 912pt
-TITLE_DY   = 3.2     # vertical offset from box top to title baseline
-LINE_DY    = 2.6     # vertical spacing between body lines
-TITLE_PAD  = 1.6     # space from title to first body line
+BOX_W = 23.2
+BOX_H = 10.5
+GAP_X = 3.0
+LEFT = 2.0
+TOP_Y = 24.4
+BOTTOM_Y = 6.0
+TITLE_PAD_X = 1.0
+TITLE_PAD_Y = 2.1
+BODY_GAP = 2.0
 
-ANN_X      = 78      # annotation cards
-ANN_W      = 30
+COL_X = [LEFT + i * (BOX_W + GAP_X) for i in range(4)]
+TOP_ROW = ["inputs", "map", "pre", "mlps"]
+BOTTOM_ROW = ["cmp", "back", "fwd", "post"]
 
-# Stage heights are computed from number of body lines.
-def stage_height(body_lines):
-    return 2.0 + TITLE_PAD + TITLE_DY + LINE_DY * len(body_lines) + 1.5
+stage_lookup = {sid: (title, body, cat) for sid, title, body, cat in STAGES}
+stage_rects = {
+    "inputs": (COL_X[0], TOP_Y, BOX_W, BOX_H),
+    "map": (COL_X[1], TOP_Y, BOX_W, BOX_H),
+    "pre": (COL_X[2], TOP_Y, BOX_W, BOX_H),
+    "mlps": (COL_X[3], TOP_Y, BOX_W, BOX_H),
+    "post": (COL_X[3], BOTTOM_Y, BOX_W, BOX_H),
+    "fwd": (COL_X[2], BOTTOM_Y, BOX_W, BOX_H),
+    "back": (COL_X[1], BOTTOM_Y, BOX_W, BOX_H),
+    "cmp": (COL_X[0], BOTTOM_Y, BOX_W, BOX_H),
+}
 
-# Y layout topdown
-Y_TOP = 97
-GAP = 1.8
-
-stage_rects = {}  # id > (x, y_top, w, h)
-y_cursor = Y_TOP
-for sid, title, body, cat in STAGES:
-    h = stage_height(body)
-    stage_rects[sid] = (BOX_X, y_cursor, BOX_W, h)
-    y_cursor -= (h + GAP)
-Y_BOTTOM = y_cursor + GAP   # bottom of last box
-
-# Build figure
 fig, ax = plt.subplots(figsize=(FIG_W_IN, FIG_H_IN))
-ax.set_xlim(0, ANN_X + ANN_W + 4)
-ax.set_ylim(Y_BOTTOM - 2, 100)
-ax.set_aspect("equal")
+ax.set_xlim(0, 108)
+ax.set_ylim(3.8, 38.7)
 ax.axis("off")
 
-# Draw category lane backgrounds
-# Group consecutive samecategory stages into a lane rectangle.
-lanes = []
-cur_cat = None
-lane_top = None
-prev_bot = None
-for sid, _, _, cat in STAGES:
-    x, y_top, w, h = stage_rects[sid]
-    y_bot = y_top - h
-    if cat != cur_cat:
-        if cur_cat is not None:
-            lanes.append((cur_cat, lane_top, prev_bot))
-        cur_cat = cat
-        lane_top = y_top
-    prev_bot = y_bot
-lanes.append((cur_cat, lane_top, prev_bot))
 
-LANE_PAD_X = 3.5
-LANE_PAD_Y = 1.1
-
-for cat, top, bot in lanes:
-    if cat == "neutral":
-        continue
+def draw_group(x: float, y: float, w: float, h: float, cat: str) -> None:
+    label, edge = CATEGORY_BADGE[cat]
     style = CATEGORY_STYLE[cat]
-    lane = Rectangle(
-        (BOX_X - LANE_PAD_X, bot - LANE_PAD_Y),
-        BOX_W + 2 * LANE_PAD_X,
-        (top - bot) + 2 * LANE_PAD_Y,
-        linewidth=1.2,
-        edgecolor=style["stroke"],
+    group = FancyBboxPatch(
+        (x, y), w, h,
+        boxstyle="round,pad=0,rounding_size=0.8",
+        linewidth=1.0,
+        edgecolor=edge,
         facecolor=style["fill"],
-        alpha=0.45,
-        linestyle="--",
+        alpha=0.28,
+        linestyle=(0, (4, 3)),
+        zorder=0,
     )
-    ax.add_patch(lane)
-    # Badge label, vertical, on the left
-    badge, badge_col = CATEGORY_BADGE[cat]
+    ax.add_patch(group)
     ax.text(
-        BOX_X - LANE_PAD_X - 1.3,
-        (top + bot) / 2,
-        badge,
-        rotation=90,
-        ha="center", va="center",
-        fontsize=10, fontweight="bold", fontstyle="italic",
-        color=badge_col,
+        x + w / 2, y + h - 0.6,
+        label,
+        ha="center", va="top",
+        fontsize=8.5, fontweight="bold", fontstyle="italic",
+        color=edge,
+        bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.4),
+        zorder=7,
     )
 
-# Draw pipeline boxes
-for sid, title, body, cat in STAGES:
-    x, y_top, w, h = stage_rects[sid]
-    y_bot = y_top - h
-    style = CATEGORY_STYLE[cat]
 
+draw_group(COL_X[1] - 1.0, TOP_Y - 1.2, 2 * BOX_W + GAP_X + 2.0, BOX_H + 3.6, "physics")
+draw_group(COL_X[3] - 1.0, BOTTOM_Y - 1.2, BOX_W + 2.0, TOP_Y + BOX_H - BOTTOM_Y + 3.6, "ml")
+draw_group(COL_X[0] - 1.0, BOTTOM_Y - 1.2, 3 * BOX_W + 2 * GAP_X + 2.0, BOX_H + 3.6, "valid")
+
+
+def draw_box(sid: str) -> None:
+    x, y, w, h = stage_rects[sid]
+    title, body, cat = stage_lookup[sid]
+    style = CATEGORY_STYLE[cat]
     box = FancyBboxPatch(
-        (x, y_bot), w, h,
+        (x, y), w, h,
         boxstyle="round,pad=0,rounding_size=1.0",
-        linewidth=1.8,
+        linewidth=1.55,
         edgecolor=style["stroke"],
         facecolor=style["fill"],
+        zorder=3,
     )
     ax.add_patch(box)
-
-    # Title
     ax.text(
-        x + 1.2, y_top - TITLE_DY,
+        x + TITLE_PAD_X, y + h - TITLE_PAD_Y,
         title,
         ha="left", va="top",
-        fontsize=11, fontweight="bold",
+        fontsize=8.9, fontweight="bold",
         color=style["title"],
+        zorder=5,
     )
-    # Body lines
-    for i, line in enumerate(body):
+    for idx, line in enumerate(body):
         ax.text(
-            x + 1.2,
-            y_top - TITLE_DY - TITLE_PAD - (i + 1) * LINE_DY,
+            x + TITLE_PAD_X, y + h - TITLE_PAD_Y - 2.9 - idx * BODY_GAP,
             line,
             ha="left", va="top",
-            fontsize=9.5,
+            fontsize=7.9,
             color=style["body"],
+            zorder=5,
         )
 
-# Forward arrows between pipeline boxes
-for i in range(len(STAGES) - 1):
-    _, y_top_a, w, h_a = stage_rects[STAGES[i][0]]
-    _, y_top_b, _, _   = stage_rects[STAGES[i + 1][0]]
-    cx = BOX_X + BOX_W / 2
-    y_a_bot = y_top_a - h_a
+
+for sid in TOP_ROW + BOTTOM_ROW:
+    draw_box(sid)
+
+
+def edge_mid(sid: str, side: str) -> tuple[float, float]:
+    x, y, w, h = stage_rects[sid]
+    if side == "right":
+        return x + w, y + h / 2
+    if side == "left":
+        return x, y + h / 2
+    if side == "top":
+        return x + w / 2, y + h
+    if side == "bottom":
+        return x + w / 2, y
+    raise ValueError(side)
+
+
+def draw_arrow(start_sid: str, start_side: str, end_sid: str, end_side: str, label: str, label_offset=(0, 0)) -> None:
+    start = edge_mid(start_sid, start_side)
+    end = edge_mid(end_sid, end_side)
     arrow = FancyArrowPatch(
-        (cx, y_a_bot),
-        (cx, y_top_b),
+        start,
+        end,
         arrowstyle="-|>",
         mutation_scale=14,
-        linewidth=1.6,
+        linewidth=1.85,
         color=ARROW,
+        shrinkA=3.0,
+        shrinkB=3.0,
+        zorder=4,
     )
     ax.add_patch(arrow)
-
-# Annotation cards
-for i in range(1, len(STAGES)):
-    sid = STAGES[i][0]
-    if sid not in ANNOTATIONS:
-        continue
-    label, details = ANNOTATIONS[sid]
-    x, y_top, w, h = stage_rects[sid]
-
-    n_lines = 1 + len(details)
-    card_h = 2.0 + TITLE_DY * 0.9 + LINE_DY * len(details) + 1.5
-    # Align card vertically with its pipeline box
-    card_top = y_top - 0.2
-
-    card = FancyBboxPatch(
-        (ANN_X, card_top - card_h), ANN_W, card_h,
-        boxstyle="round,pad=0,rounding_size=0.7",
-        linewidth=1.0,
-        edgecolor="#CCCCCC",
-        facecolor="#FAFAFA",
-    )
-    ax.add_patch(card)
-
-    # Label
-    ax.text(
-        ANN_X + 1.0, card_top - 1.6,
-        label,
-        ha="left", va="top",
-        fontsize=9, fontweight="bold",
-        color=TEXT_MAIN,
-    )
-    # Details
-    for j, d in enumerate(details):
+    if label:
+        mx = (start[0] + end[0]) / 2 + label_offset[0]
+        my = (start[1] + end[1]) / 2 + label_offset[1]
         ax.text(
-            ANN_X + 1.0,
-            card_top - 1.6 - TITLE_PAD - (j + 1) * LINE_DY * 0.9,
-            d,
-            ha="left", va="top",
-            fontsize=9,
+            mx, my,
+            label,
+            ha="center", va="center",
+            fontsize=7.2,
             color=TEXT_DIM,
+            bbox=dict(facecolor="white", edgecolor="none", alpha=0.9, pad=0.5),
+            zorder=6,
         )
-    # Dashed connector from box right edge to card left edge
-    y_mid = card_top - card_h / 2
+
+
+draw_arrow("inputs", "right", "map", "left", "")
+draw_arrow("map", "right", "pre", "left", "")
+draw_arrow("pre", "right", "mlps", "left", "")
+draw_arrow("mlps", "bottom", "post", "top", "")
+draw_arrow("post", "left", "fwd", "right", "")
+draw_arrow("fwd", "left", "back", "right", "")
+draw_arrow("back", "left", "cmp", "right", "")
+
+map_bottom = edge_mid("map", "bottom")
+cmp_left = edge_mid("cmp", "left")
+
+feedback_start = (cmp_left[0] - 0.1, cmp_left[1])
+feedback_elbow_1 = (0.6, cmp_left[1])
+feedback_elbow_2 = (0.6, 21.2)
+feedback_elbow_3 = (map_bottom[0], 21.2)
+
+arrow_tip = (map_bottom[0], map_bottom[1] - 0.02)
+
+arrow_base_y = arrow_tip[1] - 1.05
+feedback_elbow_4 = (map_bottom[0], arrow_base_y)
+
+for start, end in [
+    (feedback_start, feedback_elbow_1),
+    (feedback_elbow_1, feedback_elbow_2),
+    (feedback_elbow_2, feedback_elbow_3),
+    (feedback_elbow_3, feedback_elbow_4),
+]:
     ax.plot(
-        [BOX_X + BOX_W, ANN_X],
-        [y_mid, y_mid],
-        color="#BBBBBB", linewidth=0.8, linestyle=(0, (3, 3)),
+        [start[0], end[0]],
+        [start[1], end[1]],
+        color=FEEDBACK,
+        linewidth=1.8,
+        linestyle=(0, (6, 3)),
+        zorder=8,
     )
 
-# Feedback loop compare/iterate > physics mapping
-map_x, map_y_top, map_w, map_h = stage_rects["map"]
-cmp_x, cmp_y_top, cmp_w, cmp_h = stage_rects["cmp"]
+arrow_half_width = 0.75
+arrow_head_height = 1.05
 
-map_mid_y = map_y_top - map_h / 2
-cmp_mid_y = cmp_y_top - cmp_h / 2
-FB_X = BOX_X - 8
-
-# Draw the three segments manually as lines + arrowhead
-ax.plot([BOX_X, FB_X], [cmp_mid_y, cmp_mid_y],
-        color=FEEDBACK, linewidth=1.8, linestyle=(0, (7, 4)))
-ax.plot([FB_X, FB_X], [cmp_mid_y, map_mid_y],
-        color=FEEDBACK, linewidth=1.8, linestyle=(0, (7, 4)))
-fb_arrow = FancyArrowPatch(
-    (FB_X, map_mid_y),
-    (BOX_X, map_mid_y),
-    arrowstyle="-|>",
-    mutation_scale=14,
-    linewidth=1.8,
-    color=FEEDBACK,
-    linestyle=(0, (7, 4)),
+arrow_head = Polygon(
+    [
+        (arrow_tip[0], arrow_tip[1]),
+        (arrow_tip[0] - arrow_half_width, arrow_tip[1] - arrow_head_height),
+        (arrow_tip[0] + arrow_half_width, arrow_tip[1] - arrow_head_height),
+    ],
+    closed=True,
+    facecolor=FEEDBACK,
+    edgecolor=FEEDBACK,
+    zorder=9,
 )
-ax.add_patch(fb_arrow)
+ax.add_patch(arrow_head)
 
-# Feedback label, vertical on the return arm
 ax.text(
-    FB_X - 1.2, (cmp_mid_y + map_mid_y) / 2,
+    13.0,
+    22.35,
     FEEDBACK_LABEL,
-    rotation=90, ha="center", va="center",
-    fontsize=9, fontweight="bold", fontstyle="italic",
+    ha="center", va="center",
+    fontsize=7.6, fontweight="bold", fontstyle="italic",
     color=FEEDBACK,
+    bbox=dict(facecolor="white", edgecolor="none", alpha=0.85, pad=0.5),
+    zorder=10,
 )
 
 # Save
 workflow_pdf = OUTPUTS_DIR / "workflow.pdf"
 workflow_svg = OUTPUTS_DIR / "workflow.svg"
 
-plt.savefig(workflow_pdf, bbox_inches="tight", pad_inches=0.1)
-plt.savefig(workflow_svg, bbox_inches="tight", pad_inches=0.1)
+plt.savefig(workflow_pdf, bbox_inches="tight", pad_inches=0.04)
+plt.savefig(workflow_svg, bbox_inches="tight", pad_inches=0.04)
 print(f"Written {workflow_pdf} and {workflow_svg}")

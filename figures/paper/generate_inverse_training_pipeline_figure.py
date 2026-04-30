@@ -69,9 +69,9 @@ LOSS_HL_IN      = "#E87A00"   # orange ties to "input" side (Qubit accent)
 LOSS_HL_OUT     = "#7B68AE"   # purple ties to "reconstruction" side (Cavity accent)
 
 SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 560 760"
+     viewBox="0 0 560 590"
      font-family="'Helvetica Neue', Arial, Helvetica, sans-serif">
-<rect width="560" height="760" fill="{BG}"/>
+<rect width="560" height="590" fill="{BG}"/>
 <defs>
     <marker id="arrowMain" viewBox="0 0 10 10" refX="9" refY="5"
             markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -99,86 +99,88 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
   </defs>
 
 
-<rect x="140" y="24" width="280" height="52" rx="10" ry="10"
+<rect x="138" y="20" width="284" height="48" rx="10" ry="10"
         fill="{ENDPOINT_FILL}" stroke="{ENDPOINT_STROKE}" stroke-width="2"
         filter="url(#softShadow)"/>
-  <text x="280" y="56" text-anchor="middle"
+  <text x="280" y="50" text-anchor="middle"
         font-size="14" font-weight="bold" fill="{ENDPOINT_TEXT}">
     Desired Hamiltonian Input
   </text>
-<line x1="280" y1="80" x2="280" y2="112"
+
+<line x1="280" y1="72" x2="280" y2="92"
         stroke="{ARROW_OUT}" stroke-width="2.5"
         marker-end="url(#arrowOut)"/>
 
-
-<rect x="60" y="116" width="440" height="520" rx="18" ry="18"
+<rect x="64" y="88" width="432" height="410" rx="16" ry="16"
         fill="{TRAIN_FILL}" stroke="{TRAIN_STROKE}" stroke-width="2.5"
         stroke-dasharray="8,4"
         filter="url(#softShadow)"/>
-<text x="480" y="146" text-anchor="end"
+<text x="480" y="116" text-anchor="end"
         font-size="13" font-style="italic" font-weight="bold"
         fill="{TRAIN_LABEL}">Training</text>
-<rect x="210" y="150" width="140" height="60" rx="10" ry="10"
+
+<rect x="210" y="106" width="140" height="54" rx="10" ry="10"
         fill="{INV_FILL}" stroke="{INV_STROKE}" stroke-width="2"/>
-  <text x="280" y="176" text-anchor="middle"
+  <text x="280" y="129" text-anchor="middle"
         font-size="14" font-weight="bold" fill="{INV_TEXT}">Inverse</text>
-  <text x="280" y="196" text-anchor="middle"
+  <text x="280" y="148" text-anchor="middle"
         font-size="14" font-weight="bold" fill="{INV_TEXT}">MLP</text>
-<line x1="280" y1="212" x2="280" y2="244"
+
+<line x1="280" y1="164" x2="280" y2="184"
         stroke="{ARROW_MAIN}" stroke-width="2.5"
         marker-end="url(#arrowMain)"/>
-<rect x="120" y="248" width="320" height="52" rx="10" ry="10"
+
+<rect x="122" y="188" width="316" height="46" rx="10" ry="10"
         fill="{PARAM_FILL}" stroke="{PARAM_STROKE}" stroke-width="2"/>
-  <text x="280" y="280" text-anchor="middle"
+  <text x="280" y="216" text-anchor="middle"
         font-size="14" font-weight="bold" fill="{PARAM_TEXT}">
-    Best Quantum Metal Parameter guess
-  </text>
-<line x1="280" y1="302" x2="280" y2="334"
-        stroke="{ARROW_MAIN}" stroke-width="2.5"
-        marker-end="url(#arrowMain)"/>
-<rect x="170" y="338" width="220" height="68" rx="10" ry="10"
-        fill="{SURR_FILL}" stroke="{SURR_STROKE}" stroke-width="2"/>
-  <text x="280" y="365" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{SURR_TEXT}">Ansys Surrogate</text>
-  <text x="280" y="388" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{SURR_TEXT}">MLP</text>
-<line x1="280" y1="408" x2="280" y2="440"
-        stroke="{ARROW_MAIN}" stroke-width="2.5"
-        marker-end="url(#arrowMain)"/>
-<rect x="170" y="444" width="220" height="68" rx="10" ry="10"
-        fill="{RECON_FILL}" stroke="{RECON_STROKE}" stroke-width="2"/>
-  <text x="280" y="471" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{RECON_TEXT}">Hamiltonian</text>
-  <text x="280" y="494" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{RECON_TEXT}">Reconstruction</text>
-<text x="100" y="548" text-anchor="start"
-        font-size="12" fill="{LOSS_TEXT}">
-    Loss = MAE(<tspan font-weight="bold" fill="{LOSS_HL_IN}">Hamiltonian Input</tspan>, <tspan font-weight="bold" fill="{LOSS_HL_OUT}">Hamiltonian</tspan>
-  </text>
-  <text x="100" y="568" text-anchor="start"
-        font-size="12" font-weight="bold" fill="{LOSS_HL_OUT}">
-    Reconstructed<tspan font-weight="normal" fill="{LOSS_TEXT}"> )</tspan>
+    Best Quantum Metal Parameter Guess
   </text>
 
-<path d="M 170,478 L 110,478 L 110,180 L 210,180"
+<line x1="280" y1="238" x2="280" y2="258"
+        stroke="{ARROW_MAIN}" stroke-width="2.5"
+        marker-end="url(#arrowMain)"/>
+
+<rect x="172" y="262" width="216" height="58" rx="10" ry="10"
+        fill="{SURR_FILL}" stroke="{SURR_STROKE}" stroke-width="2"/>
+  <text x="280" y="285" text-anchor="middle"
+        font-size="14" font-weight="bold" fill="{SURR_TEXT}">Ansys Surrogate</text>
+  <text x="280" y="304" text-anchor="middle"
+        font-size="14" font-weight="bold" fill="{SURR_TEXT}">MLP</text>
+
+<line x1="280" y1="324" x2="280" y2="344"
+        stroke="{ARROW_MAIN}" stroke-width="2.5"
+        marker-end="url(#arrowMain)"/>
+
+<rect x="172" y="348" width="216" height="58" rx="10" ry="10"
+        fill="{RECON_FILL}" stroke="{RECON_STROKE}" stroke-width="2"/>
+  <text x="280" y="371" text-anchor="middle"
+        font-size="14" font-weight="bold" fill="{RECON_TEXT}">Hamiltonian</text>
+  <text x="280" y="390" text-anchor="middle"
+        font-size="14" font-weight="bold" fill="{RECON_TEXT}">Reconstruction</text>
+
+<text x="92" y="440" text-anchor="start"
+        font-size="12" fill="{LOSS_TEXT}">
+    Loss = MAE(<tspan font-weight="bold" fill="{LOSS_HL_IN}">Hamiltonian Input</tspan>, <tspan font-weight="bold" fill="{LOSS_HL_OUT}">Hamiltonian Reconstructed</tspan>)
+  </text>
+
+<path d="M 172,377 L 104,377 L 104,133 L 210,133"
         fill="none" stroke="{FEEDBACK}" stroke-width="2.5"
         stroke-dasharray="6,4" marker-end="url(#arrowFb)"/>
-  <text x="102" y="330" text-anchor="end"
+  <text x="96" y="255" text-anchor="middle"
         font-size="12" font-style="italic" fill="{FEEDBACK}"
-        transform="rotate(-90 102 330)">
+        transform="rotate(-90 96 255)">
     backprop / update
   </text>
 
-
-
-<line x1="280" y1="640" x2="280" y2="672"
+<line x1="280" y1="502" x2="280" y2="522"
         stroke="{ARROW_OUT}" stroke-width="2.5"
         marker-end="url(#arrowOut)"/>
 
-  <rect x="120" y="676" width="320" height="52" rx="10" ry="10"
+<rect x="120" y="526" width="320" height="46" rx="10" ry="10"
         fill="{ENDPOINT_FILL}" stroke="{ENDPOINT_STROKE}" stroke-width="2"
         filter="url(#softShadow)"/>
-  <text x="280" y="708" text-anchor="middle"
+  <text x="280" y="555" text-anchor="middle"
         font-size="14" font-weight="bold" fill="{ENDPOINT_TEXT}">
     Best Quantum Metal Design Output
   </text>

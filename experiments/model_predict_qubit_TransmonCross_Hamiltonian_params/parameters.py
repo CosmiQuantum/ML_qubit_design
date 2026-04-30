@@ -4,9 +4,18 @@ from pathlib import Path
 
 EXPERIMENT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = EXPERIMENT_DIR.parents[1]
-ARTIFACT_DIR = REPO_ROOT / 'experiments' / 'model_predict_qubit_TransmonCross_Hamiltonian_params'
-if not ARTIFACT_DIR.exists():
-    ARTIFACT_DIR = EXPERIMENT_DIR
+ARTIFACT_DIR_CANDIDATES = [
+    EXPERIMENT_DIR,
+    REPO_ROOT / 'experiments' / 'model_predict_qubit-TransmonCross-Hamiltonian_params',
+    REPO_ROOT / 'model_predict_qubit_TransmonCross_Hamiltonian_params',
+]
+ARTIFACT_DIR = next(
+    (
+        path for path in ARTIFACT_DIR_CANDIDATES
+        if any((path / child).exists() for child in ('model', 'data', 'scalers'))
+    ),
+    EXPERIMENT_DIR,
+)
 
 DATA_DIR = str(ARTIFACT_DIR / 'data')
 SCALERS_DIR = str(ARTIFACT_DIR / 'scalers')
