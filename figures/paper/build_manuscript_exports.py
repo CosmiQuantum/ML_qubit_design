@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
-from matplotlib.patches import Patch
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Patch
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -214,12 +214,12 @@ def plot_dataset_distributions() -> None:
     fig, axes = plt.subplots(3, 1, figsize=(COLUMN_WIDTH_IN, 5.2), sharey=False)
     bins = [24, np.arange(3.5, 10.6, 1.0), 24]
 
-    for ax, values, label, binspec, color in zip(
+    color = GREEN
+    for ax, values, label, binspec in zip(
         axes,
         Y.T,
         labels,
         bins,
-        [ORANGE, PURPLE, GREEN],
     ):
         ax.hist(values, bins=binspec, color=color, alpha=0.18, edgecolor=color, linewidth=1.3)
         ax.axvline(np.median(values), color=color, linewidth=1.2, linestyle="--")
@@ -250,10 +250,7 @@ def plot_architecture_sweep() -> None:
     cmap = LinearSegmentedColormap.from_list("paper_sweep", [GREEN, "#F7F7F7", ORANGE])
     best_row = df.loc[df["best_val_loss"].idxmin()]
 
-    fig = plt.figure(figsize=(FULL_WIDTH_IN, 3.05))
-    gs = gridspec.GridSpec(1, 2, width_ratios=[1.08, 1.02], wspace=0.32, figure=fig)
-
-    ax0 = fig.add_subplot(gs[0, 0])
+    fig, ax0 = plt.subplots(figsize=(FULL_WIDTH_IN, 2.75))
     im = ax0.imshow(heatmap_df.values, cmap=cmap, aspect="auto", origin="lower")
     ax0.set_xticks(np.arange(len(heatmap_df.columns)))
     ax0.set_xticklabels([str(int(v)) for v in heatmap_df.columns])
@@ -288,54 +285,6 @@ def plot_architecture_sweep() -> None:
     cbar = fig.colorbar(im, ax=ax0, fraction=0.046, pad=0.03)
     cbar.set_label("best val loss")
 
-    ax1 = fig.add_subplot(gs[0, 1])
-    depth_colors = {
-        1: ORANGE,
-        2: GREEN,
-        3: PURPLE,
-        4: "#A45D2A",
-        5: "#2A6F73",
-    }
-    for depth, group in df.groupby("depth"):
-        group = group.sort_values("total_params")
-        ax1.plot(
-            group["total_params"],
-            group["best_val_loss"],
-            marker="o",
-            markersize=3.2,
-            linewidth=1.1,
-            color=depth_colors.get(int(depth), TEXT_DIM),
-            label=f"{int(depth)} layer" if int(depth) == 1 else f"{int(depth)} layers",
-        )
-
-    ax1.scatter(
-        best_row["total_params"],
-        best_row["best_val_loss"],
-        marker="o",
-        s=72,
-        facecolor="none",
-        edgecolor=TEXT,
-        linewidth=1.0,
-        zorder=6,
-    )
-    ax1.annotate(
-        f"best: [{best_width}]x{best_depth}",
-        (best_row["total_params"], best_row["best_val_loss"]),
-        xytext=(10, 10),
-        textcoords="offset points",
-        fontsize=8.5,
-        color=TEXT,
-    )
-    ax1.set_xscale("log")
-    ax1.set_xlabel("total trainable parameters")
-    ax1.set_ylabel("mean validation loss (MAE)")
-    ax1.set_title("Loss vs model size")
-    ax1.grid(axis="both", linestyle=":", color=GRID)
-    ax1.spines["top"].set_visible(False)
-    ax1.spines["right"].set_visible(False)
-    ax1.legend(frameon=True, edgecolor="#CCCCCC", facecolor="white")
-
-    fig.suptitle("Performance at various architecture sizes", y=1.02, fontsize=11, fontweight="normal")
     fig.tight_layout()
     save_figure(fig, EXPORT_DIR / "architecture_sweep-v2.pdf")
 
@@ -492,10 +441,10 @@ def plot_inverse_surrogate_boxplot() -> None:
     means = [np.mean(values) for values in data]
     medians = [np.median(values) for values in data]
     legend_handles = [
-        Line2D([0], [0], marker="D", linestyle="none", markerfacecolor="white", markeredgecolor=ORANGE, markeredgewidth=1.2, markersize=5.5, label=fr"$\omega_q$ mean: {means[0]:.2f}\%"),
-        Line2D([0], [0], color=ORANGE, linewidth=1.8, label=fr"$\omega_q$ median: {medians[0]:.2f}\%"),
-        Line2D([0], [0], marker="D", linestyle="none", markerfacecolor="white", markeredgecolor=PURPLE, markeredgewidth=1.2, markersize=5.5, label=fr"$\alpha$ mean: {means[1]:.2f}\%"),
-        Line2D([0], [0], color=PURPLE, linewidth=1.8, label=fr"$\alpha$ median: {medians[1]:.2f}\%"),
+        Line2D([0], [0], marker="D", linestyle="none", markerfacecolor="white", markeredgecolor=ORANGE, markeredgewidth=1.2, markersize=5.5, label=fr"$\omega_q$ mean: {means[0]:.2f}%"),
+        Line2D([0], [0], color=ORANGE, linewidth=1.8, label=fr"$\omega_q$ median: {medians[0]:.2f}%"),
+        Line2D([0], [0], marker="D", linestyle="none", markerfacecolor="white", markeredgecolor=PURPLE, markeredgewidth=1.2, markersize=5.5, label=fr"$\alpha$ mean: {means[1]:.2f}%"),
+        Line2D([0], [0], color=PURPLE, linewidth=1.8, label=fr"$\alpha$ median: {medians[1]:.2f}%"),
     ]
     ax.legend(handles=legend_handles, loc="upper left", frameon=True, edgecolor="#CCCCCC", facecolor="white")
     ax.set_xticklabels([r"$\omega_q$", r"$\alpha$"])
@@ -524,19 +473,19 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         rows = [row for row in data if int(row["nn_bin"]) == bin_id]
         fq = np.array(
             [
-                100 - 100 * abs(row["pred_H_params"]["qubit_frequency_GHz"] - row["surrogate_H_params"]["qubit_frequency_GHz"])
+                100 * abs(row["pred_H_params"]["qubit_frequency_GHz"] - row["surrogate_H_params"]["qubit_frequency_GHz"])
                 / (abs(row["pred_H_params"]["qubit_frequency_GHz"]) + eps)
                 for row in rows
             ]
         )
         ah = np.array(
             [
-                100 - 100 * abs(row["pred_H_params"]["anharmonicity_MHz"] - row["surrogate_H_params"]["anharmonicity_MHz"])
+                100 * abs(row["pred_H_params"]["anharmonicity_MHz"] - row["surrogate_H_params"]["anharmonicity_MHz"])
                 / (abs(row["pred_H_params"]["anharmonicity_MHz"]) + eps)
                 for row in rows
             ]
         )
-        nn = np.array([100 - row["nn_distance_scaled"] * 100 for row in rows])
+        nn = np.array([row["nn_distance_scaled"] * 100 for row in rows])
 
         fq_pts.append(fq)
         ah_pts.append(ah)
@@ -589,25 +538,210 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     ax.plot(x, nn_med, "D", color=GREEN, markersize=4.5, markeredgecolor="white", markeredgewidth=0.7, zorder=6)
 
     legend_handles = [
-        Patch(facecolor=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.0, label=r"$f_q$ IQR"),
-        Line2D([0], [0], marker="o", color=ORANGE, linestyle="none", markersize=5, label=r"$f_q$ median"),
-        Patch(facecolor=PURPLE_LIGHT, edgecolor=PURPLE, linewidth=1.0, label=r"$\alpha$ IQR"),
-        Line2D([0], [0], marker="s", color=PURPLE, linestyle="none", markersize=5, label=r"$\alpha$ median"),
-        Patch(facecolor=GREEN_LIGHT, edgecolor=GREEN, linewidth=1.0, label="Geometry similarity IQR"),
-        Line2D([0], [0], marker="D", color=GREEN, linestyle="-", markersize=4.5, label="Geometry similarity median"),
+        Patch(facecolor=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.0, label=r"$f_q$ error IQR"),
+        Line2D([0], [0], marker="o", color=ORANGE, linestyle="none", markersize=5, label=r"$f_q$ error median"),
+        Patch(facecolor=PURPLE_LIGHT, edgecolor=PURPLE, linewidth=1.0, label=r"$\alpha$ error IQR"),
+        Line2D([0], [0], marker="s", color=PURPLE, linestyle="none", markersize=5, label=r"$\alpha$ error median"),
+        Patch(facecolor=GREEN_LIGHT, edgecolor=GREEN, linewidth=1.0, label="NN distance IQR"),
+        Line2D([0], [0], marker="D", color=GREEN, linestyle="-", markersize=4.5, label="NN distance median"),
     ]
-    ax.legend(handles=legend_handles, loc="lower left", frameon=True, edgecolor="#CCCCCC", facecolor="white")
+    ax.legend(handles=legend_handles, loc="upper left", frameon=True, edgecolor="#CCCCCC", facecolor="white")
     ax.set_xticks(x)
     ax.set_xticklabels(bin_labels)
     ax.set_xlabel("Scaled [0,1] Euclidean distance to nearest neighbor")
-    ax.set_ylabel("Accuracy / similarity (%)")
-    ax.set_title("Ansys vs surrogate prediction accuracy of Hamiltonian parameters")
-    ax.set_ylim(0, 100)
+    ax.set_ylabel("Percent error / NN distance (%)")
+    ax.set_title("Ansys vs surrogate Hamiltonian error")
+    y_max = max(
+        np.nanmax(fq_q3),
+        np.nanmax(ah_q3),
+        np.nanmax(nn_q3),
+        np.nanmax([np.nanmax(v) for v in fq_pts + ah_pts]),
+    )
+    ax.set_ylim(0, y_max * 1.18)
     ax.grid(axis="y", linestyle=":", color=GRID)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     fig.tight_layout()
     save_figure(fig, EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.pdf")
+
+
+def plot_model_architecture_combined() -> None:
+    use_paper_style()
+
+    fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 2.75))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 34)
+    ax.axis("off")
+
+    def block(
+        x: float,
+        y: float,
+        w: float,
+        h: float,
+        title: str,
+        lines: list[str],
+        *,
+        edge: str,
+        face: str,
+        hatch: str | None = None,
+    ) -> None:
+        patch = FancyBboxPatch(
+            (x, y),
+            w,
+            h,
+            boxstyle="round,pad=0,rounding_size=1.1",
+            linewidth=1.35,
+            edgecolor=edge,
+            facecolor=face,
+            hatch=hatch,
+            zorder=3,
+        )
+        ax.add_patch(patch)
+        ax.text(x + 1.2, y + h - 2.2, title, ha="left", va="top", fontsize=8.8, fontweight="bold", color=edge, zorder=5)
+        for idx, line in enumerate(lines):
+            ax.text(x + 1.2, y + h - 5.6 - idx * 2.2, line, ha="left", va="top", fontsize=7.7, color=TEXT, zorder=5)
+
+    def arrow(x0: float, y0: float, x1: float, y1: float, label: str | None = None) -> None:
+        arr = FancyArrowPatch(
+            (x0, y0),
+            (x1, y1),
+            arrowstyle="-|>",
+            mutation_scale=13,
+            linewidth=1.45,
+            color=TEXT_DIM,
+            shrinkA=2.5,
+            shrinkB=2.5,
+            zorder=4,
+        )
+        ax.add_patch(arr)
+        if label:
+            ax.text(
+                (x0 + x1) / 2,
+                (y0 + y1) / 2 + 2.2,
+                label,
+                ha="center",
+                va="center",
+                fontsize=7.2,
+                color=TEXT_DIM,
+                bbox=dict(facecolor="white", edgecolor="none", alpha=0.9, pad=0.5),
+                zorder=6,
+            )
+
+    y = 11.0
+    h = 12.2
+    boxes = {
+        "input": (2.0, y, 15.0, h),
+        "inverse": (22.5, y, 18.0, h),
+        "geom": (46.0, y, 15.5, h),
+        "surrogate": (67.0, y, 18.0, h),
+        "output": (90.0, y, 8.0, h),
+    }
+
+    training_region = FancyBboxPatch(
+        (20.4, y - 1.2),
+        78.0,
+        h + 3.0,
+        boxstyle="round,pad=0,rounding_size=1.3",
+        linewidth=1.0,
+        edgecolor=GREEN,
+        facecolor=GREEN_LIGHT,
+        alpha=0.26,
+        linestyle=(0, (4, 3)),
+        zorder=0,
+    )
+    ax.add_patch(training_region)
+    ax.text(
+        21.5,
+        y + h + 0.9,
+        "Training",
+        ha="left",
+        va="center",
+        fontsize=7.6,
+        fontweight="bold",
+        fontstyle="italic",
+        color=GREEN,
+        zorder=1,
+    )
+
+    block(*boxes["input"], "Targets", [r"$\omega_q,\ \alpha$", "scaled inputs"], edge=ORANGE, face=ORANGE_LIGHT)
+    block(*boxes["inverse"], "Inverse MLP", ["2 hidden layers", "16 neurons each", "387 trainable"], edge=GREEN, face=GREEN_LIGHT)
+    block(*boxes["geom"], "Design", ["3 Quantum Metal", "geometry params"], edge=PURPLE, face=PURPLE_LIGHT)
+    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{\omega}_q,\ \hat{\alpha}$ check"], edge=GREEN, face="#F0F7F0")
+    block(*boxes["output"], "Loss", ["MAE in", "target", "space"], edge=TEXT_DIM, face="#F7F7F7")
+
+    arrow(17.0, y + h / 2, 22.5, y + h / 2)
+    arrow(40.5, y + h / 2, 46.0, y + h / 2)
+    arrow(61.5, y + h / 2, 67.0, y + h / 2)
+    arrow(85.0, y + h / 2, 90.0, y + h / 2)
+
+    update_arrow = FancyArrowPatch(
+        (94.0, y - 0.1),
+        (31.5, y - 0.1),
+        arrowstyle="-|>",
+        mutation_scale=12,
+        linewidth=1.25,
+        color=GREEN,
+        linestyle=(0, (5, 3)),
+        connectionstyle="arc3,rad=-0.18",
+        shrinkA=3.0,
+        shrinkB=3.0,
+        zorder=2,
+    )
+    ax.add_patch(update_arrow)
+    ax.text(
+        62.0,
+        y - 2.8,
+        "update inverse weights",
+        ha="center",
+        va="center",
+        fontsize=7.4,
+        fontweight="bold",
+        fontstyle="italic",
+        color=GREEN,
+        bbox=dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.5),
+        zorder=6,
+    )
+
+    ax.text(
+        50,
+        31.7,
+        "Surrogate-defined inverse training",
+        ha="center",
+        va="center",
+        fontsize=10.2,
+        fontweight="normal",
+        color=TEXT,
+    )
+    ax.text(
+        50,
+        29.2,
+        "Trainable params: 387   |   Non-trainable params: 4,418   |   Total params: 4,805",
+        ha="center",
+        va="center",
+        fontsize=8.1,
+        color=TEXT_DIM,
+    )
+    ax.text(
+        50,
+        2.7,
+        "The surrogate is fixed during inverse-model training, so geometry predictions are graded by recovered Hamiltonian parameters.",
+        ha="center",
+        va="center",
+        fontsize=7.7,
+        color=TEXT_DIM,
+    )
+
+    fig.tight_layout(pad=0.15)
+    out_paths = [
+        EXPORT_DIR / "model_architecture_paper_theme_combined.pdf",
+        TRANSMON_DIR / "plots" / "model_architecture_paper_theme_combined.pdf",
+        TRANSMON_DIR / "plots" / "model_architecture_paper_theme_combined.png",
+    ]
+    for out_path in out_paths:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
 
 
 def export_static_sources() -> None:
@@ -617,16 +751,8 @@ def export_static_sources() -> None:
     copy_file(PAPER_DIR / "outputs" / "testing_pipeline.pdf", EXPORT_DIR / "testing_pipeline.pdf")
     copy_file(PAPER_DIR / "outputs" / "stress_test_methodology.pdf", EXPORT_DIR / "stress_test_methodology.pdf")
     copy_file(
-        TRANSMON_DIR / "plots" / "model_architecture_paper_theme_combined.pdf",
-        EXPORT_DIR / "model_architecture_paper_theme_combined.pdf",
-    )
-    copy_file(
         TRANSMON_DIR / "plots" / "surrogate_stress_random_points_pairs.pdf",
         EXPORT_DIR / "surrogate_stress_random_points_pairs.pdf",
-    )
-    copy_file(
-        NCAP_DIR / "plot_outputs" / "best_val_loss_vs_model_size_orig_plus_wide.pdf",
-        HYPER_DIR / "param_sweep_ncap.pdf",
     )
 
 
@@ -657,6 +783,7 @@ def main() -> None:
     plot_tuner_correlations()
     plot_inverse_surrogate_boxplot()
     plot_ansys_validation_vs_nn_distance()
+    plot_model_architecture_combined()
     export_pdf_fallbacks()
     export_png_fallbacks()
 
