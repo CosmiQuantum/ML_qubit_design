@@ -13,60 +13,79 @@ Usage:
     # => produces outputs/inverse_pipeline.svg and outputs/inverse_pipeline.pdf
 """
 
+import os
+
 from _paths import OUTPUTS_DIR
 
-# Color palette (aligned with the Testing Pipeline figure)
-# White background, green as the primary highlight color, pale grey
-# utility boxes, and orange/purple accents matching the lowersection
-# Qubit/CPW subsystem annotations in the reference figure.
 BG              = "#FFFFFF"
 
-# Green primary (matches "ML Model predictions" / pyEPR boxes)
-GREEN           = "#3D8B3D"
-GREEN_LIGHT     = "#E8F5E8"
-GREEN_DARK      = "#2E6B2E"
+FLOWCHART_COLOR_SCHEME = os.environ.get("FLOWCHART_COLOR_SCHEME", "blue").strip().lower()
+FLOWCHART_COLOR_SCHEME = {"current": "blue", "new": "blue", "old": "legacy", "classic": "legacy"}.get(
+    FLOWCHART_COLOR_SCHEME,
+    FLOWCHART_COLOR_SCHEME,
+)
+if FLOWCHART_COLOR_SCHEME == "legacy":
+    FROST           = "#FFF4E6"  # Physics targets
+    PALE_ICE        = "#E8F5E8"  # ML components
+    DUSTY_BLUE      = "#E8E4F0"  # Validation
+    FROST_DARK      = "#E87A00"
+    PALE_ICE_DARK   = "#3D8B3D"
+    DUSTY_BLUE_DARK = "#7B68AE"
+else:
+    FROST           = "#D6E5EE"  # Physics targets
+    PALE_ICE        = "#B0CCDE"  # ML components
+    DUSTY_BLUE      = "#8AABC8"  # Validation
+    FROST_DARK      = "#567A90"
+    PALE_ICE_DARK   = "#3F6F8B"
+    DUSTY_BLUE_DARK = "#17384F"
 
-# Outer "Training" container light green fill, green dashed border
-TRAIN_FILL      = GREEN_LIGHT
-TRAIN_STROKE    = GREEN
-TRAIN_LABEL     = GREEN_DARK
+# Outer "Training" container stays light so the training stages stand out.
+TRAIN_FILL      = "#FFFFFF"
+TRAIN_STROKE    = PALE_ICE_DARK
+TRAIN_LABEL     = PALE_ICE_DARK
 
-# Endpoint boxes (input / output) same green style as ML Model box
-ENDPOINT_FILL   = GREEN_LIGHT
-ENDPOINT_STROKE = GREEN
-ENDPOINT_TEXT   = "#222222"
+INPUT_FILL      = FROST
+INPUT_STROKE    = FROST_DARK
+INPUT_TEXT      = "#222222"
 
-# Inverse MLP node the "active/highlighted" node (solid green, like pyEPR)
-INV_FILL        = GREEN
-INV_STROKE      = GREEN_DARK
-INV_TEXT        = "#FFFFFF"
+OUTPUT_FILL     = "#FFFFFF"
+OUTPUT_STROKE   = PALE_ICE_DARK
+OUTPUT_TEXT     = "#222222"
 
-# Intermediate data node (Quantum Metal params) neutral grey utility box
-PARAM_FILL      = "#E8E8E8"
-PARAM_STROKE    = "#999999"
+INV_FILL        = PALE_ICE
+INV_STROKE      = PALE_ICE_DARK
+INV_TEXT        = "#222222"
+
+# Intermediate data node is the learned model output.
+PARAM_FILL      = PALE_ICE
+PARAM_STROKE    = PALE_ICE_DARK
 PARAM_TEXT      = "#333333"
 
-# Surrogate MLP (forward) orange, matching Qubit Subsystem accent
-SURR_FILL       = "#FFF4E6"
-SURR_STROKE     = "#E87A00"
+# Surrogate MLP is an ML component.
+SURR_FILL       = PALE_ICE
+SURR_STROKE     = PALE_ICE_DARK
 SURR_TEXT       = "#333333"
-SURR_TITLE      = "#E87A00"
+SURR_TITLE      = PALE_ICE_DARK
 
-# Reconstruction node purple, matching CPW Cavity Subsystem accent
-RECON_FILL      = "#E8E4F0"
-RECON_STROKE    = "#7B68AE"
+# Reconstruction is part of the training graph in Fig. 1B.
+RECON_FILL      = PALE_ICE
+RECON_STROKE    = PALE_ICE_DARK
 RECON_TEXT      = "#333333"
-RECON_TITLE     = "#7B68AE"
+RECON_TITLE     = PALE_ICE_DARK
+
+LOSS_FILL       = DUSTY_BLUE_DARK
+LOSS_STROKE     = DUSTY_BLUE_DARK
+LOSS_BOX_TEXT   = "#FFFFFF"
 
 # Arrows
 ARROW_MAIN      = "#555555"   # neutral grey arrows on the forward path
 ARROW_OUT       = "#555555"
-FEEDBACK        = GREEN       # green feedback loop (primary highlight)
+FEEDBACK        = PALE_ICE_DARK
 
 # Loss text
 LOSS_TEXT       = "#333333"
-LOSS_HL_IN      = "#E87A00"   # orange ties to "input" side (Qubit accent)
-LOSS_HL_OUT     = "#7B68AE"   # purple ties to "reconstruction" side (Cavity accent)
+LOSS_HL_IN      = FROST_DARK
+LOSS_HL_OUT     = DUSTY_BLUE_DARK
 
 SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 560 590"
@@ -74,15 +93,15 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
 <rect width="560" height="590" fill="{BG}"/>
 <defs>
     <marker id="arrowMain" viewBox="0 0 10 10" refX="9" refY="5"
-            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="{ARROW_MAIN}"/>
     </marker>
     <marker id="arrowOut" viewBox="0 0 10 10" refX="9" refY="5"
-            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="{ARROW_OUT}"/>
     </marker>
     <marker id="arrowFb" viewBox="0 0 10 10" refX="9" refY="5"
-            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="{FEEDBACK}"/>
     </marker>
     <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -100,88 +119,98 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
 
 
 <rect x="138" y="20" width="284" height="48" rx="10" ry="10"
-        fill="{ENDPOINT_FILL}" stroke="{ENDPOINT_STROKE}" stroke-width="2"
+        fill="{INPUT_FILL}" stroke="{INPUT_STROKE}" stroke-width="2"
         filter="url(#softShadow)"/>
   <text x="280" y="50" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{ENDPOINT_TEXT}">
+        font-size="17" font-weight="bold" fill="{INPUT_TEXT}">
     Desired Hamiltonian Input
   </text>
 
-<line x1="280" y1="72" x2="280" y2="92"
-        stroke="{ARROW_OUT}" stroke-width="2.5"
-        marker-end="url(#arrowOut)"/>
 
 <rect x="64" y="88" width="432" height="410" rx="16" ry="16"
         fill="{TRAIN_FILL}" stroke="{TRAIN_STROKE}" stroke-width="2.5"
         stroke-dasharray="8,4"
         filter="url(#softShadow)"/>
 <text x="480" y="116" text-anchor="end"
-        font-size="13" font-style="italic" font-weight="bold"
+        font-size="15" font-style="italic" font-weight="bold"
         fill="{TRAIN_LABEL}">Training</text>
+
+<line x1="280" y1="72" x2="280" y2="102"
+        stroke="{ARROW_OUT}" stroke-width="3.2"/>
+<polygon points="280,112 273,100 287,100" fill="{ARROW_OUT}"/>
 
 <rect x="210" y="106" width="140" height="54" rx="10" ry="10"
         fill="{INV_FILL}" stroke="{INV_STROKE}" stroke-width="2"/>
   <text x="280" y="129" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{INV_TEXT}">Inverse</text>
+        font-size="16" font-weight="bold" fill="{INV_TEXT}">Inverse</text>
   <text x="280" y="148" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{INV_TEXT}">MLP</text>
+        font-size="16" font-weight="bold" fill="{INV_TEXT}">MLP</text>
 
-<line x1="280" y1="164" x2="280" y2="184"
-        stroke="{ARROW_MAIN}" stroke-width="2.5"
-        marker-end="url(#arrowMain)"/>
+<line x1="280" y1="164" x2="280" y2="178"
+        stroke="{ARROW_MAIN}" stroke-width="3.2"/>
+<polygon points="280,188 273,176 287,176" fill="{ARROW_MAIN}"/>
 
 <rect x="122" y="188" width="316" height="46" rx="10" ry="10"
         fill="{PARAM_FILL}" stroke="{PARAM_STROKE}" stroke-width="2"/>
   <text x="280" y="216" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{PARAM_TEXT}">
+        font-size="16" font-weight="bold" fill="{PARAM_TEXT}">
     Best Quantum Metal Parameter Guess
   </text>
 
-<line x1="280" y1="238" x2="280" y2="258"
-        stroke="{ARROW_MAIN}" stroke-width="2.5"
-        marker-end="url(#arrowMain)"/>
+<line x1="280" y1="238" x2="280" y2="252"
+        stroke="{ARROW_MAIN}" stroke-width="3.2"/>
+<polygon points="280,262 273,250 287,250" fill="{ARROW_MAIN}"/>
 
 <rect x="172" y="262" width="216" height="58" rx="10" ry="10"
         fill="{SURR_FILL}" stroke="{SURR_STROKE}" stroke-width="2"/>
   <text x="280" y="285" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{SURR_TEXT}">Ansys Surrogate</text>
+        font-size="16" font-weight="bold" fill="{SURR_TEXT}">Ansys Surrogate</text>
   <text x="280" y="304" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{SURR_TEXT}">MLP</text>
+        font-size="16" font-weight="bold" fill="{SURR_TEXT}">MLP</text>
 
-<line x1="280" y1="324" x2="280" y2="344"
-        stroke="{ARROW_MAIN}" stroke-width="2.5"
-        marker-end="url(#arrowMain)"/>
+<line x1="280" y1="324" x2="280" y2="338"
+        stroke="{ARROW_MAIN}" stroke-width="3.2"/>
+<polygon points="280,348 273,336 287,336" fill="{ARROW_MAIN}"/>
 
 <rect x="172" y="348" width="216" height="58" rx="10" ry="10"
         fill="{RECON_FILL}" stroke="{RECON_STROKE}" stroke-width="2"/>
   <text x="280" y="371" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{RECON_TEXT}">Hamiltonian</text>
+        font-size="16" font-weight="bold" fill="{RECON_TEXT}">Hamiltonian</text>
   <text x="280" y="390" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{RECON_TEXT}">Reconstruction</text>
+        font-size="16" font-weight="bold" fill="{RECON_TEXT}">Reconstruction</text>
 
-<text x="92" y="440" text-anchor="start"
-        font-size="12" fill="{LOSS_TEXT}">
-    Loss = MAE(<tspan font-weight="bold" fill="{LOSS_HL_IN}">Hamiltonian Input</tspan>, <tspan font-weight="bold" fill="{LOSS_HL_OUT}">Hamiltonian Reconstructed</tspan>)
+<line x1="280" y1="410" x2="280" y2="420"
+        stroke="{ARROW_MAIN}" stroke-width="3.2"/>
+<polygon points="280,430 273,418 287,418" fill="{ARROW_MAIN}"/>
+
+<rect x="126" y="427" width="308" height="68" rx="10" ry="10"
+        fill="{LOSS_FILL}" stroke="{LOSS_STROKE}" stroke-width="2"/>
+  <text x="280" y="450" text-anchor="middle"
+        font-size="16" font-weight="bold" fill="{LOSS_BOX_TEXT}">Compute loss</text>
+  <text x="280" y="471" text-anchor="middle"
+        font-size="13" fill="{LOSS_BOX_TEXT}">Average absolute difference between</text>
+  <text x="280" y="488" text-anchor="middle"
+        font-size="13" fill="{LOSS_BOX_TEXT}">target and reconstructed Hamiltonian</text>
+
+<line x1="280" y1="499" x2="280" y2="516"
+        stroke="{ARROW_OUT}" stroke-width="3.2"/>
+<polygon points="280,526 273,514 287,514" fill="{ARROW_OUT}"/>
+
+<path d="M 126,461 L 104,461 L 104,133 L 198,133"
+        fill="none" stroke="{FEEDBACK}" stroke-width="3.0"
+        stroke-dasharray="7,4"/>
+<polygon points="210,133 198,126 198,140" fill="{FEEDBACK}"/>
+  <text x="96" y="290" text-anchor="middle"
+        font-size="14" font-style="italic" fill="{FEEDBACK}"
+        transform="rotate(-90 96 290)">
+    update inverse weights
   </text>
-
-<path d="M 172,377 L 104,377 L 104,133 L 210,133"
-        fill="none" stroke="{FEEDBACK}" stroke-width="2.5"
-        stroke-dasharray="6,4" marker-end="url(#arrowFb)"/>
-  <text x="96" y="255" text-anchor="middle"
-        font-size="12" font-style="italic" fill="{FEEDBACK}"
-        transform="rotate(-90 96 255)">
-    backprop / update
-  </text>
-
-<line x1="280" y1="502" x2="280" y2="522"
-        stroke="{ARROW_OUT}" stroke-width="2.5"
-        marker-end="url(#arrowOut)"/>
 
 <rect x="120" y="526" width="320" height="46" rx="10" ry="10"
-        fill="{ENDPOINT_FILL}" stroke="{ENDPOINT_STROKE}" stroke-width="2"
+        fill="{OUTPUT_FILL}" stroke="{OUTPUT_STROKE}" stroke-width="2"
         filter="url(#softShadow)"/>
   <text x="280" y="555" text-anchor="middle"
-        font-size="14" font-weight="bold" fill="{ENDPOINT_TEXT}">
+        font-size="17" font-weight="bold" fill="{OUTPUT_TEXT}">
     Best Quantum Metal Design Output
   </text>
 

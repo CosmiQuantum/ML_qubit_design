@@ -17,6 +17,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 
+import os
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
@@ -28,18 +29,25 @@ plt.rcParams["mathtext.fontset"] = "cm"       # Computer Modern look for math
 plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Helvetica", "Arial", "DejaVu Sans"]
 
-# Color palette (same family as inverse_pipeline figure)
-GREEN         = "#3D8B3D"
-GREEN_LIGHT   = "#E8F5E8"
-GREEN_DARK    = "#2E6B2E"
-
-ORANGE        = "#E87A00"
-ORANGE_LIGHT  = "#FFF4E6"
-ORANGE_DARK   = "#A85600"
-
-PURPLE        = "#7B68AE"
-PURPLE_LIGHT  = "#E8E4F0"
-PURPLE_DARK   = "#4A3D78"
+FLOWCHART_COLOR_SCHEME = os.environ.get("FLOWCHART_COLOR_SCHEME", "blue").strip().lower()
+FLOWCHART_COLOR_SCHEME = {"current": "blue", "new": "blue", "old": "legacy", "classic": "legacy"}.get(
+    FLOWCHART_COLOR_SCHEME,
+    FLOWCHART_COLOR_SCHEME,
+)
+if FLOWCHART_COLOR_SCHEME == "legacy":
+    FROST         = "#FFF4E6"  # Physics targets
+    PALE_ICE      = "#E8F5E8"  # ML components
+    DUSTY_BLUE    = "#E8E4F0"  # Validation
+    FROST_DARK      = "#E87A00"
+    PALE_ICE_DARK   = "#3D8B3D"
+    DUSTY_BLUE_DARK = "#7B68AE"
+else:
+    FROST         = "#D6E5EE"  # Physics targets
+    PALE_ICE      = "#B0CCDE"  # ML components
+    DUSTY_BLUE    = "#8AABC8"  # Validation
+    FROST_DARK      = "#567A90"
+    PALE_ICE_DARK   = "#3F6F8B"
+    DUSTY_BLUE_DARK = "#17384F"
 
 NEUTRAL_FILL  = "#F5F5F5"
 NEUTRAL_STROKE = "#999999"
@@ -48,7 +56,7 @@ TEXT_MAIN     = "#222222"
 TEXT_DIM      = "#555555"
 
 ARROW         = "#555555"
-FEEDBACK      = GREEN
+FEEDBACK      = DUSTY_BLUE_DARK
 
 # Stage content.
 # Keep the figure terse. The manuscript text explains the details.
@@ -57,7 +65,7 @@ STAGES = [
      "Target Hamiltonian",
      [r"$\omega_q,\ \alpha$",
       r"$\omega_r,\ g,\ \kappa$"],
-     "neutral"),
+     "physics"),
 
     ("map",
      "Physics features",
@@ -107,15 +115,15 @@ FEEDBACK_LABEL = "Iterate"
 
 CATEGORY_STYLE = {
     "neutral": dict(fill=NEUTRAL_FILL, stroke=NEUTRAL_STROKE, title=TEXT_MAIN, body=TEXT_DIM),
-    "physics": dict(fill=ORANGE_LIGHT, stroke=ORANGE, title=ORANGE_DARK, body=TEXT_MAIN),
-    "ml":      dict(fill=GREEN_LIGHT,  stroke=GREEN,  title=GREEN_DARK,  body=TEXT_MAIN),
-    "valid":   dict(fill=PURPLE_LIGHT, stroke=PURPLE, title=PURPLE_DARK, body=TEXT_MAIN),
+    "physics": dict(fill=FROST,      stroke=FROST_DARK,      title=FROST_DARK,      body=TEXT_MAIN),
+    "ml":      dict(fill=PALE_ICE,   stroke=PALE_ICE_DARK,   title=PALE_ICE_DARK,   body=TEXT_MAIN),
+    "valid":   dict(fill=DUSTY_BLUE, stroke=DUSTY_BLUE_DARK, title=DUSTY_BLUE_DARK, body=TEXT_MAIN),
 }
 
 CATEGORY_BADGE = {
-    "physics": ("Physics targets", ORANGE),
-    "ml":      ("ML", GREEN),
-    "valid":   ("Validation", PURPLE),
+    "physics": ("Physics targets", FROST_DARK),
+    "ml":      ("ML", PALE_ICE_DARK),
+    "valid":   ("Validation", DUSTY_BLUE_DARK),
 }
 
 # Compact two-row layout. The path runs left to right across the top row,
@@ -180,7 +188,7 @@ def draw_group(x: float, y: float, w: float, h: float, cat: str) -> None:
     )
 
 
-draw_group(COL_X[1] - 1.0, TOP_Y - 1.2, 2 * BOX_W + GAP_X + 2.0, BOX_H + 3.6, "physics")
+draw_group(COL_X[0] - 1.0, TOP_Y - 1.2, 3 * BOX_W + 2 * GAP_X + 2.0, BOX_H + 3.6, "physics")
 draw_group(COL_X[3] - 1.0, BOTTOM_Y - 1.2, BOX_W + 2.0, TOP_Y + BOX_H - BOTTOM_Y + 3.6, "ml")
 draw_group(COL_X[0] - 1.0, BOTTOM_Y - 1.2, 3 * BOX_W + 2 * GAP_X + 2.0, BOX_H + 3.6, "valid")
 

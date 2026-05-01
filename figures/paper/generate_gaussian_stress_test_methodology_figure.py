@@ -85,18 +85,15 @@ STEP_STYLES = [
 
 # Layout
 FIG_W_IN = 12
-FIG_H_IN = 7.8
+FIG_H_IN = 7.1
 
 # Canvas coordinate system (arbitrary units)
 W = 100
-H = 66
-
-# Title (at the very top)
-TITLE_Y = 62.5
+H = 60
 
 # Headline banner (top), "Goal" strip.
 # Widened near the full canvas width so the long italic subtitle fits.
-BANNER_X, BANNER_Y = 0.5, 44
+BANNER_X, BANNER_Y = 0.5, 43
 BANNER_W, BANNER_H = 99, 13
 
 # Three step cards. Cards widened from 28 to 30 each, gaps set to 3.5,
@@ -119,14 +116,6 @@ ax.set_xlim(0, W)
 ax.set_ylim(0, H)
 ax.set_aspect("equal")
 ax.axis("off")
-
-# Title above the banner
-ax.text(
-    W / 2, TITLE_Y,
-    r"Stress-test methodology",
-    ha="center", va="center",
-    fontsize=20, fontweight="bold", color=TEXT_MAIN,
-)
 
 # Goal banner (neutral card with green label)
 banner = FancyBboxPatch(
@@ -230,8 +219,8 @@ punch = FancyBboxPatch(
     (PUNCH_X, PUNCH_Y), PUNCH_W, PUNCH_H,
     boxstyle="round,pad=0,rounding_size=1.1",
     linewidth=1.8,
-    edgecolor=ORANGE,
-    facecolor=ORANGE_LIGHT,
+    edgecolor=NEUTRAL_STROKE,
+    facecolor=NEUTRAL_FILL,
 )
 ax.add_patch(punch)
 
@@ -240,13 +229,13 @@ ax.text(
     PUNCH_X + PUNCH_W / 2, PUNCH_Y + PUNCH_H * 0.65,
     r"Surrogate evaluates all 50,000 samples in seconds.",
     ha="center", va="center",
-    fontsize=13, fontweight="bold", color=ORANGE_DARK,
+    fontsize=13, fontweight="bold", color=TEXT_MAIN,
 )
 ax.text(
     PUNCH_X + PUNCH_W / 2, PUNCH_Y + PUNCH_H * 0.30,
     r"90 selected across distance bins sent to Ansys for validation.",
     ha="center", va="center",
-    fontsize=13, fontweight="bold", color=ORANGE_DARK,
+    fontsize=13, fontweight="bold", color=TEXT_MAIN,
 )
 
 # Save

@@ -36,10 +36,6 @@ SVG_TEMPLATE = """\
      viewBox="0 0 %(PAGE_W)s %(PAGE_H)s"
      width="%(PAGE_W)s" height="%(PAGE_H)s"
      font-family="Arial, Helvetica, sans-serif">
-<text x="560" y="32"
-        text-anchor="middle" font-size="16" font-weight="bold" fill="#333">
-    Transmon&#x2013;Resonator System: Parameter Identification
-  </text>
 <line x1="269" y1="307" x2="157" y2="552"
         stroke="%(FIG_ORANGE)s" stroke-width="1.5" stroke-dasharray="5,3"/>
   <line x1="399" y1="307" x2="433" y2="552"
