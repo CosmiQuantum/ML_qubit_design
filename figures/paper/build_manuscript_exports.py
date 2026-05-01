@@ -6,7 +6,6 @@ import json
 import shutil
 from pathlib import Path
 
-import fitz
 import matplotlib
 
 matplotlib.use("Agg")
@@ -18,6 +17,7 @@ import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Patch
+from matplotlib.ticker import LogFormatterMathtext, LogLocator
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -99,10 +99,30 @@ def save_figure(fig: plt.Figure, out_path: Path) -> None:
     plt.close(fig)
 
 
+def get_pymupdf():
+    try:
+        import fitz  # type: ignore[import-not-found]
+    except Exception as exc:
+        raise RuntimeError(
+            "PDF cropping requires PyMuPDF, imported as 'fitz'. "
+            "Install it with `python -m pip install PyMuPDF`. "
+            "If you installed the unrelated package named `fitz`, remove it with "
+            "`python -m pip uninstall fitz`."
+        ) from exc
+
+    if not hasattr(fitz, "open") or not hasattr(fitz, "Rect"):
+        raise RuntimeError(
+            "The imported 'fitz' module is not PyMuPDF. "
+            "Run `python -m pip uninstall fitz` and then `python -m pip install PyMuPDF`."
+        )
+    return fitz
+
+
 def crop_pdf_page(page_number: int, clip_rect: tuple[float, float, float, float], out_path: Path) -> None:
     if not COMPILED_PDF.exists() and out_path.exists():
         print(f"reused existing {out_path.relative_to(REPO_ROOT)}")
         return
+    fitz = get_pymupdf()
     src_doc = fitz.open(COMPILED_PDF)
     src_page = src_doc.load_page(page_number - 1)
     clip = fitz.Rect(*clip_rect)
@@ -119,6 +139,7 @@ def crop_png_page(page_number: int, clip_rect: tuple[float, float, float, float]
     if not COMPILED_PDF.exists() and out_path.exists():
         print(f"reused existing {out_path.relative_to(REPO_ROOT)}")
         return
+    fitz = get_pymupdf()
     src_doc = fitz.open(COMPILED_PDF)
     src_page = src_doc.load_page(page_number - 1)
     clip = fitz.Rect(*clip_rect)
@@ -129,9 +150,26 @@ def crop_png_page(page_number: int, clip_rect: tuple[float, float, float, float]
 
 
 def load_transmon_trials() -> pd.DataFrame:
-    trial_dir = TRANSMON_ARTIFACT_DIR / "kt_dir2" / "transmon_cross_surrogate_loss2"
+    trial_dir_candidates = [
+        TRANSMON_DIR / "kt_dir2",
+        TRANSMON_DIR / "kt_dir2" / "transmon_cross_surrogate_loss2",
+        TRANSMON_ARTIFACT_DIR / "kt_dir2",
+        TRANSMON_ARTIFACT_DIR / "kt_dir2" / "transmon_cross_surrogate_loss2",
+        TRANSMON_DIR / "surrogate_trials" / "model2_mlp_tuning_bayesian",
+        TRANSMON_ARTIFACT_DIR / "surrogate_trials" / "model2_mlp_tuning_bayesian",
+    ]
+    trial_files: list[Path] = []
+    for trial_dir in trial_dir_candidates:
+        if not trial_dir.exists():
+            continue
+        trial_files = sorted(set(trial_dir.glob("trial_*/trial.json")) | set(trial_dir.glob("**/trial_*/trial.json")))
+        if trial_files:
+            break
+    if not trial_files:
+        raise FileNotFoundError("No TransmonCross Keras Tuner trial.json files found")
+
     rows: list[dict[str, float | int | bool | str]] = []
-    for trial_path in sorted(trial_dir.glob("trial_*/trial.json")):
+    for trial_path in trial_files:
         data = json.loads(trial_path.read_text())
         values = dict(data.get("hyperparameters", {}).get("values", {}))
         score = data.get("score")
@@ -140,6 +178,9 @@ def load_transmon_trials() -> pd.DataFrame:
         rows.append(values | {"val_loss": float(score), "trial_id": trial_path.parent.name})
 
     df = pd.DataFrame(rows)
+    if df.empty:
+        raise ValueError("No completed TransmonCross Keras Tuner trials found")
+
     neuron_cols = sorted(col for col in df.columns if col.startswith("neurons_"))
     for col in neuron_cols:
         df[col] = pd.to_numeric(df[col], errors="coerce")
@@ -160,7 +201,7 @@ def load_transmon_trials() -> pd.DataFrame:
 
     df["total_hidden_units"] = df[neuron_cols].fillna(0).sum(axis=1)
     df["max_width"] = df[neuron_cols].fillna(0).max(axis=1)
-    df["total_trainable_params"] = df.apply(estimate_trainable_params, axis=1)
+    df["total_trainable_params"] = [estimate_trainable_params(row) for _, row in df.iterrows()]
     return df
 
 
@@ -193,45 +234,214 @@ def draw_binned_median(ax: plt.Axes, x: np.ndarray, y: np.ndarray, *, bins: int 
         ax.plot(mids, meds, color=color, linewidth=1.7, linestyle="--", zorder=4)
 
 
-def plot_dataset_distributions() -> None:
-    use_paper_style()
+def parse_um(value: object) -> float:
+    text = str(value).strip()
+    for suffix in ("um", "\u00b5m", "\u03bcm"):
+        if text.endswith(suffix):
+            text = text[: -len(suffix)]
+            break
+    return float(text)
 
-    data_dir = TRANSMON_ARTIFACT_DIR / "data" / "npy"
-    y_train = np.load(data_dir / "y_train_linear_encoding.npy")
-    y_val = np.load(data_dir / "y_val_linear_encoding.npy")
-    y_test = np.load(data_dir / "y_test_linear_encoding.npy")
-    Y = np.vstack([y_train, y_val, y_test]) * 1e6
 
-    labels = np.load(TRANSMON_DIR / "metadata" / "y_columns.npy", allow_pickle=True).tolist()
-    short_labels = [
-        "claw length (um)",
-        "ground spacing (um)",
-        "cross length (um)",
+def split_indices_like_ml00(n_rows: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    first_rng = np.random.RandomState(42)
+    first_perm = first_rng.permutation(n_rows)
+    n_val_test = int(np.ceil(0.3 * n_rows))
+    val_test_idx = first_perm[:n_val_test]
+    train_idx = first_perm[n_val_test:]
+
+    second_rng = np.random.RandomState(42)
+    second_perm = second_rng.permutation(len(val_test_idx))
+    n_test = int(np.ceil(0.5 * len(val_test_idx)))
+    test_idx = val_test_idx[second_perm[:n_test]]
+    val_idx = val_test_idx[second_perm[n_test:]]
+    return train_idx, val_idx, test_idx
+
+
+def load_transmon_design_splits_um() -> dict[str, np.ndarray]:
+    npy_dirs = [
+        TRANSMON_ARTIFACT_DIR / "data" / "npy",
+        TRANSMON_DIR / "data" / "npy",
     ]
-    if len(labels) == len(short_labels):
-        labels = short_labels
+    for data_dir in npy_dirs:
+        train_path = data_dir / "y_train_linear_encoding.npy"
+        val_path = data_dir / "y_val_linear_encoding.npy"
+        test_path = data_dir / "y_test_linear_encoding.npy"
+        if train_path.exists() and val_path.exists() and test_path.exists():
+            splits = {
+                "Train": np.load(train_path),
+                "Validation": np.load(val_path),
+                "Test": np.load(test_path),
+            }
+            for key, values in splits.items():
+                values = np.asarray(values, dtype=float)
+                if np.nanmax(np.abs(values)) < 1.0:
+                    values = values * 1e6
+                splits[key] = values
+            return splits
 
-    fig, axes = plt.subplots(3, 1, figsize=(COLUMN_WIDTH_IN, 5.2), sharey=False)
-    bins = [24, np.arange(3.5, 10.6, 1.0), 24]
+    rows = json.loads((TRANSMON_DIR / "metadata" / "qubit-TransmonCross-Hamiltonian_params.json").read_text())
+    values = []
+    for row in rows:
+        opts = row["design"]["design_options"]
+        readout = opts["connection_pads"]["readout"]
+        values.append(
+            [
+                parse_um(readout["claw_length"]),
+                parse_um(readout["ground_spacing"]),
+                parse_um(opts["cross_length"]),
+            ]
+        )
+    all_values = np.asarray(values, dtype=float)
+    train_idx, val_idx, test_idx = split_indices_like_ml00(len(all_values))
+    return {
+        "Train": all_values[train_idx],
+        "Validation": all_values[val_idx],
+        "Test": all_values[test_idx],
+    }
 
-    color = GREEN
-    for ax, values, label, binspec in zip(
-        axes,
-        Y.T,
-        labels,
-        bins,
-    ):
-        ax.hist(values, bins=binspec, color=color, alpha=0.18, edgecolor=color, linewidth=1.3)
-        ax.axvline(np.median(values), color=color, linewidth=1.2, linestyle="--")
+
+def draw_split_histograms(fig: plt.Figure, axes: np.ndarray, splits: dict[str, np.ndarray], *, legend_y: float = 0.98) -> None:
+    labels = [
+        r"claw length ($\mu$m)",
+        r"ground spacing ($\mu$m)",
+        r"cross length ($\mu$m)",
+    ]
+    colors = {
+        "Train": GREEN,
+        "Validation": ORANGE,
+        "Test": PURPLE,
+    }
+    fills = {
+        "Train": GREEN_LIGHT,
+        "Validation": ORANGE_LIGHT,
+        "Test": PURPLE_LIGHT,
+    }
+
+    all_values = np.vstack(list(splits.values()))
+    bin_specs = [
+        np.linspace(all_values[:, 0].min() - 5, all_values[:, 0].max() + 5, 18),
+        np.arange(3.5, 10.6, 1.0),
+        np.linspace(all_values[:, 2].min() - 5, all_values[:, 2].max() + 5, 18),
+    ]
+
+    for param_idx, (ax, label, bins) in enumerate(zip(axes, labels, bin_specs)):
+        for split_name in ("Train", "Validation", "Test"):
+            values = splits[split_name][:, param_idx]
+            ax.hist(
+                values,
+                bins=bins,
+                histtype="stepfilled",
+                facecolor=fills[split_name],
+                edgecolor=colors[split_name],
+                alpha=0.36,
+                linewidth=1.15,
+                label=f"{split_name} (n={len(values)})",
+            )
         ax.set_xlabel(label)
-        ax.set_ylabel("count")
+        ax.set_ylabel("Counts")
         ax.grid(axis="y", linestyle=":", color=GRID)
         ax.spines["top"].set_visible(False)
         ax.spines["right"].set_visible(False)
 
-    axes[0].set_title("Quantum Metal parameter distributions")
-    fig.tight_layout()
+    legend_handles = [
+        Patch(facecolor=GREEN_LIGHT, edgecolor=GREEN, linewidth=1.0, alpha=0.8, label="Train"),
+        Patch(facecolor=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.0, alpha=0.8, label="Validation"),
+        Patch(facecolor=PURPLE_LIGHT, edgecolor=PURPLE, linewidth=1.0, alpha=0.8, label="Test"),
+    ]
+    fig.legend(
+        handles=legend_handles,
+        loc="upper center",
+        ncol=3,
+        frameon=True,
+        edgecolor="#CCCCCC",
+        bbox_to_anchor=(0.5, legend_y),
+        handlelength=1.4,
+        columnspacing=0.9,
+        borderpad=0.35,
+    )
+
+
+def plot_dataset_distributions() -> None:
+    use_paper_style()
+
+    splits = load_transmon_design_splits_um()
+    fig, axes = plt.subplots(3, 1, figsize=(COLUMN_WIDTH_IN, 4.35), sharey=False)
+    draw_split_histograms(fig, axes, splits)
+    fig.suptitle("Quantum Metal parameter distributions", y=0.995, fontsize=10.5, fontweight="normal")
+    fig.tight_layout(rect=(0, 0, 1, 0.91))
     save_figure(fig, EXPORT_DIR / "dataset_distributions.pdf")
+
+
+def plot_sample_data_distribution() -> None:
+    use_paper_style()
+
+    splits = load_transmon_design_splits_um()
+    fig, axes = plt.subplots(3, 1, figsize=(COLUMN_WIDTH_IN, 4.2), sharey=False)
+    draw_split_histograms(fig, axes, splits, legend_y=0.94)
+    fig.suptitle("Train, validation, and test distributions", y=0.995, fontsize=10.5, fontweight="normal")
+    fig.tight_layout(rect=(0, 0, 1, 0.91))
+    out_png = EXPORT_DIR / "sample_data_distribution.png"
+    out_pdf = EXPORT_DIR / "sample_data_distribution.pdf"
+    out_png.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_pdf, bbox_inches="tight", pad_inches=0.04)
+    fig.savefig(out_png, bbox_inches="tight", pad_inches=0.04, dpi=300)
+    print(f"wrote {out_pdf.relative_to(REPO_ROOT)}")
+    print(f"wrote {out_png.relative_to(REPO_ROOT)}")
+    plt.close(fig)
+
+
+def plot_data_amount_sweep() -> None:
+    use_paper_style()
+
+    df = pd.read_csv(TRANSMON_DIR / "data_amount_sweep.csv")
+    summary = (
+        df.groupby(["fraction", "n_samples"], as_index=False)
+        .agg(
+            train_mean=("train_mae", "mean"),
+            train_std=("train_mae", "std"),
+            val_mean=("val_mae", "mean"),
+            val_std=("val_mae", "std"),
+            test_mean=("test_mae", "mean"),
+            test_std=("test_mae", "std"),
+        )
+        .sort_values("n_samples")
+    )
+
+    series = [
+        ("Training", "train_mean", "train_std", GREEN, GREEN_LIGHT),
+        ("Validation", "val_mean", "val_std", ORANGE, ORANGE_LIGHT),
+        ("Test", "test_mean", "test_std", PURPLE, PURPLE_LIGHT),
+    ]
+
+    x = summary["n_samples"].to_numpy()
+    fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 3.05))
+    for label, mean_col, std_col, color, fill in series:
+        mean = summary[mean_col].to_numpy()
+        std = summary[std_col].fillna(0).to_numpy()
+        ax.plot(x, mean, marker="o", markersize=4.0, linewidth=1.6, color=color, label=label)
+        ax.fill_between(x, mean - std, mean + std, color=fill, alpha=0.62, linewidth=0)
+
+    ax.set_xlabel("Training samples")
+    ax.set_ylabel("MAE loss")
+    ax.set_title("Learning curve for the inverse model")
+    ax.grid(axis="y", linestyle=":", color=GRID)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.legend(loc="upper right", frameon=True, edgecolor="#CCCCCC", facecolor="white")
+    ax.set_ylim(bottom=0)
+    ax.margins(x=0.03)
+
+    top = ax.twiny()
+    top.set_xlim(ax.get_xlim())
+    top.set_xticks(x)
+    top.set_xticklabels([f"{frac * 100:.0f}" for frac in summary["fraction"]])
+    top.set_xlabel("Fraction of full training set [%]")
+    top.tick_params(axis="x", labelsize=8.0, colors=TEXT)
+    top.spines["top"].set_color(SPINE)
+
+    fig.tight_layout()
+    save_figure(fig, EXPORT_DIR / "data_amount_sweep-v2.pdf")
 
 
 def plot_architecture_sweep() -> None:
@@ -298,16 +508,18 @@ def plot_tuner_correlations() -> None:
 
     feature_specs: list[tuple[str, str, str]] = [
         ("learning_rate", "Learning rate", "log"),
-        ("l2_reg", "L2 regularization", "log"),
+        ("l2_reg", "L2 reg.", "log"),
         ("dropout_rate", "Dropout rate", "linear"),
         ("penalty_weight", "Penalty weight", "log"),
         ("n_layers", "Hidden layers", "discrete"),
-        ("total_trainable_params", "Total trainable params", "log"),
-        ("use_batchnorm", "Batch normalization", "bool"),
+        ("total_trainable_params", "Trainable params", "log"),
+        ("use_batchnorm", "Batch norm.", "bool"),
     ]
 
     correlations = []
     for col, label, kind in feature_specs:
+        if col not in df.columns:
+            continue
         if kind == "bool":
             series = df[col].astype(int)
         else:
@@ -320,16 +532,23 @@ def plot_tuner_correlations() -> None:
     corr_df = pd.DataFrame(correlations).sort_values("rho", key=lambda s: s.abs(), ascending=False)
     top_features = corr_df.head(4).to_dict("records")
 
-    fig = plt.figure(figsize=(FULL_WIDTH_IN, 4.6))
-    gs = gridspec.GridSpec(2, 3, width_ratios=[1.05, 1.0, 1.0], hspace=0.38, wspace=0.35, figure=fig)
+    fig = plt.figure(figsize=(FULL_WIDTH_IN, 5.15))
+    gs = gridspec.GridSpec(
+        2,
+        3,
+        width_ratios=[1.12, 1.0, 1.0],
+        hspace=0.58,
+        wspace=0.48,
+        figure=fig,
+    )
 
     ax_bar = fig.add_subplot(gs[:, 0])
     bar_df = corr_df.iloc[::-1]
     bar_colors = [ORANGE if rho > 0 else PURPLE for rho in bar_df["rho"]]
     ax_bar.barh(bar_df["label"], bar_df["rho"], color=bar_colors, alpha=0.85)
     ax_bar.axvline(0, color=SPINE, linewidth=0.9)
-    ax_bar.set_xlabel("Spearman correlation with val loss")
-    ax_bar.set_title("Which hyperparameters move with val loss")
+    ax_bar.set_xlabel("Spearman correlation\nwith val loss")
+    ax_bar.set_title("Hyperparameter sensitivity")
     ax_bar.grid(axis="x", linestyle=":", color=GRID)
     ax_bar.spines["top"].set_visible(False)
     ax_bar.spines["right"].set_visible(False)
@@ -383,10 +602,13 @@ def plot_tuner_correlations() -> None:
             ax.scatter(best[col], best["val_loss"], marker="*", s=120, color="#C14F00", edgecolors="white", linewidths=0.7, zorder=5)
             if kind == "log":
                 ax.set_xscale("log")
+                ax.xaxis.set_major_locator(LogLocator(base=10, numticks=4))
+                ax.xaxis.set_major_formatter(LogFormatterMathtext(base=10))
+                ax.xaxis.set_minor_locator(LogLocator(base=10, subs=[]))
             if col == "total_trainable_params":
                 ax.ticklabel_format(axis="y", style="plain")
 
-        ax.set_title(f"{label}  (rho = {feature['rho']:+.2f})")
+        ax.set_title(f"{label}\nrho = {feature['rho']:+.2f}")
         ax.set_ylabel("Val loss")
         ax.grid(axis="y", linestyle=":", color=GRID)
         ax.spines["top"].set_visible(False)
@@ -397,14 +619,25 @@ def plot_tuner_correlations() -> None:
         else:
             ax.set_xlabel(label)
 
-    fig.legend(handles=legend_handles, loc="upper center", ncol=3, frameon=True, edgecolor="#CCCCCC", bbox_to_anchor=(0.68, 1.02))
+    fig.legend(
+        handles=legend_handles,
+        loc="lower center",
+        ncol=3,
+        frameon=True,
+        edgecolor="#CCCCCC",
+        facecolor="white",
+        bbox_to_anchor=(0.62, 0.018),
+        handlelength=1.6,
+        columnspacing=1.0,
+        borderpad=0.45,
+    )
     fig.suptitle(
         f"Keras Tuner hyperparameter search  ({len(df)} trials)",
-        y=1.03,
+        y=0.985,
         fontsize=11,
         fontweight="normal",
     )
-    fig.tight_layout()
+    fig.subplots_adjust(left=0.13, right=0.985, top=0.88, bottom=0.18)
     save_figure(fig, EXPORT_DIR / "keras_tuner_hyperparameter_search-v2.pdf")
 
 
@@ -760,13 +993,10 @@ def export_static_sources() -> None:
 
 
 def export_pdf_fallbacks() -> None:
-    crop_pdf_page(18, (105, 70, 495, 334), EXPORT_DIR / "data_amount_sweep-v2.pdf")
     crop_pdf_page(19, (98, 48, 502, 346), EXPORT_DIR / "predicted_vs_reference_design_comparsion.pdf")
 
 
 def export_png_fallbacks() -> None:
-    crop_png_page(19, (42, 392, 272, 520), EXPORT_DIR / "sample_data_distribution.png")
-
     crop_png_page(21, (120, 48, 510, 166), EXPORT_DIR / "testing_pipeline.png")
     crop_png_page(21, (22, 232, 280, 350), SIM_RESULTS_DIR / "transmon2.png")
     crop_png_page(21, (18, 462, 280, 552), SIM_RESULTS_DIR / "transmon3.png")
@@ -782,6 +1012,8 @@ def main() -> None:
     ensure_dirs()
     export_static_sources()
     plot_dataset_distributions()
+    plot_sample_data_distribution()
+    plot_data_amount_sweep()
     plot_architecture_sweep()
     plot_tuner_correlations()
     plot_inverse_surrogate_boxplot()
