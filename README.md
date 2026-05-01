@@ -61,7 +61,7 @@ jupyter-lab
 
 A GPU is recommended. If you have a Fermilab services account, you can run Jupyter notebooks on the EAF.
 
-1. Navigate to the Fermilab EAF docs and sign in with your credentials.
+1. Navigate to the [Fermilab EAF docs](https://eafdocs.fnal.gov/master/index.html) and sign in with your credentials.
 2. Follow the three Quickstart steps. When the second step opens a new link, enter your credentials again.
 3. Click Add New Server.
 4. Scroll to the bottom of the server options and choose Fermilab generic notebooks.
