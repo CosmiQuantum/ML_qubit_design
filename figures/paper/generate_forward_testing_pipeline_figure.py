@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate the Testing Pipeline (Forward Pass) figure as a standalone SVG/PDF.
+Generate the Testing Pipeline (Forward Pass) figure as a standalone PDF.
 
 This shows the forward-validation tool chain:
     ML Model → SQuADDS → Quantum Metal → pyEPR ↔ PyAEDT ↔ Ansys HFSS & Q3D
@@ -9,7 +9,6 @@ with the validation-loss cross comparing Reference (SQuADDS dataset)
 vs Predicted (forward-pass simulation) results.
 
 Output:
-    manuscript_exports/testing_pipeline.svg
     manuscript_exports/testing_pipeline.pdf
 """
 import os
@@ -39,7 +38,6 @@ else:
     VALID_STROKE = "#17384F"
 PIPELINE_SHIFT = 46
 
-OUT_SVG = MANUSCRIPT_EXPORTS_DIR / "testing_pipeline.svg"
 OUT_PDF = MANUSCRIPT_EXPORTS_DIR / "testing_pipeline.pdf"
 
 PAGE_W = 1120
@@ -162,9 +160,6 @@ svg = SVG_TEMPLATE % {
     "ML_STROKE": ML_STROKE,
     "VALID_STROKE": VALID_STROKE,
 }
-
-OUT_SVG.write_text(svg, encoding="utf-8")
-print(f"Written {OUT_SVG}")
 
 cairosvg.svg2pdf(
     bytestring=svg.encode("utf-8"),

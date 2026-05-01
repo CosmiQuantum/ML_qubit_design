@@ -12,7 +12,6 @@ Same palette family and rendering approach as generate_workflow_mpl.py:
 
 Outputs:
     manuscript_exports/stress_test_methodology.pdf
-    manuscript_exports/stress_test_methodology.svg
 
 Usage:
     python3 generate_gaussian_stress_test_methodology_figure.py
@@ -240,8 +239,6 @@ ax.text(
 
 # Save
 stress_test_pdf = MANUSCRIPT_EXPORTS_DIR / "stress_test_methodology.pdf"
-stress_test_svg = MANUSCRIPT_EXPORTS_DIR / "stress_test_methodology.svg"
 
 plt.savefig(stress_test_pdf, bbox_inches="tight", pad_inches=0.15)
-plt.savefig(stress_test_svg, bbox_inches="tight", pad_inches=0.15)
-print(f"Written {stress_test_pdf} and {stress_test_svg}")
+print(f"Written {stress_test_pdf}")

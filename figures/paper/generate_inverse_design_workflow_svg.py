@@ -10,7 +10,6 @@ Produces a two-column flowchart:
     extracted capacitances, achieved Hamiltonian values, errors)
 
 Outputs:
-    manuscript_exports/workflow.svg   (vector, for web / quick preview)
     manuscript_exports/workflow.pdf   (vector, for Overleaf \\includegraphics)
 
 Usage:
@@ -329,13 +328,8 @@ out.write("</svg>\n")
 
 SVG = out.getvalue()
 
-# Write files
-workflow_svg = MANUSCRIPT_EXPORTS_DIR / "workflow.svg"
+# Write file
 workflow_pdf = MANUSCRIPT_EXPORTS_DIR / "workflow.pdf"
-
-with workflow_svg.open("w", encoding="utf-8") as f:
-    f.write(SVG)
-print(f"Written {workflow_svg}")
 
 try:
     from svglib.svglib import svg2rlg
