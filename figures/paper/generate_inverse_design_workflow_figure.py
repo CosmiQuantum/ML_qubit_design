@@ -6,7 +6,6 @@ Uses matplotlib's mathtext renderer so variables like $\omega_q$, $\hat{y}_q$,
 $\mathbb{R}^{d_{in}}$ appear as proper typeset math — no LaTeX install needed.
 
 Outputs:
-    manuscript_exports/workflow.svg
     manuscript_exports/workflow.pdf
 
 Usage:
@@ -357,8 +356,6 @@ ax.text(
 
 # Save
 workflow_pdf = MANUSCRIPT_EXPORTS_DIR / "workflow.pdf"
-workflow_svg = MANUSCRIPT_EXPORTS_DIR / "workflow.svg"
 
 plt.savefig(workflow_pdf, bbox_inches="tight", pad_inches=0.04)
-plt.savefig(workflow_svg, bbox_inches="tight", pad_inches=0.04)
-print(f"Written {workflow_pdf} and {workflow_svg}")
+print(f"Written {workflow_pdf}")
