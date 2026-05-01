@@ -10,34 +10,40 @@ Produces a two-column flowchart:
     extracted capacitances, achieved Hamiltonian values, errors)
 
 Outputs:
-    outputs/workflow.svg   (vector, for web / quick preview)
-    outputs/workflow.pdf   (vector, for Overleaf \\includegraphics)
+    manuscript_exports/workflow.svg   (vector, for web / quick preview)
+    manuscript_exports/workflow.pdf   (vector, for Overleaf \\includegraphics)
 
 Usage:
     python3 generate_inverse_design_workflow_svg.py
 """
 
 import io
+import os
 
-from _paths import OUTPUTS_DIR
+from _paths import MANUSCRIPT_EXPORTS_DIR
 
 # Color palette (same family as inverse_pipeline figure)
 BG            = "#FFFFFF"
 
-# Green ML / trainedmodel stages
-GREEN         = "#3D8B3D"
-GREEN_LIGHT   = "#E8F5E8"
-GREEN_DARK    = "#2E6B2E"
-
-# Orange physics / domainknowledge stages (Qubit Subsystem accent)
-ORANGE        = "#E87A00"
-ORANGE_LIGHT  = "#FFF4E6"
-ORANGE_DARK   = "#A85600"
-
-# Purple validation / EMsimulation stages (CPW Cavity accent)
-PURPLE        = "#7B68AE"
-PURPLE_LIGHT  = "#E8E4F0"
-PURPLE_DARK   = "#4A3D78"
+FLOWCHART_COLOR_SCHEME = os.environ.get("FLOWCHART_COLOR_SCHEME", "blue").strip().lower()
+FLOWCHART_COLOR_SCHEME = {"current": "blue", "new": "blue", "old": "legacy", "classic": "legacy"}.get(
+    FLOWCHART_COLOR_SCHEME,
+    FLOWCHART_COLOR_SCHEME,
+)
+if FLOWCHART_COLOR_SCHEME == "legacy":
+    FROST         = "#FFF4E6"  # Physics targets
+    PALE_ICE      = "#E8F5E8"  # ML components
+    DUSTY_BLUE    = "#E8E4F0"  # Validation
+    FROST_DARK      = "#E87A00"
+    PALE_ICE_DARK   = "#3D8B3D"
+    DUSTY_BLUE_DARK = "#7B68AE"
+else:
+    FROST         = "#D6E5EE"  # Physics targets
+    PALE_ICE      = "#B0CCDE"  # ML components
+    DUSTY_BLUE    = "#8AABC8"  # Validation
+    FROST_DARK      = "#567A90"
+    PALE_ICE_DARK   = "#3F6F8B"
+    DUSTY_BLUE_DARK = "#17384F"
 
 # Neutral utility box (the initial "Inputs" target row)
 NEUTRAL_FILL  = "#F5F5F5"
@@ -48,7 +54,7 @@ TEXT_DIM      = "#555555"
 TEXT_MONO     = "#444444"
 
 ARROW         = "#555555"
-FEEDBACK      = GREEN
+FEEDBACK      = DUSTY_BLUE_DARK
 
 # Layout
 W = 540
@@ -69,13 +75,13 @@ STAGES = [
      "Inputs — target Hamiltonian",
      ["ω_q, α, ω_r, g, κ, …",
       "(user-specified targets)"],
-     "neutral", 60),
+     "physics", 60),
 
     ("map",
      "Physics mapping",
      ["Convert Hamiltonian targets to",
-      "ML-friendly features using",
-      "analytic relations (e.g. α ≈ −E_C)."],
+      "ML-friendly features using analytic",
+      "approximations (α ≈ −E_C, etc.)."],
      "physics", 75),
 
     ("pre",
@@ -147,15 +153,15 @@ FEEDBACK_LABEL = "refined targets / retry"
 
 CATEGORY_STYLE = {
     "neutral": (NEUTRAL_FILL, NEUTRAL_STROKE, TEXT_MAIN, TEXT_DIM),
-    "physics": (ORANGE_LIGHT, ORANGE,        ORANGE_DARK, TEXT_MAIN),
-    "ml":      (GREEN_LIGHT,  GREEN,         GREEN_DARK,  TEXT_MAIN),
-    "valid":   (PURPLE_LIGHT, PURPLE,        PURPLE_DARK, TEXT_MAIN),
+    "physics": (FROST,      FROST_DARK,      FROST_DARK,      TEXT_MAIN),
+    "ml":      (PALE_ICE,   PALE_ICE_DARK,   PALE_ICE_DARK,   TEXT_MAIN),
+    "valid":   (DUSTY_BLUE, DUSTY_BLUE_DARK, DUSTY_BLUE_DARK, TEXT_MAIN),
 }
 
 CATEGORY_BADGE = {
-    "physics": ("Physics targets", ORANGE),
-    "ml":      ("ML surrogate", GREEN),
-    "valid":   ("Validation",  PURPLE),
+    "physics": ("Physics targets", FROST_DARK),
+    "ml":      ("ML surrogate", PALE_ICE_DARK),
+    "valid":   ("Validation", DUSTY_BLUE_DARK),
 }
 
 # Precompute ycoordinates for each stage
@@ -324,8 +330,8 @@ out.write("</svg>\n")
 SVG = out.getvalue()
 
 # Write files
-workflow_svg = OUTPUTS_DIR / "workflow.svg"
-workflow_pdf = OUTPUTS_DIR / "workflow.pdf"
+workflow_svg = MANUSCRIPT_EXPORTS_DIR / "workflow.svg"
+workflow_pdf = MANUSCRIPT_EXPORTS_DIR / "workflow.pdf"
 
 with workflow_svg.open("w", encoding="utf-8") as f:
     f.write(SVG)

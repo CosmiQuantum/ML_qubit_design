@@ -1,11 +1,10 @@
 # Paper Figures
 
-This folder is organized into four parts.
+This folder is organized into three parts.
 
 1. `source_materials` contains manually curated source material used by the generators.
-2. `outputs` contains checked in generated SVG and PDF figures.
-3. `manuscript_exports` contains the paper facing figure files used by the manuscript.
-4. `generate_*.py` contains figure generation scripts.
+2. `manuscript_exports` contains the paper facing figure files used by the manuscript.
+3. `generate_*.py` contains figure generation scripts.
 
 ## Scripts
 
