@@ -6,8 +6,8 @@ Uses matplotlib's mathtext renderer so variables like $\omega_q$, $\hat{y}_q$,
 $\mathbb{R}^{d_{in}}$ appear as proper typeset math — no LaTeX install needed.
 
 Outputs:
-    outputs/workflow.svg
-    outputs/workflow.pdf
+    manuscript_exports/workflow.svg
+    manuscript_exports/workflow.pdf
 
 Usage:
     python3 generate_inverse_design_workflow_figure.py
@@ -17,10 +17,11 @@ import matplotlib
 
 matplotlib.use("Agg")
 
+import os
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Polygon
 
-from _paths import OUTPUTS_DIR
+from _paths import MANUSCRIPT_EXPORTS_DIR
 
 # Use mathtext (built in, ships with matplotlib) NOT full LaTeX
 plt.rcParams["text.usetex"] = False
@@ -28,18 +29,25 @@ plt.rcParams["mathtext.fontset"] = "cm"       # Computer Modern look for math
 plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["font.sans-serif"] = ["Helvetica", "Arial", "DejaVu Sans"]
 
-# Color palette (same family as inverse_pipeline figure)
-GREEN         = "#3D8B3D"
-GREEN_LIGHT   = "#E8F5E8"
-GREEN_DARK    = "#2E6B2E"
-
-ORANGE        = "#E87A00"
-ORANGE_LIGHT  = "#FFF4E6"
-ORANGE_DARK   = "#A85600"
-
-PURPLE        = "#7B68AE"
-PURPLE_LIGHT  = "#E8E4F0"
-PURPLE_DARK   = "#4A3D78"
+FLOWCHART_COLOR_SCHEME = os.environ.get("FLOWCHART_COLOR_SCHEME", "blue").strip().lower()
+FLOWCHART_COLOR_SCHEME = {"current": "blue", "new": "blue", "old": "legacy", "classic": "legacy"}.get(
+    FLOWCHART_COLOR_SCHEME,
+    FLOWCHART_COLOR_SCHEME,
+)
+if FLOWCHART_COLOR_SCHEME == "legacy":
+    FROST         = "#FFF4E6"  # Physics targets
+    PALE_ICE      = "#E8F5E8"  # ML components
+    DUSTY_BLUE    = "#E8E4F0"  # Validation
+    FROST_DARK      = "#E87A00"
+    PALE_ICE_DARK   = "#3D8B3D"
+    DUSTY_BLUE_DARK = "#7B68AE"
+else:
+    FROST         = "#D6E5EE"  # Physics targets
+    PALE_ICE      = "#B0CCDE"  # ML components
+    DUSTY_BLUE    = "#8AABC8"  # Validation
+    FROST_DARK      = "#567A90"
+    PALE_ICE_DARK   = "#3F6F8B"
+    DUSTY_BLUE_DARK = "#17384F"
 
 NEUTRAL_FILL  = "#F5F5F5"
 NEUTRAL_STROKE = "#999999"
@@ -48,7 +56,7 @@ TEXT_MAIN     = "#222222"
 TEXT_DIM      = "#555555"
 
 ARROW         = "#555555"
-FEEDBACK      = GREEN
+FEEDBACK      = DUSTY_BLUE_DARK
 
 # Stage content.
 # Keep the figure terse. The manuscript text explains the details.
@@ -57,12 +65,12 @@ STAGES = [
      "Target Hamiltonian",
      [r"$\omega_q,\ \alpha$",
       r"$\omega_r,\ g,\ \kappa$"],
-     "neutral"),
+     "physics"),
 
     ("map",
      "Physics features",
-     [r"$\alpha \approx -E_C$",
-      r"$\omega_q(E_J,E_C)$"],
+     [r"$\omega_q \approx \sqrt{8E_JE_C}-E_C$",
+      r"$\alpha \approx -E_C$"],
      "physics"),
 
     ("pre",
@@ -107,15 +115,15 @@ FEEDBACK_LABEL = "Iterate"
 
 CATEGORY_STYLE = {
     "neutral": dict(fill=NEUTRAL_FILL, stroke=NEUTRAL_STROKE, title=TEXT_MAIN, body=TEXT_DIM),
-    "physics": dict(fill=ORANGE_LIGHT, stroke=ORANGE, title=ORANGE_DARK, body=TEXT_MAIN),
-    "ml":      dict(fill=GREEN_LIGHT,  stroke=GREEN,  title=GREEN_DARK,  body=TEXT_MAIN),
-    "valid":   dict(fill=PURPLE_LIGHT, stroke=PURPLE, title=PURPLE_DARK, body=TEXT_MAIN),
+    "physics": dict(fill=FROST,      stroke=FROST_DARK,      title=FROST_DARK,      body=TEXT_MAIN),
+    "ml":      dict(fill=PALE_ICE,   stroke=PALE_ICE_DARK,   title=PALE_ICE_DARK,   body=TEXT_MAIN),
+    "valid":   dict(fill=DUSTY_BLUE_DARK, stroke=DUSTY_BLUE_DARK, title="#B8D4E3", body="#FFFFFF"),
 }
 
 CATEGORY_BADGE = {
-    "physics": ("Physics targets", ORANGE),
-    "ml":      ("ML", GREEN),
-    "valid":   ("Validation", PURPLE),
+    "physics": ("Physics targets", FROST_DARK),
+    "ml":      ("ML", PALE_ICE_DARK),
+    "valid":   ("Validation", DUSTY_BLUE_DARK),
 }
 
 # Compact two-row layout. The path runs left to right across the top row,
@@ -125,13 +133,14 @@ FIG_H_IN = 3.15
 
 BOX_W = 23.2
 BOX_H = 10.5
+ML_BOX_H = 12.0
 GAP_X = 3.0
 LEFT = 2.0
 TOP_Y = 24.4
 BOTTOM_Y = 6.0
 TITLE_PAD_X = 1.0
 TITLE_PAD_Y = 2.1
-BODY_GAP = 2.0
+BODY_GAP = 2.6
 
 COL_X = [LEFT + i * (BOX_W + GAP_X) for i in range(4)]
 TOP_ROW = ["inputs", "map", "pre", "mlps"]
@@ -142,7 +151,7 @@ stage_rects = {
     "inputs": (COL_X[0], TOP_Y, BOX_W, BOX_H),
     "map": (COL_X[1], TOP_Y, BOX_W, BOX_H),
     "pre": (COL_X[2], TOP_Y, BOX_W, BOX_H),
-    "mlps": (COL_X[3], TOP_Y, BOX_W, BOX_H),
+    "mlps": (COL_X[3], TOP_Y + BOX_H - ML_BOX_H, BOX_W, ML_BOX_H),
     "post": (COL_X[3], BOTTOM_Y, BOX_W, BOX_H),
     "fwd": (COL_X[2], BOTTOM_Y, BOX_W, BOX_H),
     "back": (COL_X[1], BOTTOM_Y, BOX_W, BOX_H),
@@ -169,18 +178,20 @@ def draw_group(x: float, y: float, w: float, h: float, cat: str) -> None:
         zorder=0,
     )
     ax.add_patch(group)
+    # Use a darkened version of the edge color for the badge text
+    # so it reads well against the semi-transparent lane background.
+    badge_color = {"physics": "#3A5766", "ml": "#2A4F65", "valid": "#0D2636"}.get(cat, edge)
     ax.text(
         x + w / 2, y + h - 0.6,
         label,
         ha="center", va="top",
         fontsize=8.5, fontweight="bold", fontstyle="italic",
-        color=edge,
-        bbox=dict(facecolor="white", edgecolor="none", alpha=0.86, pad=0.4),
+        color=badge_color,
         zorder=7,
     )
 
 
-draw_group(COL_X[1] - 1.0, TOP_Y - 1.2, 2 * BOX_W + GAP_X + 2.0, BOX_H + 3.6, "physics")
+draw_group(COL_X[0] - 1.0, TOP_Y - 1.2, 3 * BOX_W + 2 * GAP_X + 2.0, BOX_H + 3.6, "physics")
 draw_group(COL_X[3] - 1.0, BOTTOM_Y - 1.2, BOX_W + 2.0, TOP_Y + BOX_H - BOTTOM_Y + 3.6, "ml")
 draw_group(COL_X[0] - 1.0, BOTTOM_Y - 1.2, 3 * BOX_W + 2 * GAP_X + 2.0, BOX_H + 3.6, "valid")
 
@@ -265,7 +276,21 @@ def draw_arrow(start_sid: str, start_side: str, end_sid: str, end_side: str, lab
 
 draw_arrow("inputs", "right", "map", "left", "")
 draw_arrow("map", "right", "pre", "left", "")
-draw_arrow("pre", "right", "mlps", "left", "")
+pre_right = edge_mid("pre", "right")
+mlps_x, _, _, _ = stage_rects["mlps"]
+ax.add_patch(
+    FancyArrowPatch(
+        pre_right,
+        (mlps_x, pre_right[1]),
+        arrowstyle="-|>",
+        mutation_scale=14,
+        linewidth=1.85,
+        color=ARROW,
+        shrinkA=3.0,
+        shrinkB=3.0,
+        zorder=4,
+    )
+)
 draw_arrow("mlps", "bottom", "post", "top", "")
 draw_arrow("post", "left", "fwd", "right", "")
 draw_arrow("fwd", "left", "back", "right", "")
@@ -280,35 +305,44 @@ feedback_elbow_2 = (0.6, 21.2)
 feedback_elbow_3 = (map_bottom[0], 21.2)
 
 arrow_tip = (map_bottom[0], map_bottom[1] - 0.02)
+arrow_base_y = arrow_tip[1] - 1.2
 
-for start, end in [
-    (feedback_start, feedback_elbow_1),
-    (feedback_elbow_1, feedback_elbow_2),
-    (feedback_elbow_2, feedback_elbow_3),
-]:
-    ax.plot(
-        [start[0], end[0]],
-        [start[1], end[1]],
-        color=FEEDBACK,
-        linewidth=1.8,
-        linestyle=(0, (6, 3)),
-        zorder=8,
-    )
-
-feedback_arrow = FancyArrowPatch(
-    feedback_elbow_3,
-    arrow_tip,
-    arrowstyle="-|>",
-    mutation_scale=18,
-    linewidth=1.8,
+ax.plot(
+    [
+        feedback_start[0],
+        feedback_elbow_1[0],
+        feedback_elbow_2[0],
+        feedback_elbow_3[0],
+        arrow_tip[0],
+    ],
+    [
+        feedback_start[1],
+        feedback_elbow_1[1],
+        feedback_elbow_2[1],
+        feedback_elbow_3[1],
+        arrow_base_y,
+    ],
     color=FEEDBACK,
+    linewidth=2.0,
     linestyle=(0, (6, 3)),
-    connectionstyle="arc3,rad=0",
-    shrinkA=0.0,
-    shrinkB=0.0,
+    dash_capstyle="round",
+    dash_joinstyle="round",
     zorder=9,
 )
-ax.add_patch(feedback_arrow)
+ax.add_patch(
+    Polygon(
+        [
+            arrow_tip,
+            (arrow_tip[0] - 0.72, arrow_base_y),
+            (arrow_tip[0] + 0.72, arrow_base_y),
+        ],
+        closed=True,
+        facecolor=FEEDBACK,
+        edgecolor=FEEDBACK,
+        linewidth=0,
+        zorder=10,
+    )
+)
 
 ax.text(
     13.0,
@@ -322,8 +356,8 @@ ax.text(
 )
 
 # Save
-workflow_pdf = OUTPUTS_DIR / "workflow.pdf"
-workflow_svg = OUTPUTS_DIR / "workflow.svg"
+workflow_pdf = MANUSCRIPT_EXPORTS_DIR / "workflow.pdf"
+workflow_svg = MANUSCRIPT_EXPORTS_DIR / "workflow.svg"
 
 plt.savefig(workflow_pdf, bbox_inches="tight", pad_inches=0.04)
 plt.savefig(workflow_svg, bbox_inches="tight", pad_inches=0.04)

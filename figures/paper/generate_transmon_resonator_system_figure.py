@@ -6,21 +6,20 @@ Composites the fragments.pdf vector image with SVG annotation overlays
 (leader lines + parameter boxes) into a single PDF.
 
 Output:
-    outputs/pipeline_updated.pdf
+    manuscript_exports/design_example.pdf
 """
 from pathlib import Path
+import tempfile
 import cairosvg
 import fitz  # pymupdf
 
-from _paths import OUTPUTS_DIR, SOURCE_MATERIALS_DIR
+from _paths import MANUSCRIPT_EXPORTS_DIR, SOURCE_MATERIALS_DIR
 
 FIG_ORANGE = "#E87A00"
 FIG_PURPLE = "#7B68AE"
 
 FRAGMENTS_PDF = SOURCE_MATERIALS_DIR / "fragments.pdf"
-OVERLAY_SVG = OUTPUTS_DIR / "pipeline_overlay.svg"
-OVERLAY_PDF = OUTPUTS_DIR / "pipeline_overlay.pdf"
-FINAL_PDF = OUTPUTS_DIR / "pipeline_updated.pdf"
+FINAL_PDF = MANUSCRIPT_EXPORTS_DIR / "design_example.pdf"
 
 PAGE_W = 1120
 PAGE_H = 640
@@ -36,10 +35,6 @@ SVG_TEMPLATE = """\
      viewBox="0 0 %(PAGE_W)s %(PAGE_H)s"
      width="%(PAGE_W)s" height="%(PAGE_H)s"
      font-family="Arial, Helvetica, sans-serif">
-<text x="560" y="32"
-        text-anchor="middle" font-size="16" font-weight="bold" fill="#333">
-    Transmon&#x2013;Resonator System: Parameter Identification
-  </text>
 <line x1="269" y1="307" x2="157" y2="552"
         stroke="%(FIG_ORANGE)s" stroke-width="1.5" stroke-dasharray="5,3"/>
   <line x1="399" y1="307" x2="433" y2="552"
@@ -93,31 +88,34 @@ svg = SVG_TEMPLATE % {
     "FIG_PURPLE": FIG_PURPLE,
 }
 
-OVERLAY_SVG.write_text(svg, encoding="utf-8")
-print(f"Written {OVERLAY_SVG}")
+with tempfile.TemporaryDirectory() as tmpdir:
+    overlay_pdf = Path(tmpdir) / "pipeline_overlay.pdf"
+    cairosvg.svg2pdf(
+        bytestring=svg.encode("utf-8"),
+        write_to=str(overlay_pdf),
+    )
 
-cairosvg.svg2pdf(
-    bytestring=svg.encode("utf-8"),
-    write_to=str(OVERLAY_PDF),
-)
-print(f"Written {OVERLAY_PDF}")
+    fragments_doc = fitz.open(str(FRAGMENTS_PDF))
+    overlay_doc = fitz.open(str(overlay_pdf))
 
-fragments_doc = fitz.open(str(FRAGMENTS_PDF))
-overlay_doc = fitz.open(str(OVERLAY_PDF))
+    final_doc = fitz.open()
+    page = final_doc.new_page(width=PAGE_W, height=PAGE_H)
 
-final_doc = fitz.open()
-page = final_doc.new_page(width=PAGE_W, height=PAGE_H)
+    # Layer 1 white background
+    page.draw_rect(fitz.Rect(0, 0, PAGE_W, PAGE_H), color=None, fill=(1, 1, 1))
 
-# Layer 1 white background
-page.draw_rect(fitz.Rect(0, 0, PAGE_W, PAGE_H), color=None, fill=(1, 1, 1))
+    # Layer 2 fragments.pdf image placed in the target rectangle
+    target_rect = fitz.Rect(FIG_X, FIG_Y, FIG_X + FIG_W, FIG_Y + FIG_H)
+    page.show_pdf_page(target_rect, fragments_doc, 0, keep_proportion=True, overlay=True)
 
-# Layer 2 fragments.pdf image placed in the target rectangle
-target_rect = fitz.Rect(FIG_X, FIG_Y, FIG_X + FIG_W, FIG_Y + FIG_H)
-page.show_pdf_page(target_rect, fragments_doc, 0, keep_proportion=True, overlay=True)
+    # Layer 3 SVG overlay (leaders and annotation boxes) on top
+    full_rect = fitz.Rect(0, 0, PAGE_W, PAGE_H)
+    page.show_pdf_page(full_rect, overlay_doc, 0, keep_proportion=True, overlay=True)
 
-# Layer 3 SVG overlay (title, leaders, annotation boxes) on top
-full_rect = fitz.Rect(0, 0, PAGE_W, PAGE_H)
-page.show_pdf_page(full_rect, overlay_doc, 0, keep_proportion=True, overlay=True)
+    final_doc.save(str(FINAL_PDF))
 
-final_doc.save(str(FINAL_PDF))
+    final_doc.close()
+    overlay_doc.close()
+    fragments_doc.close()
+
 print(f"Written {FINAL_PDF}")
