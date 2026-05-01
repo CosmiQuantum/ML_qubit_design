@@ -18,7 +18,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Polygon
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
 from _paths import OUTPUTS_DIR
 
@@ -281,14 +281,10 @@ feedback_elbow_3 = (map_bottom[0], 21.2)
 
 arrow_tip = (map_bottom[0], map_bottom[1] - 0.02)
 
-arrow_base_y = arrow_tip[1] - 1.05
-feedback_elbow_4 = (map_bottom[0], arrow_base_y)
-
 for start, end in [
     (feedback_start, feedback_elbow_1),
     (feedback_elbow_1, feedback_elbow_2),
     (feedback_elbow_2, feedback_elbow_3),
-    (feedback_elbow_3, feedback_elbow_4),
 ]:
     ax.plot(
         [start[0], end[0]],
@@ -299,21 +295,20 @@ for start, end in [
         zorder=8,
     )
 
-arrow_half_width = 0.75
-arrow_head_height = 1.05
-
-arrow_head = Polygon(
-    [
-        (arrow_tip[0], arrow_tip[1]),
-        (arrow_tip[0] - arrow_half_width, arrow_tip[1] - arrow_head_height),
-        (arrow_tip[0] + arrow_half_width, arrow_tip[1] - arrow_head_height),
-    ],
-    closed=True,
-    facecolor=FEEDBACK,
-    edgecolor=FEEDBACK,
+feedback_arrow = FancyArrowPatch(
+    feedback_elbow_3,
+    arrow_tip,
+    arrowstyle="-|>",
+    mutation_scale=18,
+    linewidth=1.8,
+    color=FEEDBACK,
+    linestyle=(0, (6, 3)),
+    connectionstyle="arc3,rad=0",
+    shrinkA=0.0,
+    shrinkB=0.0,
     zorder=9,
 )
-ax.add_patch(arrow_head)
+ax.add_patch(feedback_arrow)
 
 ax.text(
     13.0,

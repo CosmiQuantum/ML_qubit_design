@@ -13,6 +13,6 @@ This folder is organized into four parts.
 2. `generate_inverse_design_workflow_svg.py` builds a pure SVG alternative for the workflow figure.
 3. `generate_inverse_training_pipeline_figure.py` builds the inverse training pipeline figure.
 4. `generate_forward_testing_pipeline_figure.py` builds the forward testing pipeline figure.
-5. `generate_gaussian_stress_test_methodology_figure.py` builds the Gaussian stress test methodology figure.
+5. `generate_gaussian_stress_test_methodology_figure.py` builds the stress test methodology figure (uniform sampling + NN-distance binning).
 6. `generate_transmon_resonator_system_figure.py` builds the composite transmon resonator system figure from `source_materials/fragments.pdf`.
 7. `build_manuscript_exports.py` rebuilds the figure files used by the manuscript.
