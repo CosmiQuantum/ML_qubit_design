@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 r"""
-Generate the Gaussian stress-test methodology figure.
+Generate the stress-test methodology figure.
 
 Same palette family and rendering approach as generate_workflow_mpl.py:
   - matplotlib + mathtext (no LaTeX install needed)
   - orange = physics / qubit accent, green = ML / data action,
     purple = validation / stress-test accent
   - rounded FancyBboxPatch cards with a title bar + body text
-  - horizontal three-step pipeline: Pick Seeds -> Add Noise -> Vary Sigma
+  - horizontal three-step pipeline: Sample → Measure → Select
   - headline banner at top and punchline strip at bottom
 
 Outputs:
@@ -57,31 +57,29 @@ ARROW         = "#555555"
 # Step cards rotate through physics > ml > validation accents, so each
 # step feels visually distinct but all three live in the same family.
 STEP_STYLES = [
-    dict(title="1. Pick seeds",
+    dict(title="1. Sample uniformly",
          fill=ORANGE_LIGHT, stroke=ORANGE, accent=ORANGE_DARK,
          body=[
-             r"Choose 30 held-out test samples",
-             r"from SQuADDS and treat each one",
-             r"as the center of a Gaussian ball",
-             r"in Quantum Metal parameter space.",
+             r"Generate 50,000 uniformly random",
+             r"Quantum Metal parameter sets inside",
+             r"the convex hull of the training data",
+             r"(pure interpolation, no extrapolation).",
          ]),
-    dict(title="2. Add Gaussian noise",
+    dict(title="2. Measure NN distance",
          fill=GREEN_LIGHT, stroke=GREEN, accent=GREEN_DARK,
          body=[
-             r"For each parameter $i$:",
-             r"$p_i^{\rm new} = p_i^{\rm orig} + \mathcal{N}(0,\ \sigma_i)$",
-             r"with $\sigma_i = f \cdot \mathrm{range}(p_i)$.",
-             r"Reject samples that leave the box",
-             r"or violate layout constraints.",
+             r"For each random point, compute",
+             r"$d_{\rm NN}$ = Euclidean distance to its",
+             r"nearest training sample in the",
+             r"scaled $[0,\,1]$ parameter space.",
          ]),
-    dict(title="3. Sweep sigma",
+    dict(title="3. Bin and select",
          fill=PURPLE_LIGHT, stroke=PURPLE, accent=PURPLE_DARK,
          body=[
-             r"Sweep $f$ across",
-             r"$\{1\%,\ 2\%,\ 5\%,\ 10\%,\ 20\%\}$",
-             r"of each parameter's range.",
-             r"Draw 6,000 samples per $\sigma$",
-             r"$\rightarrow$ 30,000 total.",
+             r"Split the $d_{\rm NN}$ range into",
+             r"10 equal-width bins (close $\rightarrow$ far).",
+             r"Randomly draw 9 points per bin",
+             r"$\rightarrow$ 90 total for Ansys validation.",
          ]),
 ]
 
@@ -125,7 +123,7 @@ ax.axis("off")
 # Title above the banner
 ax.text(
     W / 2, TITLE_Y,
-    r"Gaussian stress-test methodology",
+    r"Stress-test methodology",
     ha="center", va="center",
     fontsize=20, fontweight="bold", color=TEXT_MAIN,
 )
@@ -155,8 +153,8 @@ ax.text(
 )
 ax.text(
     W / 2, BANNER_Y + BANNER_H * 0.20,
-    r"Probe the in-between regions of SQuADDS by perturbing held-out test "
-    r"points with controllable Gaussian noise.",
+    r"Probe the in-between regions of SQuADDS by sampling uniformly inside "
+    r"the training cloud and binning by proximity.",
     ha="center", va="center",
     fontsize=12, fontstyle="italic", color=TEXT_DIM,
 )
@@ -189,7 +187,7 @@ for i, style in enumerate(STEP_STYLES):
     )
     ax.add_patch(title_bar)
 
-    # Title text (dark accent color). 15 pt fits "2. Add Gaussian noise"
+    # Title text (dark accent color). 15 pt fits "2. Measure NN distance"
     # (the longest title) inside a 30unit wide card with margin to spare.
     ax.text(
         x + CARD_W / 2, y + CARD_H - title_bar_h / 2,
@@ -237,11 +235,16 @@ punch = FancyBboxPatch(
 )
 ax.add_patch(punch)
 
-# 13 pt bold fits the 85character sentence in the widened punch box.
+# Two-line punchline, vertically centered in the strip.
 ax.text(
-    PUNCH_X + PUNCH_W / 2, PUNCH_Y + PUNCH_H / 2,
-    r"Surrogate evaluates all 30,000 samples in seconds "
-    r"($\sim$5000 Ansys-hours equivalent).",
+    PUNCH_X + PUNCH_W / 2, PUNCH_Y + PUNCH_H * 0.65,
+    r"Surrogate evaluates all 50,000 samples in seconds.",
+    ha="center", va="center",
+    fontsize=13, fontweight="bold", color=ORANGE_DARK,
+)
+ax.text(
+    PUNCH_X + PUNCH_W / 2, PUNCH_Y + PUNCH_H * 0.30,
+    r"90 selected across distance bins sent to Ansys for validation.",
     ha="center", va="center",
     fontsize=13, fontweight="bold", color=ORANGE_DARK,
 )

@@ -531,11 +531,14 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     ax.bar(x - width / 2, fq_med, width=width, color=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.2, zorder=3)
     ax.bar(x + width / 2, ah_med, width=width, color=PURPLE_LIGHT, edgecolor=PURPLE, linewidth=1.2, zorder=3)
 
-    ax.errorbar(x - width / 2, fq_med, yerr=[fq_med - fq_q1, fq_q3 - fq_med], fmt="none", ecolor=ORANGE, elinewidth=1.3, capsize=3, zorder=5)
-    ax.errorbar(x + width / 2, ah_med, yerr=[ah_med - ah_q1, ah_q3 - ah_med], fmt="none", ecolor=PURPLE, elinewidth=1.3, capsize=3, zorder=5)
+    ax.errorbar(x - width / 2, fq_med, yerr=[fq_med - fq_q1, fq_q3 - fq_med], fmt="none", ecolor=ORANGE, elinewidth=2.0, capsize=5, capthick=1.6, zorder=5)
+    ax.errorbar(x + width / 2, ah_med, yerr=[ah_med - ah_q1, ah_q3 - ah_med], fmt="none", ecolor=PURPLE, elinewidth=2.0, capsize=5, capthick=1.6, zorder=5)
+
+    ax.scatter(x - width / 2, fq_med, marker="o", s=28, color=ORANGE, edgecolors="none", linewidths=0, zorder=7)
+    ax.scatter(x + width / 2, ah_med, marker="s", s=28, color=PURPLE, edgecolors="none", linewidths=0, zorder=7)
     ax.fill_between(x, nn_q1, nn_q3, color=GREEN, alpha=0.16, zorder=1)
     ax.plot(x, nn_med, color=GREEN, linewidth=1.5, zorder=4)
-    ax.plot(x, nn_med, "D", color=GREEN, markersize=4.5, markeredgecolor="white", markeredgewidth=0.7, zorder=6)
+    ax.plot(x, nn_med, "D", color=GREEN, markersize=4.5, markeredgecolor="none", markeredgewidth=0, zorder=6)
 
     legend_handles = [
         Patch(facecolor=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.0, label=r"$f_q$ error IQR"),
