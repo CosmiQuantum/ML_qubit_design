@@ -3,7 +3,10 @@ from __future__ import annotations
 
 import ast
 import json
+import os
+import runpy
 import shutil
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -36,6 +39,29 @@ COMPILED_PDF = REPO_ROOT / "Component_Level_Inverse_Design_of_Transmon_Qubits_Us
 FULL_WIDTH_IN = 7.10
 COLUMN_WIDTH_IN = 3.35
 
+# Flowchart color scheme. Use "blue" for the current requested palette, or
+# "legacy" for the previous orange/green/purple palette.
+FLOWCHART_COLOR_SCHEME = "blue"
+
+FLOWCHART_PALETTES = {
+    "blue": {
+        "physics_fill": "#D6E5EE",
+        "physics_edge": "#567A90",
+        "ml_fill": "#B0CCDE",
+        "ml_edge": "#3F6F8B",
+        "validation_fill": "#8AABC8",
+        "validation_edge": "#17384F",
+    },
+    "legacy": {
+        "physics_fill": "#FFF4E6",
+        "physics_edge": "#E87A00",
+        "ml_fill": "#E8F5E8",
+        "ml_edge": "#3D8B3D",
+        "validation_fill": "#E8E4F0",
+        "validation_edge": "#7B68AE",
+    },
+}
+
 ORANGE = "#E87A00"
 ORANGE_LIGHT = "#FFF4E6"
 PURPLE = "#7B68AE"
@@ -46,6 +72,21 @@ TEXT = "#222222"
 TEXT_DIM = "#555555"
 GRID = "#D7D7D7"
 SPINE = "#888888"
+
+
+def flowchart_palette() -> dict[str, str]:
+    key = FLOWCHART_COLOR_SCHEME.strip().lower()
+    aliases = {
+        "current": "blue",
+        "new": "blue",
+        "old": "legacy",
+        "classic": "legacy",
+    }
+    key = aliases.get(key, key)
+    if key not in FLOWCHART_PALETTES:
+        options = ", ".join(sorted(FLOWCHART_PALETTES))
+        raise ValueError(f"Unknown FLOWCHART_COLOR_SCHEME={FLOWCHART_COLOR_SCHEME!r}. Use one of: {options}.")
+    return FLOWCHART_PALETTES[key]
 
 
 def ensure_dirs() -> None:
@@ -90,6 +131,27 @@ def copy_file(src: Path, dst: Path) -> None:
     dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(src, dst)
     print(f"copied {src.relative_to(REPO_ROOT)} -> {dst.relative_to(REPO_ROOT)}")
+
+
+def regenerate_flowchart_sources() -> None:
+    scripts = [
+        PAPER_DIR / "generate_inverse_training_pipeline_figure.py",
+        PAPER_DIR / "generate_inverse_design_workflow_figure.py",
+        PAPER_DIR / "generate_forward_testing_pipeline_figure.py",
+    ]
+    old_env = os.environ.get("FLOWCHART_COLOR_SCHEME")
+    old_path = list(sys.path)
+    os.environ["FLOWCHART_COLOR_SCHEME"] = FLOWCHART_COLOR_SCHEME
+    sys.path.insert(0, str(PAPER_DIR))
+    try:
+        for script in scripts:
+            runpy.run_path(str(script), run_name="__main__")
+    finally:
+        sys.path[:] = old_path
+        if old_env is None:
+            os.environ.pop("FLOWCHART_COLOR_SCHEME", None)
+        else:
+            os.environ["FLOWCHART_COLOR_SCHEME"] = old_env
 
 
 def save_figure(fig: plt.Figure, out_path: Path) -> None:
@@ -965,6 +1027,14 @@ def plot_surrogate_stress_random_points_pairs() -> None:
 def plot_model_architecture_combined() -> None:
     use_paper_style()
 
+    palette = flowchart_palette()
+    physics_fill = palette["physics_fill"]
+    ml_fill = palette["ml_fill"]
+    validation_fill = palette["validation_fill"]
+    physics_edge = palette["physics_edge"]
+    ml_edge = palette["ml_edge"]
+    validation_edge = palette["validation_edge"]
+
     fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 2.75))
     ax.set_xlim(0, 100)
     ax.set_ylim(0, 34)
@@ -1040,8 +1110,8 @@ def plot_model_architecture_combined() -> None:
         h + 3.0,
         boxstyle="round,pad=0,rounding_size=1.3",
         linewidth=1.0,
-        edgecolor=GREEN,
-        facecolor=GREEN_LIGHT,
+        edgecolor=ml_edge,
+        facecolor=ml_fill,
         alpha=0.26,
         linestyle=(0, (4, 3)),
         zorder=0,
@@ -1056,15 +1126,15 @@ def plot_model_architecture_combined() -> None:
         fontsize=7.6,
         fontweight="bold",
         fontstyle="italic",
-        color=GREEN,
+        color=ml_edge,
         zorder=1,
     )
 
-    block(*boxes["input"], "Targets", [r"$\omega_q,\ \alpha$", "scaled inputs"], edge=ORANGE, face=ORANGE_LIGHT)
-    block(*boxes["inverse"], "Inverse MLP", ["2 hidden layers", "16 neurons each", "387 trainable"], edge=GREEN, face=GREEN_LIGHT)
-    block(*boxes["geom"], "Design", ["3 Quantum Metal", "geometry params"], edge=PURPLE, face=PURPLE_LIGHT)
-    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{\omega}_q,\ \hat{\alpha}$ check"], edge=GREEN, face="#F0F7F0")
-    block(*boxes["output"], "Loss", ["MAE in", "target", "space"], edge=TEXT_DIM, face="#F7F7F7")
+    block(*boxes["input"], "Targets", [r"$\omega_q,\ \alpha$", "scaled inputs"], edge=physics_edge, face=physics_fill)
+    block(*boxes["inverse"], "Inverse MLP", ["2 hidden layers", "16 neurons each", "387 trainable"], edge=ml_edge, face=ml_fill)
+    block(*boxes["geom"], "Design", ["3 Quantum Metal", "geometry params"], edge=ml_edge, face=ml_fill)
+    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{\omega}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
+    block(*boxes["output"], "Loss", ["MAE in", "target", "space"], edge=validation_edge, face=validation_fill)
 
     arrow(17.0, y + h / 2, 22.5, y + h / 2)
     arrow(40.5, y + h / 2, 46.0, y + h / 2)
@@ -1077,7 +1147,7 @@ def plot_model_architecture_combined() -> None:
         arrowstyle="-|>",
         mutation_scale=12,
         linewidth=1.25,
-        color=GREEN,
+        color=ml_edge,
         linestyle=(0, (5, 3)),
         connectionstyle="arc3,rad=-0.18",
         shrinkA=3.0,
@@ -1094,7 +1164,7 @@ def plot_model_architecture_combined() -> None:
         fontsize=7.4,
         fontweight="bold",
         fontstyle="italic",
-        color=GREEN,
+        color=ml_edge,
         bbox=dict(facecolor="white", edgecolor="none", alpha=0.88, pad=0.5),
         zorder=6,
     )
@@ -1167,6 +1237,7 @@ def export_png_fallbacks() -> None:
 
 def main() -> None:
     ensure_dirs()
+    regenerate_flowchart_sources()
     export_static_sources()
     plot_dataset_distributions()
     plot_sample_data_distribution()
