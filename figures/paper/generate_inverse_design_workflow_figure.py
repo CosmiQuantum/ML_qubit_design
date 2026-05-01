@@ -113,7 +113,7 @@ CATEGORY_STYLE = {
 }
 
 CATEGORY_BADGE = {
-    "physics": ("Physics", ORANGE),
+    "physics": ("Physics targets", ORANGE),
     "ml":      ("ML", GREEN),
     "valid":   ("Validation", PURPLE),
 }

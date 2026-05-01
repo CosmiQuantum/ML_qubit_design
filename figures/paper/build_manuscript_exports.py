@@ -458,7 +458,11 @@ def plot_architecture_sweep() -> None:
     )
 
     cmap = LinearSegmentedColormap.from_list("paper_sweep", [GREEN, "#F7F7F7", ORANGE])
-    best_row = df.loc[df["best_val_loss"].idxmin()]
+    if "source" in df.columns:
+        reference_rows = df[df["source"].astype(str).eq("saved_best_inverse_model")]
+    else:
+        reference_rows = pd.DataFrame()
+    reference_row = reference_rows.iloc[0] if not reference_rows.empty else df.loc[df["best_val_loss"].idxmin()]
 
     fig, ax0 = plt.subplots(figsize=(FULL_WIDTH_IN, 2.75))
     im = ax0.imshow(heatmap_df.values, cmap=cmap, aspect="auto", origin="lower")
@@ -486,11 +490,11 @@ def plot_architecture_sweep() -> None:
                 fontweight="bold",
             )
 
-    best_depth = int(best_row["depth"])
-    best_width = int(best_row["width"])
-    best_col = list(heatmap_df.columns).index(best_width)
-    best_row_idx = list(heatmap_df.index).index(best_depth)
-    ax0.scatter(best_col, best_row_idx, marker="*", s=130, color="#F5F5F5", edgecolor="#173717", linewidth=1.0, zorder=5)
+    reference_depth = int(reference_row["depth"])
+    reference_width = int(reference_row["width"])
+    reference_col = list(heatmap_df.columns).index(reference_width)
+    reference_row_idx = list(heatmap_df.index).index(reference_depth)
+    ax0.scatter(reference_col, reference_row_idx, marker="*", s=130, color="#F5F5F5", edgecolor="#173717", linewidth=1.0, zorder=5)
 
     cbar = fig.colorbar(im, ax=ax0, fraction=0.046, pad=0.03)
     cbar.set_label("best val loss")
