@@ -9,7 +9,7 @@ This folder is organized into three parts.
 ## Scripts
 
 1. `generate_inverse_design_workflow_figure.py` builds the matplotlib based end to end inverse design workflow figure.
-2. `generate_inverse_design_workflow_svg.py` builds a pure SVG alternative for the workflow figure.
+2. `generate_inverse_design_workflow_svg.py` builds a PDF from a pure SVG drawing alternative for the workflow figure.
 3. `generate_inverse_training_pipeline_figure.py` builds the inverse training pipeline figure.
 4. `generate_forward_testing_pipeline_figure.py` builds the forward testing pipeline figure.
 5. `generate_gaussian_stress_test_methodology_figure.py` builds the stress test methodology figure (uniform sampling + NN-distance binning).
