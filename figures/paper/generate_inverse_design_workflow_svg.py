@@ -10,8 +10,8 @@ Produces a two-column flowchart:
     extracted capacitances, achieved Hamiltonian values, errors)
 
 Outputs:
-    outputs/workflow.svg   (vector, for web / quick preview)
-    outputs/workflow.pdf   (vector, for Overleaf \\includegraphics)
+    manuscript_exports/workflow.svg   (vector, for web / quick preview)
+    manuscript_exports/workflow.pdf   (vector, for Overleaf \\includegraphics)
 
 Usage:
     python3 generate_inverse_design_workflow_svg.py
@@ -20,7 +20,7 @@ Usage:
 import io
 import os
 
-from _paths import OUTPUTS_DIR
+from _paths import MANUSCRIPT_EXPORTS_DIR
 
 # Color palette (same family as inverse_pipeline figure)
 BG            = "#FFFFFF"
@@ -80,8 +80,8 @@ STAGES = [
     ("map",
      "Physics mapping",
      ["Convert Hamiltonian targets to",
-      "ML-friendly features using",
-      "analytic relations (e.g. α ≈ −E_C)."],
+      "ML-friendly features using analytic",
+      "approximations (α ≈ −E_C, etc.)."],
      "physics", 75),
 
     ("pre",
@@ -330,8 +330,8 @@ out.write("</svg>\n")
 SVG = out.getvalue()
 
 # Write files
-workflow_svg = OUTPUTS_DIR / "workflow.svg"
-workflow_pdf = OUTPUTS_DIR / "workflow.pdf"
+workflow_svg = MANUSCRIPT_EXPORTS_DIR / "workflow.svg"
+workflow_pdf = MANUSCRIPT_EXPORTS_DIR / "workflow.pdf"
 
 with workflow_svg.open("w", encoding="utf-8") as f:
     f.write(SVG)

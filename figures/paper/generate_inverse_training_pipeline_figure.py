@@ -10,12 +10,12 @@ This produces an overall flowchart of the inverse-design training loop:
 
 Usage:
     python3 generate_inverse_training_pipeline_figure.py
-    # => produces outputs/inverse_pipeline.svg and outputs/inverse_pipeline.pdf
+    # => produces manuscript_exports/inverse_pipeline.svg and manuscript_exports/inverse_pipeline.pdf
 """
 
 import os
 
-from _paths import OUTPUTS_DIR
+from _paths import MANUSCRIPT_EXPORTS_DIR
 
 BG              = "#FFFFFF"
 
@@ -88,9 +88,9 @@ LOSS_HL_IN      = FROST_DARK
 LOSS_HL_OUT     = DUSTY_BLUE_DARK
 
 SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 560 590"
+     viewBox="0 0 560 550"
      font-family="'Helvetica Neue', Arial, Helvetica, sans-serif">
-<rect width="560" height="590" fill="{BG}"/>
+<rect width="560" height="550" fill="{BG}"/>
 <defs>
     <marker id="arrowMain" viewBox="0 0 10 10" refX="9" refY="5"
             markerWidth="8" markerHeight="8" orient="auto-start-reverse">
@@ -127,89 +127,89 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
   </text>
 
 
-<rect x="64" y="88" width="432" height="410" rx="16" ry="16"
+<rect x="64" y="82" width="432" height="400" rx="16" ry="16"
         fill="{TRAIN_FILL}" stroke="{TRAIN_STROKE}" stroke-width="2.5"
         stroke-dasharray="8,4"
         filter="url(#softShadow)"/>
-<text x="480" y="116" text-anchor="end"
+<text x="480" y="108" text-anchor="end"
         font-size="15" font-style="italic" font-weight="bold"
         fill="{TRAIN_LABEL}">Training</text>
 
-<line x1="280" y1="72" x2="280" y2="102"
+<line x1="280" y1="72" x2="280" y2="88"
         stroke="{ARROW_OUT}" stroke-width="3.2"/>
-<polygon points="280,112 273,100 287,100" fill="{ARROW_OUT}"/>
+<polygon points="280,98 273,86 287,86" fill="{ARROW_OUT}"/>
 
-<rect x="210" y="106" width="140" height="54" rx="10" ry="10"
+<rect x="210" y="96" width="140" height="54" rx="10" ry="10"
         fill="{INV_FILL}" stroke="{INV_STROKE}" stroke-width="2"/>
-  <text x="280" y="129" text-anchor="middle"
+  <text x="280" y="119" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{INV_TEXT}">Inverse</text>
-  <text x="280" y="148" text-anchor="middle"
+  <text x="280" y="138" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{INV_TEXT}">MLP</text>
 
-<line x1="280" y1="164" x2="280" y2="178"
+<line x1="280" y1="154" x2="280" y2="164"
         stroke="{ARROW_MAIN}" stroke-width="3.2"/>
-<polygon points="280,188 273,176 287,176" fill="{ARROW_MAIN}"/>
+<polygon points="280,174 273,162 287,162" fill="{ARROW_MAIN}"/>
 
-<rect x="122" y="188" width="316" height="46" rx="10" ry="10"
+<rect x="122" y="174" width="316" height="46" rx="10" ry="10"
         fill="{PARAM_FILL}" stroke="{PARAM_STROKE}" stroke-width="2"/>
-  <text x="280" y="216" text-anchor="middle"
+  <text x="280" y="202" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{PARAM_TEXT}">
     Best Quantum Metal Parameter Guess
   </text>
 
-<line x1="280" y1="238" x2="280" y2="252"
+<line x1="280" y1="224" x2="280" y2="234"
         stroke="{ARROW_MAIN}" stroke-width="3.2"/>
-<polygon points="280,262 273,250 287,250" fill="{ARROW_MAIN}"/>
+<polygon points="280,244 273,232 287,232" fill="{ARROW_MAIN}"/>
 
-<rect x="172" y="262" width="216" height="58" rx="10" ry="10"
+<rect x="172" y="244" width="216" height="58" rx="10" ry="10"
         fill="{SURR_FILL}" stroke="{SURR_STROKE}" stroke-width="2"/>
-  <text x="280" y="285" text-anchor="middle"
+  <text x="280" y="267" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{SURR_TEXT}">Ansys Surrogate</text>
-  <text x="280" y="304" text-anchor="middle"
+  <text x="280" y="286" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{SURR_TEXT}">MLP</text>
 
-<line x1="280" y1="324" x2="280" y2="338"
+<line x1="280" y1="306" x2="280" y2="316"
         stroke="{ARROW_MAIN}" stroke-width="3.2"/>
-<polygon points="280,348 273,336 287,336" fill="{ARROW_MAIN}"/>
+<polygon points="280,326 273,314 287,314" fill="{ARROW_MAIN}"/>
 
-<rect x="172" y="348" width="216" height="58" rx="10" ry="10"
+<rect x="172" y="326" width="216" height="58" rx="10" ry="10"
         fill="{RECON_FILL}" stroke="{RECON_STROKE}" stroke-width="2"/>
-  <text x="280" y="371" text-anchor="middle"
+  <text x="280" y="349" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{RECON_TEXT}">Hamiltonian</text>
-  <text x="280" y="390" text-anchor="middle"
+  <text x="280" y="368" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{RECON_TEXT}">Reconstruction</text>
 
-<line x1="280" y1="410" x2="280" y2="420"
+<line x1="280" y1="388" x2="280" y2="393"
         stroke="{ARROW_MAIN}" stroke-width="3.2"/>
-<polygon points="280,430 273,418 287,418" fill="{ARROW_MAIN}"/>
+<polygon points="280,403 273,391 287,391" fill="{ARROW_MAIN}"/>
 
-<rect x="126" y="427" width="308" height="68" rx="10" ry="10"
+<rect x="126" y="405" width="308" height="72" rx="10" ry="10"
         fill="{LOSS_FILL}" stroke="{LOSS_STROKE}" stroke-width="2"/>
-  <text x="280" y="450" text-anchor="middle"
+  <text x="280" y="425" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{LOSS_BOX_TEXT}">Compute loss</text>
-  <text x="280" y="471" text-anchor="middle"
+  <text x="280" y="446" text-anchor="middle"
         font-size="13" fill="{LOSS_BOX_TEXT}">Average absolute difference between</text>
-  <text x="280" y="488" text-anchor="middle"
+  <text x="280" y="463" text-anchor="middle"
         font-size="13" fill="{LOSS_BOX_TEXT}">target and reconstructed Hamiltonian</text>
 
-<line x1="280" y1="499" x2="280" y2="516"
+<line x1="280" y1="481" x2="280" y2="491"
         stroke="{ARROW_OUT}" stroke-width="3.2"/>
-<polygon points="280,526 273,514 287,514" fill="{ARROW_OUT}"/>
+<polygon points="280,501 273,489 287,489" fill="{ARROW_OUT}"/>
 
-<path d="M 126,461 L 104,461 L 104,133 L 198,133"
+<path d="M 126,441 L 104,441 L 104,123 L 198,123"
         fill="none" stroke="{FEEDBACK}" stroke-width="3.0"
         stroke-dasharray="7,4"/>
-<polygon points="210,133 198,126 198,140" fill="{FEEDBACK}"/>
-  <text x="96" y="290" text-anchor="middle"
+<polygon points="210,123 198,116 198,130" fill="{FEEDBACK}"/>
+  <text x="96" y="275" text-anchor="middle"
         font-size="14" font-style="italic" fill="{FEEDBACK}"
-        transform="rotate(-90 96 290)">
+        transform="rotate(-90 96 275)">
     update inverse weights
   </text>
 
-<rect x="120" y="526" width="320" height="46" rx="10" ry="10"
+<rect x="120" y="499" width="320" height="46" rx="10" ry="10"
         fill="{OUTPUT_FILL}" stroke="{OUTPUT_STROKE}" stroke-width="2"
         filter="url(#softShadow)"/>
-  <text x="280" y="555" text-anchor="middle"
+  <text x="280" y="528" text-anchor="middle"
         font-size="17" font-weight="bold" fill="{OUTPUT_TEXT}">
     Best Quantum Metal Design Output
   </text>
@@ -217,8 +217,8 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
 </svg>
 """
 
-inverse_pipeline_svg = OUTPUTS_DIR / "inverse_pipeline.svg"
-inverse_pipeline_pdf = OUTPUTS_DIR / "inverse_pipeline.pdf"
+inverse_pipeline_svg = MANUSCRIPT_EXPORTS_DIR / "inverse_pipeline.svg"
+inverse_pipeline_pdf = MANUSCRIPT_EXPORTS_DIR / "inverse_pipeline.pdf"
 
 with inverse_pipeline_svg.open("w", encoding="utf-8") as f:
     f.write(SVG)

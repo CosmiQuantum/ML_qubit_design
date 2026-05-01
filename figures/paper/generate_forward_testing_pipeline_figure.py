@@ -9,14 +9,14 @@ with the validation-loss cross comparing Reference (SQuADDS dataset)
 vs Predicted (forward-pass simulation) results.
 
 Output:
-    outputs/testing_pipeline.svg
-    outputs/testing_pipeline.pdf
+    manuscript_exports/testing_pipeline.svg
+    manuscript_exports/testing_pipeline.pdf
 """
 import os
 
 import cairosvg
 
-from _paths import OUTPUTS_DIR
+from _paths import MANUSCRIPT_EXPORTS_DIR
 
 FLOWCHART_COLOR_SCHEME = os.environ.get("FLOWCHART_COLOR_SCHEME", "blue").strip().lower()
 FLOWCHART_COLOR_SCHEME = {"current": "blue", "new": "blue", "old": "legacy", "classic": "legacy"}.get(
@@ -39,8 +39,8 @@ else:
     VALID_STROKE = "#17384F"
 PIPELINE_SHIFT = 46
 
-OUT_SVG = OUTPUTS_DIR / "testing_pipeline.svg"
-OUT_PDF = OUTPUTS_DIR / "testing_pipeline.pdf"
+OUT_SVG = MANUSCRIPT_EXPORTS_DIR / "testing_pipeline.svg"
+OUT_PDF = MANUSCRIPT_EXPORTS_DIR / "testing_pipeline.pdf"
 
 PAGE_W = 1120
 PAGE_H = 340

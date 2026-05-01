@@ -5,7 +5,6 @@ import ast
 import json
 import os
 import runpy
-import shutil
 import sys
 from pathlib import Path
 
@@ -127,17 +126,13 @@ def use_paper_style() -> None:
     )
 
 
-def copy_file(src: Path, dst: Path) -> None:
-    dst.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, dst)
-    print(f"copied {src.relative_to(REPO_ROOT)} -> {dst.relative_to(REPO_ROOT)}")
-
-
-def regenerate_flowchart_sources() -> None:
+def regenerate_generated_sources() -> None:
     scripts = [
+        PAPER_DIR / "generate_transmon_resonator_system_figure.py",
         PAPER_DIR / "generate_inverse_training_pipeline_figure.py",
         PAPER_DIR / "generate_inverse_design_workflow_figure.py",
         PAPER_DIR / "generate_forward_testing_pipeline_figure.py",
+        PAPER_DIR / "generate_gaussian_stress_test_methodology_figure.py",
     ]
     old_env = os.environ.get("FLOWCHART_COLOR_SCHEME")
     old_path = list(sys.path)
@@ -1211,14 +1206,6 @@ def plot_model_architecture_combined() -> None:
     plt.close(fig)
 
 
-def export_static_sources() -> None:
-    copy_file(PAPER_DIR / "outputs" / "pipeline_updated.pdf", EXPORT_DIR / "design_example.pdf")
-    copy_file(PAPER_DIR / "outputs" / "inverse_pipeline.pdf", EXPORT_DIR / "inverse_pipeline.pdf")
-    copy_file(PAPER_DIR / "outputs" / "workflow.pdf", EXPORT_DIR / "workflow.pdf")
-    copy_file(PAPER_DIR / "outputs" / "testing_pipeline.pdf", EXPORT_DIR / "testing_pipeline.pdf")
-    copy_file(PAPER_DIR / "outputs" / "stress_test_methodology.pdf", EXPORT_DIR / "stress_test_methodology.pdf")
-
-
 def export_pdf_fallbacks() -> None:
     crop_pdf_page(19, (98, 48, 502, 346), EXPORT_DIR / "predicted_vs_reference_design_comparsion.pdf")
 
@@ -1237,8 +1224,7 @@ def export_png_fallbacks() -> None:
 
 def main() -> None:
     ensure_dirs()
-    regenerate_flowchart_sources()
-    export_static_sources()
+    regenerate_generated_sources()
     plot_dataset_distributions()
     plot_sample_data_distribution()
     plot_data_amount_sweep()

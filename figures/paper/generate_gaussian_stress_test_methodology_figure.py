@@ -11,8 +11,8 @@ Same palette family and rendering approach as generate_workflow_mpl.py:
   - headline banner at top and punchline strip at bottom
 
 Outputs:
-    outputs/stress_test_methodology.pdf
-    outputs/stress_test_methodology.svg
+    manuscript_exports/stress_test_methodology.pdf
+    manuscript_exports/stress_test_methodology.svg
 
 Usage:
     python3 generate_gaussian_stress_test_methodology_figure.py
@@ -25,7 +25,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Rectangle
 
-from _paths import OUTPUTS_DIR
+from _paths import MANUSCRIPT_EXPORTS_DIR
 
 # Use mathtext (built in, ships with matplotlib), NOT full LaTeX
 plt.rcParams["text.usetex"] = False
@@ -239,8 +239,8 @@ ax.text(
 )
 
 # Save
-stress_test_pdf = OUTPUTS_DIR / "stress_test_methodology.pdf"
-stress_test_svg = OUTPUTS_DIR / "stress_test_methodology.svg"
+stress_test_pdf = MANUSCRIPT_EXPORTS_DIR / "stress_test_methodology.pdf"
+stress_test_svg = MANUSCRIPT_EXPORTS_DIR / "stress_test_methodology.svg"
 
 plt.savefig(stress_test_pdf, bbox_inches="tight", pad_inches=0.15)
 plt.savefig(stress_test_svg, bbox_inches="tight", pad_inches=0.15)
