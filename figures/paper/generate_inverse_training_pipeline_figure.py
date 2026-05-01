@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate the Inverse Design Training Pipeline SVG figure.
+Generate the Inverse Design Training Pipeline PDF figure.
 
 This produces an overall flowchart of the inverse-design training loop:
   Desired Hamiltonian -> Inverse MLP -> Quantum Metal params
@@ -10,7 +10,7 @@ This produces an overall flowchart of the inverse-design training loop:
 
 Usage:
     python3 generate_inverse_training_pipeline_figure.py
-    # => produces manuscript_exports/inverse_pipeline.svg and manuscript_exports/inverse_pipeline.pdf
+    # => produces manuscript_exports/inverse_pipeline.pdf
 """
 
 import os
@@ -217,12 +217,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
 </svg>
 """
 
-inverse_pipeline_svg = MANUSCRIPT_EXPORTS_DIR / "inverse_pipeline.svg"
 inverse_pipeline_pdf = MANUSCRIPT_EXPORTS_DIR / "inverse_pipeline.pdf"
-
-with inverse_pipeline_svg.open("w", encoding="utf-8") as f:
-    f.write(SVG)
-print(f"Written {inverse_pipeline_svg}")
 
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPDF
