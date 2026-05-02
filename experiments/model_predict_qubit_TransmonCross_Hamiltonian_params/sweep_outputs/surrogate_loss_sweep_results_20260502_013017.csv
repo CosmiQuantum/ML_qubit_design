@@ -1,0 +1,10 @@
+neurons_per_layer,depth,width,is_uniform_width,total_params,inverse_trainable_params,surrogate_non_trainable_params,combined_total_params,best_val_loss,best_epoch,dropout_rate,l2_reg,learning_rate,use_batchnorm,penalty_weight,kernel_initializer,source,saved_model_path,matched_trial_path,val_reconstruction_loss,val_penalty_loss
+"(16,)",1,16,True,99,99,4418,4517,0.001093976548872888,146.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,
+"(32,)",1,32,True,195,195,4418,4613,0.0011259494349360466,142.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,
+"(64,)",1,64,True,387,387,4418,4805,0.0009971056133508682,,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,saved_best_inverse_model,/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_inverse_model_surrogate_defined_loss.keras,/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/surrogate_trials/model2_mlp_tuning_bayesian/trial_0928/trial.json,0.0008593883248977363,4.433820777194342e-06
+"(16, 16)",2,16,True,371,371,4418,4789,0.0011549447663128376,115.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,
+"(32, 32)",2,32,True,1251,1251,4418,5669,0.0009801234118640423,253.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,
+"(16, 16, 16)",3,16,True,643,643,4418,5061,0.0016042509814724326,129.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,
+"(32, 32, 32)",3,32,True,2307,2307,4418,6725,0.0009297857759520411,195.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,
+"(16, 16, 16, 16)",4,16,True,915,915,4418,5333,0.0015815572114661336,139.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,
+"(32, 32, 32, 32)",4,32,True,3363,3363,4418,7781,0.0011037911754101515,225.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,

@@ -1,17 +1,34 @@
-neurons_per_layer,depth,width,is_uniform_width,total_params,inverse_trainable_params,surrogate_non_trainable_params,combined_total_params,best_val_loss,best_epoch,dropout_rate,l2_reg,learning_rate,use_batchnorm,penalty_weight,kernel_initializer,source,saved_model_path,val_reconstruction_loss,val_penalty_loss
-"(64,)",1,64,True,387,387,4418,4805,0.0009971056133508682,,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,saved_best_inverse_model,/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_inverse_model_surrogate_defined_loss.keras,0.0008593883248977363,4.433820777194342e-06
-"(128,)",1,128,True,771,771,4418,5189,0.0023771687410771847,240.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(256,)",1,256,True,1539,1539,4418,5957,0.0036251991987228394,265.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(512,)",1,512,True,3075,3075,4418,7493,0.005753082223236561,309.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(64, 64)",2,64,True,4547,4547,4418,8965,0.004646874498575926,161.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(128, 128)",2,128,True,17283,17283,4418,21701,0.012501509860157967,383.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(256, 256)",2,256,True,67331,67331,4418,71749,0.018806342035531998,392.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(512, 512)",2,512,True,265731,265731,4418,270149,0.04635034501552582,399.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(64, 64, 64)",3,64,True,8707,8707,4418,13125,0.007970168255269527,327.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(128, 128, 128)",3,128,True,33795,33795,4418,38213,0.020725715905427933,331.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(256, 256, 256)",3,256,True,133123,133123,4418,137541,0.040347520262002945,399.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(512, 512, 512)",3,512,True,528387,528387,4418,532805,0.4143070876598358,400.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(64, 64, 64, 64)",4,64,True,12867,12867,4418,17285,0.012701635248959064,222.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(128, 128, 128, 128)",4,128,True,50307,50307,4418,54725,0.025909818708896637,398.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(256, 256, 256, 256)",4,256,True,198915,198915,4418,203333,0.2299216240644455,399.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
-"(512, 512, 512, 512)",4,512,True,791043,791043,4418,795461,0.9757871627807617,133.0,0.0,2.0896818289947515e-05,0.04839181885665593,False,0.1,he_normal,retrained_sweep,,,
+neurons_per_layer,depth,width,is_uniform_width,total_params,inverse_trainable_params,surrogate_non_trainable_params,combined_total_params,best_val_loss,best_epoch,dropout_rate,l2_reg,learning_rate,use_batchnorm,penalty_weight,kernel_initializer,source,saved_model_path,matched_trial_path,val_reconstruction_loss,val_penalty_loss,neurons_key,run_id
+"(16,)",1,16,True,99,99,4418,4517,0.0021130854729562,146.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,16,
+"(16,)",1,16,True,99,99,4418,4517,0.001093976548872888,146.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,16,20260502_013017
+"(32,)",1,32,True,195,195,4418,4613,0.0013990619918331,163.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,32,
+"(32,)",1,32,True,195,195,4418,4613,0.0011259494349360466,142.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,32,20260502_013017
+"(64,)",1,64,True,387,387,4418,4805,0.0009971056133508,,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,saved_best_inverse_model,/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_inverse_model_surrogate_defined_loss.keras,/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/surrogate_trials/model2_mlp_tuning_bayesian/trial_0928/trial.json,0.0008593883248977,4.433820777194342e-06,64,
+"(64,)",1,64,True,387,387,4418,4805,0.0009971056133508682,,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,saved_best_inverse_model,/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_inverse_model_surrogate_defined_loss.keras,/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/surrogate_trials/model2_mlp_tuning_bayesian/trial_0928/trial.json,0.0008593883248977363,4.433820777194342e-06,64,20260502_013017
+"(128,)",1,128,True,771,771,4418,5189,0.0009882267331704,301.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,128,
+"(256,)",1,256,True,1539,1539,4418,5957,0.0011275560827925,181.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,256,
+"(512,)",1,512,True,3075,3075,4418,7493,0.0016967114061117,156.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,512,
+"(16, 16)",2,16,True,371,371,4418,4789,0.0011097682872787,89.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"16,16",
+"(16, 16)",2,16,True,371,371,4418,4789,0.0011549447663128376,115.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,"16,16",20260502_013017
+"(32, 32)",2,32,True,1251,1251,4418,5669,0.0012480166042223,168.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"32,32",
+"(32, 32)",2,32,True,1251,1251,4418,5669,0.0009801234118640423,253.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,"32,32",20260502_013017
+"(64, 64)",2,64,True,4547,4547,4418,8965,0.0013648461317643,136.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"64,64",
+"(128, 128)",2,128,True,17283,17283,4418,21701,0.0015944484621286,170.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"128,128",
+"(256, 256)",2,256,True,67331,67331,4418,71749,0.0029606919270008,204.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"256,256",
+"(512, 512)",2,512,True,265731,265731,4418,270149,0.0077838986180722,191.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"512,512",
+"(16, 16, 16)",3,16,True,643,643,4418,5061,0.0011664829216897,91.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"16,16,16",
+"(16, 16, 16)",3,16,True,643,643,4418,5061,0.0016042509814724326,129.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,"16,16,16",20260502_013017
+"(32, 32, 32)",3,32,True,2307,2307,4418,6725,0.0008763616206124,157.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"32,32,32",
+"(32, 32, 32)",3,32,True,2307,2307,4418,6725,0.0009297857759520411,195.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,"32,32,32",20260502_013017
+"(64, 64, 64)",3,64,True,8707,8707,4418,13125,0.0013967126142233,145.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"64,64,64",
+"(128, 128, 128)",3,128,True,33795,33795,4418,38213,0.0025068307295441,269.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"128,128,128",
+"(256, 256, 256)",3,256,True,133123,133123,4418,137541,0.0057028024457395,133.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"256,256,256",
+"(512, 512, 512)",3,512,True,528387,528387,4418,532805,0.0202163867652416,194.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"512,512,512",
+"(16, 16, 16, 16)",4,16,True,915,915,4418,5333,0.0009826314635574,123.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"16,16,16,16",
+"(16, 16, 16, 16)",4,16,True,915,915,4418,5333,0.0015815572114661336,139.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,"16,16,16,16",20260502_013017
+"(32, 32, 32, 32)",4,32,True,3363,3363,4418,7781,0.0012893612729385,149.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"32,32,32,32",
+"(32, 32, 32, 32)",4,32,True,3363,3363,4418,7781,0.0011037911754101515,225.0,0.0,1e-06,0.035829074138063105,False,0.1,he_normal,retrained_same_hyperparams,,,,,"32,32,32,32",20260502_013017
+"(64, 64, 64, 64)",4,64,True,12867,12867,4418,17285,0.0016831710236147,145.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"64,64,64,64",
+"(128, 128, 128, 128)",4,128,True,50307,50307,4418,54725,0.0031132269650697,156.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"128,128,128,128",
+"(256, 256, 256, 256)",4,256,True,198915,198915,4418,203333,0.0093787992373108,165.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"256,256,256,256",
+"(512, 512, 512, 512)",4,512,True,791043,791043,4418,795461,0.0368270240724086,165.0,0.0,1e-06,0.0358290741380631,False,0.1,he_normal,retrained_same_hyperparams,,,,,"512,512,512,512",
