@@ -27,7 +27,7 @@ RESULTS_DIR = str(EXPERIMENT_DIR / 'results')
 PLOTS_DIR = str(EXPERIMENT_DIR / 'plots')
 DATASETS_JSON = str(Path(DATA_DIR) / 'datasets.json')
 
-SWEEP_PARAM_NUM = True
+SWEEP_PARAM_NUM = False
 SWEEP_DATA_AMOUNT = False
 VISUALIZE_GRADIENTS = False
 
@@ -39,9 +39,9 @@ ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
 DATA_AUGMENTATION = True
 
 # We use a simple fully connected network (MLP)
-# 4 layers because deeper NNs can capture more complex patterns
-# Gradually decrease the neuron size to better capture patterns while avoiding overfitting
-NEURONS_PER_LAYER = [64,64,64,64,64]
+# Architecture sweep winner from ml_21:
+# depth = 3 hidden layers, width = 32 neurons per hidden layer
+NEURONS_PER_LAYER = [32, 32, 32]
 TRAIN_DROPOUT_RATE = 0 #0.05
 
 # Training hyperparameters
