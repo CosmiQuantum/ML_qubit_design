@@ -360,9 +360,9 @@ def load_transmon_design_splits_um() -> dict[str, np.ndarray]:
 
 def draw_split_histograms(fig: plt.Figure, axes: np.ndarray, splits: dict[str, np.ndarray], *, legend_y: float = 0.98) -> None:
     labels = [
-        r"claw length ($\mu$m)",
-        r"ground spacing ($\mu$m)",
-        r"cross length ($\mu$m)",
+        r"Claw length ($\mu$m)",
+        r"Ground spacing ($\mu$m)",
+        r"Cross length ($\mu$m)",
     ]
     colors = {
         "Train": GREEN,
@@ -521,15 +521,18 @@ def plot_architecture_sweep() -> None:
         reference_rows = pd.DataFrame()
     reference_row = reference_rows.iloc[0] if not reference_rows.empty else df.loc[df["best_val_loss"].idxmin()]
 
-    fig, ax0 = plt.subplots(figsize=(FULL_WIDTH_IN, 2.75))
-    im = ax0.imshow(heatmap_df.values, cmap=cmap, aspect="auto", origin="lower")
+    fig, ax0 = plt.subplots(figsize=(FULL_WIDTH_IN, 2.85))
+    im = ax0.imshow(heatmap_df.values, cmap=cmap, aspect="auto", origin="lower", interpolation="nearest")
     ax0.set_xticks(np.arange(len(heatmap_df.columns)))
     ax0.set_xticklabels([str(int(v)) for v in heatmap_df.columns])
     ax0.set_yticks(np.arange(len(heatmap_df.index)))
     ax0.set_yticklabels([str(int(v)) for v in heatmap_df.index])
-    ax0.set_xlabel("width (neurons per layer)")
-    ax0.set_ylabel("depth (number of layers)")
-    ax0.set_title("Validation loss")
+    ax0.set_xlabel("Width (Neurons per Layer)")
+    ax0.set_ylabel("Depth (Hidden Layers)")
+    ax0.set_title("Validation Loss vs Inverse MLP Architecture")
+    for spine in ax0.spines.values():
+        spine.set_linewidth(0.9)
+        spine.set_color(SPINE)
 
     for row_idx, depth in enumerate(heatmap_df.index):
         for col_idx, width in enumerate(heatmap_df.columns):
@@ -551,12 +554,26 @@ def plot_architecture_sweep() -> None:
     reference_width = int(reference_row["width"])
     reference_col = list(heatmap_df.columns).index(reference_width)
     reference_row_idx = list(heatmap_df.index).index(reference_depth)
-    ax0.scatter(reference_col, reference_row_idx, marker="*", s=130, color="#F5F5F5", edgecolor="#173717", linewidth=1.0, zorder=5)
+    ax0.scatter(
+        reference_col,
+        reference_row_idx - 0.20,
+        marker="*",
+        s=130,
+        color="#F5F5F5",
+        edgecolor="#173717",
+        linewidth=1.0,
+        zorder=5,
+    )
 
     cbar = fig.colorbar(im, ax=ax0, fraction=0.046, pad=0.03)
-    cbar.set_label("best val loss")
+    cbar.set_label("Best Validation Loss")
+    cbar.outline.set_edgecolor(SPINE)
+    cbar.outline.set_linewidth(0.8)
 
     fig.tight_layout()
+    png_path = EXPORT_DIR / "architecture_sweep-v2.png"
+    fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.04)
+    print(f"wrote {png_path.relative_to(REPO_ROOT)}")
     save_figure(fig, EXPORT_DIR / "architecture_sweep-v2.pdf")
 
 
@@ -1046,6 +1063,8 @@ def plot_model_architecture_combined() -> None:
         edge: str,
         face: str,
         hatch: str | None = None,
+        title_color: str | None = None,
+        body_color: str = TEXT,
     ) -> None:
         patch = FancyBboxPatch(
             (x, y),
@@ -1059,9 +1078,19 @@ def plot_model_architecture_combined() -> None:
             zorder=3,
         )
         ax.add_patch(patch)
-        ax.text(x + 1.2, y + h - 2.2, title, ha="left", va="top", fontsize=8.8, fontweight="bold", color=edge, zorder=5)
+        ax.text(
+            x + 1.2,
+            y + h - 2.2,
+            title,
+            ha="left",
+            va="top",
+            fontsize=8.8,
+            fontweight="bold",
+            color=title_color or edge,
+            zorder=5,
+        )
         for idx, line in enumerate(lines):
-            ax.text(x + 1.2, y + h - 5.6 - idx * 2.2, line, ha="left", va="top", fontsize=7.7, color=TEXT, zorder=5)
+            ax.text(x + 1.2, y + h - 5.6 - idx * 2.2, line, ha="left", va="top", fontsize=7.7, color=body_color, zorder=5)
 
     def arrow(x0: float, y0: float, x1: float, y1: float, label: str | None = None) -> None:
         arr = FancyArrowPatch(
@@ -1125,11 +1154,19 @@ def plot_model_architecture_combined() -> None:
         zorder=1,
     )
 
-    block(*boxes["input"], "Targets", [r"$\omega_q,\ \alpha$", "scaled inputs"], edge=physics_edge, face=physics_fill)
-    block(*boxes["inverse"], "Inverse MLP", ["2 hidden layers", "16 neurons each", "387 trainable"], edge=ml_edge, face=ml_fill)
+    block(*boxes["input"], "Targets", [r"$\omega_q,\ \alpha$", "Scaled inputs"], edge=physics_edge, face=physics_fill)
+    block(*boxes["inverse"], "Inverse MLP", ["1 hidden layer", "64 neurons", "387 trainable"], edge=ml_edge, face=ml_fill)
     block(*boxes["geom"], "Design", ["3 Quantum Metal", "geometry params"], edge=ml_edge, face=ml_fill)
     block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{\omega}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
-    block(*boxes["output"], "Loss", ["MAE in", "target", "space"], edge=validation_edge, face=validation_fill)
+    block(
+        *boxes["output"],
+        "Loss",
+        ["MAE in", "target", "space"],
+        edge=validation_edge,
+        face=validation_edge,
+        title_color="#FFFFFF",
+        body_color="#FFFFFF",
+    )
 
     arrow(17.0, y + h / 2, 22.5, y + h / 2)
     arrow(40.5, y + h / 2, 46.0, y + h / 2)
@@ -1153,7 +1190,7 @@ def plot_model_architecture_combined() -> None:
     ax.text(
         62.0,
         y - 2.8,
-        "update inverse weights",
+        "Update inverse weights",
         ha="center",
         va="center",
         fontsize=7.4,
@@ -1206,6 +1243,128 @@ def plot_model_architecture_combined() -> None:
     plt.close(fig)
 
 
+def plot_inverse_architecture_standalone() -> None:
+    use_paper_style()
+    palette = flowchart_palette()
+    physics_fill = palette["physics_fill"]
+    physics_edge = palette["physics_edge"]
+    ml_fill = palette["ml_fill"]
+    ml_edge = palette["ml_edge"]
+
+    fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 2.25))
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 30)
+    ax.axis("off")
+
+    def block(x, y, w, h, title, lines, *, edge, face):
+        patch = FancyBboxPatch(
+            (x, y),
+            w,
+            h,
+            boxstyle="round,pad=0.35,rounding_size=1.2",
+            linewidth=1.3,
+            edgecolor=edge,
+            facecolor=face,
+            zorder=2,
+        )
+        ax.add_patch(patch)
+        ax.text(
+            x + 1.0,
+            y + h - 2.6,
+            title,
+            ha="left",
+            va="top",
+            fontsize=8.5,
+            fontweight="bold",
+            color=edge,
+        )
+        for idx, line in enumerate(lines):
+            ax.text(
+                x + 1.0,
+                y + h - 6.2 - 2.95 * idx,
+                line,
+                ha="left",
+                va="top",
+                fontsize=7.3,
+                color=TEXT,
+            )
+
+    def arrow(start, end):
+        ax.add_patch(
+            FancyArrowPatch(
+                start,
+                end,
+                arrowstyle="-|>",
+                mutation_scale=12,
+                linewidth=1.5,
+                color=TEXT_DIM,
+                shrinkA=2,
+                shrinkB=2,
+                zorder=3,
+            )
+        )
+
+    input_box = (7, 6.4, 22, 15.0)
+    hidden_box = (39, 6.4, 25, 15.0)
+    output_box = (74, 6.4, 19, 15.0)
+
+    block(
+        *input_box,
+        "Targets",
+        [r"$\omega_q,\ \alpha$", "Scaled inputs"],
+        edge=physics_edge,
+        face=physics_fill,
+    )
+    block(
+        *hidden_box,
+        "Hidden layer",
+        ["Dense 64", "LeakyReLU", "387 trainable params"],
+        edge=ml_edge,
+        face=ml_fill,
+    )
+    block(
+        *output_box,
+        "Output",
+        ["3 Quantum Metal", "geometry params"],
+        edge=ml_edge,
+        face=ml_fill,
+    )
+
+    arrow((input_box[0] + input_box[2], input_box[1] + input_box[3] / 2), (hidden_box[0], hidden_box[1] + hidden_box[3] / 2))
+    arrow((hidden_box[0] + hidden_box[2], hidden_box[1] + hidden_box[3] / 2), (output_box[0], output_box[1] + output_box[3] / 2))
+
+    ax.text(
+        50,
+        27.0,
+        "Inverse model architecture",
+        ha="center",
+        va="center",
+        fontsize=10.2,
+        color=TEXT,
+    )
+    ax.text(
+        50,
+        24.5,
+        "1 hidden layer with width 64   |   Trainable params: 387   |   Output params: 3",
+        ha="center",
+        va="center",
+        fontsize=8.1,
+        color=TEXT_DIM,
+    )
+
+    fig.tight_layout(pad=0.12)
+    out_paths = [
+        TRANSMON_DIR / "plots" / "model_architecture_paper_theme_inverse_model.pdf",
+        TRANSMON_DIR / "plots" / "model_architecture_inverse_model.pdf",
+        TRANSMON_DIR / "plots" / "model_architecture_inverse_model.png",
+    ]
+    for out_path in out_paths:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
+
+
 def export_pdf_fallbacks() -> None:
     crop_pdf_page(19, (98, 48, 502, 346), EXPORT_DIR / "predicted_vs_reference_design_comparsion.pdf")
 
@@ -1235,6 +1394,7 @@ def main() -> None:
     plot_ansys_validation_vs_nn_distance()
     plot_surrogate_stress_random_points_pairs()
     plot_model_architecture_combined()
+    plot_inverse_architecture_standalone()
     export_pdf_fallbacks()
     export_png_fallbacks()
 
