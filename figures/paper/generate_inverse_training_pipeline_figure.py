@@ -123,7 +123,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
         filter="url(#softShadow)"/>
   <text x="280" y="50" text-anchor="middle"
         font-size="17" font-weight="bold" fill="{INPUT_TEXT}">
-    Desired Hamiltonian Input
+    Target Hamiltonian Input
   </text>
 
 
@@ -154,7 +154,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
         fill="{PARAM_FILL}" stroke="{PARAM_STROKE}" stroke-width="2"/>
   <text x="280" y="202" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{PARAM_TEXT}">
-    Best Quantum Metal Parameter Guess
+    Quantum Metal Parameter Prediction
   </text>
 
 <line x1="280" y1="224" x2="280" y2="234"
@@ -166,7 +166,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
   <text x="280" y="267" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{SURR_TEXT}">Ansys Surrogate</text>
   <text x="280" y="286" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="{SURR_TEXT}">MLP</text>
+        font-size="16" font-weight="bold" fill="{SURR_TEXT}">NN</text>
 
 <line x1="280" y1="306" x2="280" y2="316"
         stroke="{ARROW_MAIN}" stroke-width="3.2"/>
@@ -206,12 +206,12 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
     update inverse weights
   </text>
 
-<rect x="120" y="499" width="320" height="46" rx="10" ry="10"
+<rect x="70" y="499" width="420" height="46" rx="10" ry="10"
         fill="{OUTPUT_FILL}" stroke="{OUTPUT_STROKE}" stroke-width="2"
         filter="url(#softShadow)"/>
   <text x="280" y="528" text-anchor="middle"
         font-size="17" font-weight="bold" fill="{OUTPUT_TEXT}">
-    Best Quantum Metal Design Output
+    Highest Scoring Quantum Metal Design Output
   </text>
 
 </svg>
