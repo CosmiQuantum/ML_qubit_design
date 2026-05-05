@@ -1,0 +1,31 @@
+{
+  "created_by": "ml_30_runtime_batch_benchmark.ipynb",
+  "system": "Linux 6.3.12-200.fc38.x86_64",
+  "machine": "x86_64",
+  "processor": "x86_64",
+  "python": "3.10.13",
+  "tensorflow": "2.20.0",
+  "gpu_available": true,
+  "gpu_devices": [
+    "PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')"
+  ],
+  "batch_numbers": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "n_warmup": 20,
+  "n_repeat": 50,
+  "combined_model_path": "/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_keras_model_surrogate_defined_loss.keras",
+  "surrogate_model_path": "/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_keras_model_model2_surrogate.keras",
+  "ansys_seconds_per_sample": 120.0
+}
