@@ -208,12 +208,8 @@ def crop_png_page(page_number: int, clip_rect: tuple[float, float, float, float]
 
 def load_transmon_trials() -> pd.DataFrame:
     trial_dir_candidates = [
+        TRANSMON_DIR / "kt_dir2 3",
         TRANSMON_DIR / "kt_dir2",
-        TRANSMON_DIR / "kt_dir2" / "transmon_cross_surrogate_loss2",
-        TRANSMON_ARTIFACT_DIR / "kt_dir2",
-        TRANSMON_ARTIFACT_DIR / "kt_dir2" / "transmon_cross_surrogate_loss2",
-        TRANSMON_DIR / "surrogate_trials" / "model2_mlp_tuning_bayesian",
-        TRANSMON_ARTIFACT_DIR / "surrogate_trials" / "model2_mlp_tuning_bayesian",
     ]
     trial_files: list[Path] = []
     for trial_dir in trial_dir_candidates:
