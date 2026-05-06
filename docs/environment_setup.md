@@ -27,8 +27,8 @@ conda activate cryo-modelling-env
 This environment file now covers the core ML notebooks plus the checked-in paper figure scripts. In particular, it explicitly includes the packages used throughout the repo for:
 
 - numerical work: `numpy`, `scipy`, `pandas`, `scikit-learn`, `joblib`
-- training/tuning: `tensorflow-cpu`, `tensorflow-datasets`, `keras-tuner`
-- figures: `matplotlib`, `cairosvg`, `pymupdf`, `svglib`, `reportlab`
+- training/tuning: `tensorflow`, `tensorflow-datasets`, `keras-tuner`
+- figures: `matplotlib`, `seaborn`, `cairosvg`, `pymupdf`, `svglib`, `reportlab`
 
 Remove it with either:
 
@@ -46,7 +46,7 @@ or:
 
 If you are running the notebooks on Fermilab EAF or another remote host:
 
-1. Create and activate the conda environment.
+1. Create and activate either the default conda environment or the EAF GPU environment below.
 2. Initialize Conda for your shell if needed:
 
 ```bash
@@ -57,7 +57,7 @@ source ~/.bashrc
 3. Generate Jupyter configuration and set a password:
 
 ```bash
-conda activate cryo-modelling-env
+conda activate cryo-modelling-env  # or cryo-modelling-env-gpu
 jupyter-lab --generate-config
 jupyter-lab password
 ```
@@ -76,9 +76,29 @@ ssh -L 8888:localhost:8081 <REMOTE_USER>@<REMOTE_HOST>
 
 Then open `http://localhost:8888` in your browser.
 
-## GPU Note
+## Fermilab EAF GPU Environment
 
-This repo currently installs `tensorflow-cpu` from `environment.yml`, so GPU usage is not configured by default in the checked-in environment file. If you need GPU-backed TensorFlow on a remote system, treat that as an environment-specific override rather than the repository baseline.
+The default `environment.yml` installs TensorFlow without the bundled NVIDIA CUDA pip packages. For Fermilab EAF GPU runs, create the GPU-specific environment instead:
+
+```bash
+conda env create -f environment-eaf-gpu.yml
+conda activate cryo-modelling-env-gpu
+```
+
+That file uses `tensorflow[and-cuda]==2.20.0`, which is the GPU-capable TensorFlow install path used for the runtime benchmark notebooks on EAF.
+
+The checked-in `ml_30_runtime_batch_benchmark` metadata records this successful EAF run:
+
+- Python: `3.10.13`
+- TensorFlow: `2.20.0`
+- GPU visible to TensorFlow: `PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')`
+- GPU hardware in the training notebook output: NVIDIA A100 80GB PCIe MIG 4g.40gb
+
+The older metadata did not record the standalone Keras package version. New benchmark runs record it. You can also check it in any active environment with:
+
+```bash
+python -c "import platform, tensorflow as tf, keras; print('python', platform.python_version()); print('tensorflow', tf.__version__); print('keras', keras.__version__); print('gpus', tf.config.list_physical_devices('GPU'))"
+```
 
 ## Validation Notebook Caveat
 

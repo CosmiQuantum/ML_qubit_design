@@ -67,6 +67,12 @@ A GPU is recommended. If you have a Fermilab services account, you can run Jupyt
 4. Scroll to the bottom of the server options and choose Fermilab generic notebooks.
 5. Select the middle GPU option. From the menu choose the largest slot.
 6. Clone this repo there.
+7. Create the GPU environment:
+
+```bash
+conda env create -f environment-eaf-gpu.yml
+conda activate cryo-modelling-env-gpu
+```
 
 Please feel free to contribute instructions if you use a GPU somewhere else.
 
