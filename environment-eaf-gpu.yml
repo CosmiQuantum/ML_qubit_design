@@ -1,4 +1,4 @@
-name: cryo-modelling-env
+name: cryo-modelling-env-gpu
 channels:
   - conda-forge
 dependencies:
@@ -25,9 +25,9 @@ dependencies:
   - widgetsnbextension==3.6.0
   - pip
   - pip:
-      - tensorflow==2.20.0
+      - tensorflow[and-cuda]==2.20.0
       - tensorflow-datasets==4.8.3
       - keras-tuner
-    # Validation notebooks also depend on the external design and Ansys stack
+    # Validation notebooks also depend on the external design and Ansys stack.
     # These packages are not pinned here because they often require external desktop software.
     # Add those separately if you plan to run the validation notebooks.
