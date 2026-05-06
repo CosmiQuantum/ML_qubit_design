@@ -41,7 +41,7 @@ DATA_AUGMENTATION = True
 # We use a simple fully connected network (MLP)
 # Architecture sweep winner from ml_21:
 # depth = 3 hidden layers, width = 32 neurons per hidden layer
-NEURONS_PER_LAYER = [32, 32, 32]
+NEURONS_PER_LAYER = [64]#[32, 32, 32]
 TRAIN_DROPOUT_RATE = 0 #0.05
 
 # Training hyperparameters
@@ -49,7 +49,7 @@ TRAIN_DROPOUT_RATE = 0 #0.05
 # Learning Rate gives the step size that the optimizer takes while learning,
 # smaller step size means slower convergence but more accuracy
 # learning rate is=LR_INITIAL×(LR_DECAY_RATE)^(t/LR_DECAY_STEPS)
-LR_INITIAL = 0.000982
+LR_INITIAL = 0.001
 
 # Learning rate decay helps the model become refined as it gets closer to a minimum
 # The learning rate decay steps desides how many steps the learning rate will decay after
