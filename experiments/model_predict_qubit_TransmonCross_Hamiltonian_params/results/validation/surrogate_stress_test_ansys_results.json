@@ -2,16 +2,18 @@
     {
         "Sample":0,
         "pred_H_params":{
-            "qubit_frequency_GHz":3.3656994234,
-            "anharmonicity_MHz":-97.8496095971
+            "qubit_frequency_GHz":3.3656977996,
+            "anharmonicity_MHz":-97.8495088352
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.32327,
             "anharmonicity_MHz":-95.3223
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0475175,
-        "simulation_time":167.8532536998
+        "simulation_time":168.5769214006,
+        "percent_err_freq":1.2605944481,
+        "percent_err_alpha":2.58275066
     },
     {
         "Sample":1,
@@ -23,9 +25,11 @@
             "qubit_frequency_GHz":3.72361,
             "anharmonicity_MHz":-121.709
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0375038,
-        "simulation_time":100.7426931998
+        "simulation_time":102.8927435996,
+        "percent_err_freq":1.9441405386,
+        "percent_err_alpha":3.9885052215
     },
     {
         "Sample":2,
@@ -37,23 +41,27 @@
             "qubit_frequency_GHz":3.65456,
             "anharmonicity_MHz":-116.949
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0246091,
-        "simulation_time":272.450129
+        "simulation_time":273.0798875,
+        "percent_err_freq":1.6274392617,
+        "percent_err_alpha":3.2775652623
     },
     {
         "Sample":3,
         "pred_H_params":{
-            "qubit_frequency_GHz":3.7451819824,
-            "anharmonicity_MHz":-123.0354492621
+            "qubit_frequency_GHz":3.745195659,
+            "anharmonicity_MHz":-123.0364169613
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.67711,
-            "anharmonicity_MHz":-118.471
+            "anharmonicity_MHz":-118.472
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0441483,
-        "simulation_time":101.1286607999
+        "simulation_time":100.1543827001,
+        "percent_err_freq":1.8179466495,
+        "percent_err_alpha":3.7098097247
     },
     {
         "Sample":4,
@@ -65,9 +73,11 @@
             "qubit_frequency_GHz":4.4002,
             "anharmonicity_MHz":-174.165
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0256587,
-        "simulation_time":103.7205743999
+        "simulation_time":104.9539193995,
+        "percent_err_freq":0.1869863408,
+        "percent_err_alpha":0.6479855162
     },
     {
         "Sample":5,
@@ -79,9 +89,11 @@
             "qubit_frequency_GHz":4.0785,
             "anharmonicity_MHz":-147.93
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0341348,
-        "simulation_time":88.7575201998
+        "simulation_time":89.5007017003,
+        "percent_err_freq":1.3621556592,
+        "percent_err_alpha":2.9474341057
     },
     {
         "Sample":6,
@@ -93,9 +105,11 @@
             "qubit_frequency_GHz":3.62104,
             "anharmonicity_MHz":-114.581
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.03184,
-        "simulation_time":93.2171684001
+        "simulation_time":94.7395016998,
+        "percent_err_freq":1.7712035302,
+        "percent_err_alpha":3.6422756541
     },
     {
         "Sample":7,
@@ -107,9 +121,11 @@
             "qubit_frequency_GHz":4.93926,
             "anharmonicity_MHz":-225.262
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0230719,
-        "simulation_time":84.9334251001
+        "simulation_time":86.1849278994,
+        "percent_err_freq":0.2112052551,
+        "percent_err_alpha":0.4747467771
     },
     {
         "Sample":8,
@@ -121,12 +137,30 @@
             "qubit_frequency_GHz":4.29517,
             "anharmonicity_MHz":-165.786
         },
-        "nn_bin":1.0,
+        "nn_bin":1,
         "nn_distance_scaled":0.0283125,
-        "simulation_time":91.1768801999
+        "simulation_time":92.8587299995,
+        "percent_err_freq":1.891658294,
+        "percent_err_alpha":3.9812724016
     },
     {
         "Sample":9,
+        "pred_H_params":{
+            "qubit_frequency_GHz":3.7566106174,
+            "anharmonicity_MHz":-123.8456307155
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.70083,
+            "anharmonicity_MHz":-120.002
+        },
+        "nn_bin":1,
+        "nn_distance_scaled":0.0272946,
+        "simulation_time":131.4702359,
+        "percent_err_freq":1.4848655632,
+        "percent_err_alpha":3.1035658612
+    },
+    {
+        "Sample":10,
         "pred_H_params":{
             "qubit_frequency_GHz":4.097714803,
             "anharmonicity_MHz":-149.4646307746
@@ -135,12 +169,14 @@
             "qubit_frequency_GHz":4.06479,
             "anharmonicity_MHz":-146.403
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0795548,
-        "simulation_time":118.9986887001
+        "simulation_time":120.9515886996,
+        "percent_err_freq":0.8034918139,
+        "percent_err_alpha":2.0483981787
     },
     {
-        "Sample":10,
+        "Sample":11,
         "pred_H_params":{
             "qubit_frequency_GHz":4.0516963157,
             "anharmonicity_MHz":-145.8436581424
@@ -149,12 +185,14 @@
             "qubit_frequency_GHz":3.95821,
             "anharmonicity_MHz":-138.606
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0715992,
-        "simulation_time":98.8818651
+        "simulation_time":100.9091354003,
+        "percent_err_freq":2.3073376782,
+        "percent_err_alpha":4.9626142368
     },
     {
-        "Sample":11,
+        "Sample":12,
         "pred_H_params":{
             "qubit_frequency_GHz":3.5962042509,
             "anharmonicity_MHz":-112.7536111357
@@ -163,40 +201,46 @@
             "qubit_frequency_GHz":3.54747,
             "anharmonicity_MHz":-109.469
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0527535,
-        "simulation_time":184.1550925002
+        "simulation_time":186.2253262997,
+        "percent_err_freq":1.3551580361,
+        "percent_err_alpha":2.9130873083
     },
     {
-        "Sample":12,
+        "Sample":13,
         "pred_H_params":{
-            "qubit_frequency_GHz":4.0438918103,
-            "anharmonicity_MHz":-145.2347227827
+            "qubit_frequency_GHz":4.0438972029,
+            "anharmonicity_MHz":-145.2351430222
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":4.00285,
             "anharmonicity_MHz":-142.127
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0515845,
-        "simulation_time":121.6088969
+        "simulation_time":120.5924267005,
+        "percent_err_freq":1.0150407105,
+        "percent_err_alpha":2.1400764013
     },
     {
-        "Sample":13,
+        "Sample":14,
         "pred_H_params":{
-            "qubit_frequency_GHz":4.9145496915,
-            "anharmonicity_MHz":-222.7784079406
+            "qubit_frequency_GHz":4.9102933888,
+            "anharmonicity_MHz":-222.3500797262
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":4.80109,
             "anharmonicity_MHz":-212.107
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0583713,
-        "simulation_time":98.9131469
+        "simulation_time":165.6789416,
+        "percent_err_freq":2.2239687154,
+        "percent_err_alpha":4.6067353512
     },
     {
-        "Sample":14,
+        "Sample":15,
         "pred_H_params":{
             "qubit_frequency_GHz":5.0685258173,
             "anharmonicity_MHz":-238.616661788
@@ -205,12 +249,14 @@
             "qubit_frequency_GHz":4.94906,
             "anharmonicity_MHz":-226.373
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0522631,
-        "simulation_time":85.4861504002
+        "simulation_time":88.3955569994,
+        "percent_err_freq":2.3570130962,
+        "percent_err_alpha":5.131100945
     },
     {
-        "Sample":15,
+        "Sample":16,
         "pred_H_params":{
             "qubit_frequency_GHz":3.977972157,
             "anharmonicity_MHz":-140.1508395954
@@ -219,12 +265,14 @@
             "qubit_frequency_GHz":3.8724,
             "anharmonicity_MHz":-132.067
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0901776,
-        "simulation_time":116.7448901003
+        "simulation_time":117.9950404,
+        "percent_err_freq":2.6539189525,
+        "percent_err_alpha":5.767956595
     },
     {
-        "Sample":16,
+        "Sample":17,
         "pred_H_params":{
             "qubit_frequency_GHz":3.5955314003,
             "anharmonicity_MHz":-112.7083419103
@@ -233,12 +281,14 @@
             "qubit_frequency_GHz":3.53288,
             "anharmonicity_MHz":-108.27
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0631314,
-        "simulation_time":125.4236750999
+        "simulation_time":128.7615263006,
+        "percent_err_freq":1.742479576,
+        "percent_err_alpha":3.9379001013
     },
     {
-        "Sample":17,
+        "Sample":18,
         "pred_H_params":{
             "qubit_frequency_GHz":3.5506614805,
             "anharmonicity_MHz":-109.7130063496
@@ -247,12 +297,30 @@
             "qubit_frequency_GHz":3.48893,
             "anharmonicity_MHz":-105.227
         },
-        "nn_bin":2.0,
+        "nn_bin":2,
         "nn_distance_scaled":0.0577272,
-        "simulation_time":214.5921272999
+        "simulation_time":219.8122125994,
+        "percent_err_freq":1.7385909876,
+        "percent_err_alpha":4.0888555504
     },
     {
-        "Sample":18,
+        "Sample":19,
+        "pred_H_params":{
+            "qubit_frequency_GHz":3.5482187688,
+            "anharmonicity_MHz":-109.5512670297
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.52144,
+            "anharmonicity_MHz":-107.686
+        },
+        "nn_bin":2,
+        "nn_distance_scaled":0.0659143,
+        "simulation_time":127.1696004001,
+        "percent_err_freq":0.7547101953,
+        "percent_err_alpha":1.7026430458
+    },
+    {
+        "Sample":20,
         "pred_H_params":{
             "qubit_frequency_GHz":3.5247708893,
             "anharmonicity_MHz":-108.0056571066
@@ -261,12 +329,14 @@
             "qubit_frequency_GHz":3.46029,
             "anharmonicity_MHz":-103.221
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.103083,
-        "simulation_time":125.6415504999
+        "simulation_time":128.9328552997,
+        "percent_err_freq":1.8293639878,
+        "percent_err_alpha":4.4300060152
     },
     {
-        "Sample":19,
+        "Sample":21,
         "pred_H_params":{
             "qubit_frequency_GHz":3.575051244,
             "anharmonicity_MHz":-111.3354297306
@@ -275,12 +345,14 @@
             "qubit_frequency_GHz":3.51486,
             "anharmonicity_MHz":-107.143
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.141803,
-        "simulation_time":125.4531312003
+        "simulation_time":127.1209691996,
+        "percent_err_freq":1.6836470275,
+        "percent_err_alpha":3.765584541
     },
     {
-        "Sample":20,
+        "Sample":22,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4992219135,
             "anharmonicity_MHz":-106.3358376474
@@ -289,26 +361,30 @@
             "qubit_frequency_GHz":3.4469,
             "anharmonicity_MHz":-102.455
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.118541,
-        "simulation_time":178.5017852001
+        "simulation_time":185.3614179008,
+        "percent_err_freq":1.4952442227,
+        "percent_err_alpha":3.6496046237
     },
     {
-        "Sample":21,
+        "Sample":23,
         "pred_H_params":{
-            "qubit_frequency_GHz":4.9666929661,
-            "anharmonicity_MHz":-228.0669644136
+            "qubit_frequency_GHz":4.964874815,
+            "anharmonicity_MHz":-227.8812761345
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":4.82083,
             "anharmonicity_MHz":-214.739
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.124314,
-        "simulation_time":213.7346248999
+        "simulation_time":201.2716314998,
+        "percent_err_freq":2.9012778845,
+        "percent_err_alpha":5.7671592671
     },
     {
-        "Sample":22,
+        "Sample":24,
         "pred_H_params":{
             "qubit_frequency_GHz":3.7240686207,
             "anharmonicity_MHz":-121.5467886236
@@ -317,12 +393,14 @@
             "qubit_frequency_GHz":3.66005,
             "anharmonicity_MHz":-117.25
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.114661,
-        "simulation_time":97.0574603002
+        "simulation_time":98.8190569999,
+        "percent_err_freq":1.7190505122,
+        "percent_err_alpha":3.5350902087
     },
     {
-        "Sample":23,
+        "Sample":25,
         "pred_H_params":{
             "qubit_frequency_GHz":3.7020943176,
             "anharmonicity_MHz":-120.0085260979
@@ -331,12 +409,14 @@
             "qubit_frequency_GHz":3.6395,
             "anharmonicity_MHz":-115.848
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.103565,
-        "simulation_time":121.6436659
+        "simulation_time":125.3199978992,
+        "percent_err_freq":1.6907812776,
+        "percent_err_alpha":3.4668587584
     },
     {
-        "Sample":24,
+        "Sample":26,
         "pred_H_params":{
             "qubit_frequency_GHz":6.1529432473,
             "anharmonicity_MHz":-370.5743342036
@@ -345,12 +425,14 @@
             "qubit_frequency_GHz":6.00516,
             "anharmonicity_MHz":-349.675
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.136048,
-        "simulation_time":81.5137131
+        "simulation_time":85.1246650992,
+        "percent_err_freq":2.4018301707,
+        "percent_err_alpha":5.639714431
     },
     {
-        "Sample":25,
+        "Sample":27,
         "pred_H_params":{
             "qubit_frequency_GHz":4.0797551834,
             "anharmonicity_MHz":-148.0452701201
@@ -359,54 +441,78 @@
             "qubit_frequency_GHz":3.9663,
             "anharmonicity_MHz":-139.226
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.120738,
-        "simulation_time":114.8572219
+        "simulation_time":118.6911479002,
+        "percent_err_freq":2.7809311662,
+        "percent_err_alpha":5.9571441309
     },
     {
-        "Sample":26,
+        "Sample":28,
         "pred_H_params":{
-            "qubit_frequency_GHz":4.9664660896,
-            "anharmonicity_MHz":-228.0437883708
+            "qubit_frequency_GHz":4.966332544,
+            "anharmonicity_MHz":-228.030147006
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":4.83283,
             "anharmonicity_MHz":-215.607
         },
-        "nn_bin":3.0,
+        "nn_bin":3,
         "nn_distance_scaled":0.0985415,
-        "simulation_time":217.8396087
+        "simulation_time":224.3187424,
+        "percent_err_freq":2.6881515246,
+        "percent_err_alpha":5.4480283283
     },
     {
-        "Sample":27,
+        "Sample":29,
         "pred_H_params":{
-            "qubit_frequency_GHz":4.1805976418,
-            "anharmonicity_MHz":-156.1184610635
+            "qubit_frequency_GHz":3.3735574125,
+            "anharmonicity_MHz":-98.3379300293
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.28776,
+            "anharmonicity_MHz":-92.5628
+        },
+        "nn_bin":3,
+        "nn_distance_scaled":0.112659,
+        "simulation_time":127.1178118009,
+        "percent_err_freq":2.543232618,
+        "percent_err_alpha":5.8727390617
+    },
+    {
+        "Sample":30,
+        "pred_H_params":{
+            "qubit_frequency_GHz":4.1805998785,
+            "anharmonicity_MHz":-156.1186429333
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":4.0247,
             "anharmonicity_MHz":-143.862
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.182092,
-        "simulation_time":89.4300520001
+        "simulation_time":91.1904318994,
+        "percent_err_freq":3.7291269921,
+        "percent_err_alpha":7.8508515722
     },
     {
-        "Sample":28,
+        "Sample":31,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4454153375,
             "anharmonicity_MHz":-102.8676836256
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.37078,
-            "anharmonicity_MHz":-97.5038
+            "anharmonicity_MHz":-97.5037
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.172752,
-        "simulation_time":285.2672013999
+        "simulation_time":289.8695235997,
+        "percent_err_freq":2.1662217814,
+        "percent_err_alpha":5.2144497052
     },
     {
-        "Sample":29,
+        "Sample":32,
         "pred_H_params":{
             "qubit_frequency_GHz":3.952588471,
             "anharmonicity_MHz":-138.2213858863
@@ -415,26 +521,30 @@
             "qubit_frequency_GHz":3.85116,
             "anharmonicity_MHz":-130.475
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.190273,
-        "simulation_time":244.9966636002
+        "simulation_time":250.3909238996,
+        "percent_err_freq":2.5661277855,
+        "percent_err_alpha":5.6043323807
     },
     {
-        "Sample":30,
+        "Sample":33,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3737611358,
             "anharmonicity_MHz":-98.3506084131
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.26192,
-            "anharmonicity_MHz":-90.7757
+            "anharmonicity_MHz":-90.7758
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.17627,
-        "simulation_time":135.7216994003
+        "simulation_time":139.9070966002,
+        "percent_err_freq":3.3150282814,
+        "percent_err_alpha":7.7018419462
     },
     {
-        "Sample":31,
+        "Sample":34,
         "pred_H_params":{
             "qubit_frequency_GHz":3.9295574808,
             "anharmonicity_MHz":-136.4842583036
@@ -443,26 +553,30 @@
             "qubit_frequency_GHz":3.83067,
             "anharmonicity_MHz":-129.104
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.171521,
-        "simulation_time":98.1301068002
+        "simulation_time":100.5121601,
+        "percent_err_freq":2.5165042446,
+        "percent_err_alpha":5.4074062425
     },
     {
-        "Sample":32,
+        "Sample":35,
         "pred_H_params":{
-            "qubit_frequency_GHz":4.140820485,
-            "anharmonicity_MHz":-152.9038495752
+            "qubit_frequency_GHz":4.1408112145,
+            "anharmonicity_MHz":-152.903104963
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":4.00007,
             "anharmonicity_MHz":-141.894
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.162558,
-        "simulation_time":91.4549546
+        "simulation_time":92.7516369,
+        "percent_err_freq":3.3988802486,
+        "percent_err_alpha":7.20005324
     },
     {
-        "Sample":33,
+        "Sample":36,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4622688311,
             "anharmonicity_MHz":-103.946934985
@@ -471,12 +585,14 @@
             "qubit_frequency_GHz":3.38996,
             "anharmonicity_MHz":-98.5875
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.181082,
-        "simulation_time":297.0899316999
+        "simulation_time":296.9648005003,
+        "percent_err_freq":2.0884811269,
+        "percent_err_alpha":5.1559336365
     },
     {
-        "Sample":34,
+        "Sample":37,
         "pred_H_params":{
             "qubit_frequency_GHz":4.625962846,
             "anharmonicity_MHz":-194.8651409015
@@ -485,26 +601,46 @@
             "qubit_frequency_GHz":4.47558,
             "anharmonicity_MHz":-182.296
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.174885,
-        "simulation_time":96.0995573997
+        "simulation_time":96.6011654995,
+        "percent_err_freq":3.2508442244,
+        "percent_err_alpha":6.4501741273
     },
     {
-        "Sample":35,
+        "Sample":38,
         "pred_H_params":{
-            "qubit_frequency_GHz":4.1729240686,
-            "anharmonicity_MHz":-155.4952455481
+            "qubit_frequency_GHz":4.1705081118,
+            "anharmonicity_MHz":-155.2993360156
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":4.03463,
             "anharmonicity_MHz":-144.562
         },
-        "nn_bin":4.0,
+        "nn_bin":4,
         "nn_distance_scaled":0.154865,
-        "simulation_time":91.8491012002
+        "simulation_time":124.7207045006,
+        "percent_err_freq":3.258070915,
+        "percent_err_alpha":6.9139613157
     },
     {
-        "Sample":36,
+        "Sample":39,
+        "pred_H_params":{
+            "qubit_frequency_GHz":6.510816972,
+            "anharmonicity_MHz":-422.9572373138
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":6.3552,
+            "anharmonicity_MHz":-399.28
+        },
+        "nn_bin":4,
+        "nn_distance_scaled":0.188738,
+        "simulation_time":83.3822594006,
+        "percent_err_freq":2.3901297283,
+        "percent_err_alpha":5.5980215551
+    },
+    {
+        "Sample":40,
         "pred_H_params":{
             "qubit_frequency_GHz":3.5427636327,
             "anharmonicity_MHz":-109.1905592745
@@ -513,12 +649,14 @@
             "qubit_frequency_GHz":3.48236,
             "anharmonicity_MHz":-104.833
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.235174,
-        "simulation_time":219.1360043003
+        "simulation_time":227.4873475004,
+        "percent_err_freq":1.704986247,
+        "percent_err_alpha":3.9907839134
     },
     {
-        "Sample":37,
+        "Sample":41,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4607295945,
             "anharmonicity_MHz":-103.8480998717
@@ -527,12 +665,14 @@
             "qubit_frequency_GHz":3.38691,
             "anharmonicity_MHz":-98.4116
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.196457,
-        "simulation_time":132.9273798
+        "simulation_time":137.2770928992,
+        "percent_err_freq":2.1330645023,
+        "percent_err_alpha":5.2350499224
     },
     {
-        "Sample":38,
+        "Sample":42,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3897877162,
             "anharmonicity_MHz":-99.3509088129
@@ -541,12 +681,14 @@
             "qubit_frequency_GHz":3.28629,
             "anharmonicity_MHz":-92.3697
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.22569,
-        "simulation_time":123.8055363996
+        "simulation_time":129.1938652005,
+        "percent_err_freq":3.0532211709,
+        "percent_err_alpha":7.0268192776
     },
     {
-        "Sample":39,
+        "Sample":43,
         "pred_H_params":{
             "qubit_frequency_GHz":3.8306554546,
             "anharmonicity_MHz":-129.1694564003
@@ -555,12 +697,14 @@
             "qubit_frequency_GHz":3.74806,
             "anharmonicity_MHz":-123.296
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.215786,
-        "simulation_time":94.0730991
+        "simulation_time":97.0364696002,
+        "percent_err_freq":2.1561702841,
+        "percent_err_alpha":4.547093844
     },
     {
-        "Sample":40,
+        "Sample":44,
         "pred_H_params":{
             "qubit_frequency_GHz":4.2497289005,
             "anharmonicity_MHz":-161.7995646045
@@ -569,26 +713,30 @@
             "qubit_frequency_GHz":4.10475,
             "anharmonicity_MHz":-150.468
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.191179,
-        "simulation_time":89.5089537003
+        "simulation_time":93.9124268005,
+        "percent_err_freq":3.4114858593,
+        "percent_err_alpha":7.0034580329
     },
     {
-        "Sample":41,
+        "Sample":45,
         "pred_H_params":{
             "qubit_frequency_GHz":3.462042858,
             "anharmonicity_MHz":-103.9324217867
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.3903,
-            "anharmonicity_MHz":-98.6027
+            "anharmonicity_MHz":-98.6028
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.216034,
-        "simulation_time":296.0148614999
+        "simulation_time":303.6485593002,
+        "percent_err_freq":2.0722694936,
+        "percent_err_alpha":5.1279684386
     },
     {
-        "Sample":42,
+        "Sample":46,
         "pred_H_params":{
             "qubit_frequency_GHz":3.7624661014,
             "anharmonicity_MHz":-124.2619204617
@@ -597,12 +745,14 @@
             "qubit_frequency_GHz":3.69107,
             "anharmonicity_MHz":-119.315
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.19039,
-        "simulation_time":101.1102228002
+        "simulation_time":104.9356485,
+        "percent_err_freq":1.8975878978,
+        "percent_err_alpha":3.9810429803
     },
     {
-        "Sample":43,
+        "Sample":47,
         "pred_H_params":{
             "qubit_frequency_GHz":3.6944274957,
             "anharmonicity_MHz":-119.4744855654
@@ -611,12 +761,14 @@
             "qubit_frequency_GHz":3.63146,
             "anharmonicity_MHz":-115.259
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.223876,
-        "simulation_time":121.0729768001
+        "simulation_time":125.1012193998,
+        "percent_err_freq":1.7043911614,
+        "percent_err_alpha":3.5283563226
     },
     {
-        "Sample":44,
+        "Sample":48,
         "pred_H_params":{
             "qubit_frequency_GHz":4.4493130501,
             "anharmonicity_MHz":-178.8823780102
@@ -625,12 +777,30 @@
             "qubit_frequency_GHz":4.28134,
             "anharmonicity_MHz":-166.25
         },
-        "nn_bin":5.0,
+        "nn_bin":5,
         "nn_distance_scaled":0.213465,
-        "simulation_time":115.5328954998
+        "simulation_time":116.9970014002,
+        "percent_err_freq":3.7752580726,
+        "percent_err_alpha":7.0618347937
     },
     {
-        "Sample":45,
+        "Sample":49,
+        "pred_H_params":{
+            "qubit_frequency_GHz":3.355909048,
+            "anharmonicity_MHz":-97.2431356784
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.23929,
+            "anharmonicity_MHz":-89.6699
+        },
+        "nn_bin":5,
+        "nn_distance_scaled":0.235916,
+        "simulation_time":131.8608963992,
+        "percent_err_freq":3.4750360136,
+        "percent_err_alpha":7.7879385785
+    },
+    {
+        "Sample":50,
         "pred_H_params":{
             "qubit_frequency_GHz":4.256887463,
             "anharmonicity_MHz":-162.3947174818
@@ -639,12 +809,14 @@
             "qubit_frequency_GHz":4.10012,
             "anharmonicity_MHz":-150.229
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.250759,
-        "simulation_time":90.2988998001
+        "simulation_time":90.1301328,
+        "percent_err_freq":3.6826781155,
+        "percent_err_alpha":7.4914490265
     },
     {
-        "Sample":46,
+        "Sample":51,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4045720605,
             "anharmonicity_MHz":-100.2787823784
@@ -653,26 +825,30 @@
             "qubit_frequency_GHz":3.30523,
             "anharmonicity_MHz":-93.4284
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.28026,
-        "simulation_time":172.0237582
+        "simulation_time":176.0619566999,
+        "percent_err_freq":2.9179015375,
+        "percent_err_alpha":6.8313378124
     },
     {
-        "Sample":47,
+        "Sample":52,
         "pred_H_params":{
-            "qubit_frequency_GHz":3.3006384031,
-            "anharmonicity_MHz":-93.859407486
+            "qubit_frequency_GHz":3.300639132,
+            "anharmonicity_MHz":-93.8594516605
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.19004,
             "anharmonicity_MHz":-86.4723
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.2417,
-        "simulation_time":125.3554682001
+        "simulation_time":128.70658,
+        "percent_err_freq":3.35083987,
+        "percent_err_alpha":7.8704398223
     },
     {
-        "Sample":48,
+        "Sample":53,
         "pred_H_params":{
             "qubit_frequency_GHz":4.5876046016,
             "anharmonicity_MHz":-191.3245574196
@@ -681,12 +857,14 @@
             "qubit_frequency_GHz":4.40338,
             "anharmonicity_MHz":-176.571
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.26708,
-        "simulation_time":54.9273178997
+        "simulation_time":56.4618517002,
+        "percent_err_freq":4.0157035664,
+        "percent_err_alpha":7.711272206
     },
     {
-        "Sample":49,
+        "Sample":54,
         "pred_H_params":{
             "qubit_frequency_GHz":3.5646277228,
             "anharmonicity_MHz":-110.640379779
@@ -695,12 +873,14 @@
             "qubit_frequency_GHz":3.5034,
             "anharmonicity_MHz":-106.355
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.27269,
-        "simulation_time":180.3945200001
+        "simulation_time":186.4756471002,
+        "percent_err_freq":1.7176470465,
+        "percent_err_alpha":3.8732511471
     },
     {
-        "Sample":50,
+        "Sample":55,
         "pred_H_params":{
             "qubit_frequency_GHz":3.7934696436,
             "anharmonicity_MHz":-126.4795711487
@@ -709,12 +889,14 @@
             "qubit_frequency_GHz":3.7211,
             "anharmonicity_MHz":-121.442
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.259252,
-        "simulation_time":210.1197492997
+        "simulation_time":218.8159947004,
+        "percent_err_freq":1.9077427896,
+        "percent_err_alpha":3.9829128949
     },
     {
-        "Sample":51,
+        "Sample":56,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4317803566,
             "anharmonicity_MHz":-101.9992332329
@@ -723,12 +905,14 @@
             "qubit_frequency_GHz":3.34254,
             "anharmonicity_MHz":-95.7093
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.25153,
-        "simulation_time":178.088527
+        "simulation_time":184.8903206,
+        "percent_err_freq":2.6004099134,
+        "percent_err_alpha":6.1666475654
     },
     {
-        "Sample":52,
+        "Sample":57,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4720093338,
             "anharmonicity_MHz":-104.5736215324
@@ -737,12 +921,14 @@
             "qubit_frequency_GHz":3.39986,
             "anharmonicity_MHz":-99.1946
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.256301,
-        "simulation_time":131.5057242997
+        "simulation_time":138.2628565002,
+        "percent_err_freq":2.0780282212,
+        "percent_err_alpha":5.1437651805
     },
     {
-        "Sample":53,
+        "Sample":58,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3180373403,
             "anharmonicity_MHz":-94.9172630676
@@ -751,12 +937,30 @@
             "qubit_frequency_GHz":3.17836,
             "anharmonicity_MHz":-85.5451
         },
-        "nn_bin":6.0,
+        "nn_bin":6,
         "nn_distance_scaled":0.265013,
-        "simulation_time":169.6349201999
+        "simulation_time":175.3948900998,
+        "percent_err_freq":4.2096373842,
+        "percent_err_alpha":9.8740342533
     },
     {
-        "Sample":54,
+        "Sample":59,
+        "pred_H_params":{
+            "qubit_frequency_GHz":4.088070509,
+            "anharmonicity_MHz":-148.701446672
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.93857,
+            "anharmonicity_MHz":-136.695
+        },
+        "nn_bin":6,
+        "nn_distance_scaled":0.237499,
+        "simulation_time":102.7898880001,
+        "percent_err_freq":3.6569943858,
+        "percent_err_alpha":8.0741962776
+    },
+    {
+        "Sample":60,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3339541916,
             "anharmonicity_MHz":-95.8908979152
@@ -765,12 +969,14 @@
             "qubit_frequency_GHz":3.20558,
             "anharmonicity_MHz":-87.3788
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.322743,
-        "simulation_time":189.0548306997
+        "simulation_time":192.5432724999,
+        "percent_err_freq":3.850508562,
+        "percent_err_alpha":8.8768570326
     },
     {
-        "Sample":55,
+        "Sample":61,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3132825027,
             "anharmonicity_MHz":-94.6275016966
@@ -779,12 +985,14 @@
             "qubit_frequency_GHz":3.17142,
             "anharmonicity_MHz":-85.0005
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.303062,
-        "simulation_time":130.7898630002
+        "simulation_time":135.2218004009,
+        "percent_err_freq":4.2816301533,
+        "percent_err_alpha":10.1735769454
     },
     {
-        "Sample":56,
+        "Sample":62,
         "pred_H_params":{
             "qubit_frequency_GHz":3.9402168801,
             "anharmonicity_MHz":-137.2866573914
@@ -793,12 +1001,14 @@
             "qubit_frequency_GHz":3.83701,
             "anharmonicity_MHz":-129.552
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.312167,
-        "simulation_time":114.8044667998
+        "simulation_time":118.1010662001,
+        "percent_err_freq":2.6193197796,
+        "percent_err_alpha":5.6339469096
     },
     {
-        "Sample":57,
+        "Sample":63,
         "pred_H_params":{
             "qubit_frequency_GHz":3.9579528133,
             "anharmonicity_MHz":-138.6278366001
@@ -807,12 +1017,14 @@
             "qubit_frequency_GHz":3.85146,
             "anharmonicity_MHz":-130.536
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.329812,
-        "simulation_time":115.3373426003
+        "simulation_time":120.556082,
+        "percent_err_freq":2.6906034085,
+        "percent_err_alpha":5.8370936159
     },
     {
-        "Sample":58,
+        "Sample":64,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4288421542,
             "anharmonicity_MHz":-101.8126401358
@@ -821,12 +1033,14 @@
             "qubit_frequency_GHz":3.33887,
             "anharmonicity_MHz":-95.4479
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.30591,
-        "simulation_time":123.7754413001
+        "simulation_time":127.4613487003,
+        "percent_err_freq":2.623980637,
+        "percent_err_alpha":6.2514243097
     },
     {
-        "Sample":59,
+        "Sample":65,
         "pred_H_params":{
             "qubit_frequency_GHz":3.7576441355,
             "anharmonicity_MHz":-123.9190489344
@@ -835,12 +1049,14 @@
             "qubit_frequency_GHz":3.68883,
             "anharmonicity_MHz":-119.172
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.312066,
-        "simulation_time":105.6530710999
+        "simulation_time":109.6318359002,
+        "percent_err_freq":1.8313106036,
+        "percent_err_alpha":3.8307661132
     },
     {
-        "Sample":60,
+        "Sample":66,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4239262433,
             "anharmonicity_MHz":-101.5008860708
@@ -849,12 +1065,14 @@
             "qubit_frequency_GHz":3.33186,
             "anharmonicity_MHz":-95.0227
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.31726,
-        "simulation_time":119.0261235996
+        "simulation_time":126.8539398005,
+        "percent_err_freq":2.6889084857,
+        "percent_err_alpha":6.3823936141
     },
     {
-        "Sample":61,
+        "Sample":67,
         "pred_H_params":{
             "qubit_frequency_GHz":4.2623445697,
             "anharmonicity_MHz":-162.8492835235
@@ -863,12 +1081,14 @@
             "qubit_frequency_GHz":4.10612,
             "anharmonicity_MHz":-150.73
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.304844,
-        "simulation_time":97.1512505999
+        "simulation_time":101.1438017003,
+        "percent_err_freq":3.6652261952,
+        "percent_err_alpha":7.4420244666
     },
     {
-        "Sample":62,
+        "Sample":68,
         "pred_H_params":{
             "qubit_frequency_GHz":5.3369817125,
             "anharmonicity_MHz":-267.8658692566
@@ -877,26 +1097,46 @@
             "qubit_frequency_GHz":5.14906,
             "anharmonicity_MHz":-250.256
         },
-        "nn_bin":7.0,
+        "nn_bin":7,
         "nn_distance_scaled":0.329422,
-        "simulation_time":94.8835788998
+        "simulation_time":98.2630866999,
+        "percent_err_freq":3.5211234106,
+        "percent_err_alpha":6.5741370132
     },
     {
-        "Sample":63,
+        "Sample":69,
         "pred_H_params":{
-            "qubit_frequency_GHz":3.3175002003,
-            "anharmonicity_MHz":-94.8845044201
+            "qubit_frequency_GHz":3.363576124,
+            "anharmonicity_MHz":-97.7178979715
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.24294,
+            "anharmonicity_MHz":-89.659
+        },
+        "nn_bin":7,
+        "nn_distance_scaled":0.327505,
+        "simulation_time":133.8381778998,
+        "percent_err_freq":3.5865435939,
+        "percent_err_alpha":8.2471053295
+    },
+    {
+        "Sample":70,
+        "pred_H_params":{
+            "qubit_frequency_GHz":3.3175182611,
+            "anharmonicity_MHz":-94.8856057934
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.17593,
             "anharmonicity_MHz":-85.3025
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.341272,
-        "simulation_time":133.7118111001
+        "simulation_time":140.3285874007,
+        "percent_err_freq":4.2678969626,
+        "percent_err_alpha":10.0996412609
     },
     {
-        "Sample":64,
+        "Sample":71,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3756163713,
             "anharmonicity_MHz":-98.466108689
@@ -905,12 +1145,14 @@
             "qubit_frequency_GHz":3.26197,
             "anharmonicity_MHz":-90.8001
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.339017,
-        "simulation_time":137.9617696004
+        "simulation_time":145.6592416,
+        "percent_err_freq":3.3666850376,
+        "percent_err_alpha":7.7854287034
     },
     {
-        "Sample":65,
+        "Sample":72,
         "pred_H_params":{
             "qubit_frequency_GHz":4.0199347052,
             "anharmonicity_MHz":-143.3748231455
@@ -919,12 +1161,14 @@
             "qubit_frequency_GHz":3.89554,
             "anharmonicity_MHz":-133.614
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.336527,
-        "simulation_time":110.2692879997
+        "simulation_time":116.8908179002,
+        "percent_err_freq":3.0944459132,
+        "percent_err_alpha":6.8079059708
     },
     {
-        "Sample":66,
+        "Sample":73,
         "pred_H_params":{
             "qubit_frequency_GHz":3.7894837379,
             "anharmonicity_MHz":-126.1931908248
@@ -933,12 +1177,14 @@
             "qubit_frequency_GHz":3.71062,
             "anharmonicity_MHz":-120.704
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.345146,
-        "simulation_time":71.5351563999
+        "simulation_time":76.6268967995,
+        "percent_err_freq":2.0811208955,
+        "percent_err_alpha":4.3498312301
     },
     {
-        "Sample":67,
+        "Sample":74,
         "pred_H_params":{
             "qubit_frequency_GHz":4.4510430934,
             "anharmonicity_MHz":-179.0349388972
@@ -947,26 +1193,30 @@
             "qubit_frequency_GHz":4.27476,
             "anharmonicity_MHz":-165.742
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.344576,
-        "simulation_time":118.9367463998
+        "simulation_time":125.8651604997,
+        "percent_err_freq":3.9604894786,
+        "percent_err_alpha":7.4247736107
     },
     {
-        "Sample":68,
+        "Sample":75,
         "pred_H_params":{
-            "qubit_frequency_GHz":3.3215041595,
-            "anharmonicity_MHz":-95.1288487727
+            "qubit_frequency_GHz":3.3215072054,
+            "anharmonicity_MHz":-95.1290347854
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.18232,
             "anharmonicity_MHz":-85.7309
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.341053,
-        "simulation_time":131.2982831001
+        "simulation_time":138.1091785002,
+        "percent_err_freq":4.1904833196,
+        "percent_err_alpha":9.8793547171
     },
     {
-        "Sample":69,
+        "Sample":76,
         "pred_H_params":{
             "qubit_frequency_GHz":3.4148229166,
             "anharmonicity_MHz":-100.9250143645
@@ -975,12 +1225,14 @@
             "qubit_frequency_GHz":3.31714,
             "anharmonicity_MHz":-94.147
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.35894,
-        "simulation_time":128.5038716001
+        "simulation_time":136.8257131996,
+        "percent_err_freq":2.8605558468,
+        "percent_err_alpha":6.7158914043
     },
     {
-        "Sample":70,
+        "Sample":77,
         "pred_H_params":{
             "qubit_frequency_GHz":4.0326563787,
             "anharmonicity_MHz":-144.3607158657
@@ -989,26 +1241,46 @@
             "qubit_frequency_GHz":3.90362,
             "anharmonicity_MHz":-134.155
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.340377,
-        "simulation_time":97.8304769001
+        "simulation_time":103.278655,
+        "percent_err_freq":3.1997861108,
+        "percent_err_alpha":7.0695935556
     },
     {
-        "Sample":71,
+        "Sample":78,
         "pred_H_params":{
-            "qubit_frequency_GHz":3.530916853,
-            "anharmonicity_MHz":-108.4095641383
+            "qubit_frequency_GHz":3.5309166742,
+            "anharmonicity_MHz":-108.4095523765
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.47279,
             "anharmonicity_MHz":-104.207
         },
-        "nn_bin":8.0,
+        "nn_bin":8,
         "nn_distance_scaled":0.346444,
-        "simulation_time":359.9425701001
+        "simulation_time":390.8842627006,
+        "percent_err_freq":1.646220502,
+        "percent_err_alpha":3.8765517285
     },
     {
-        "Sample":72,
+        "Sample":79,
+        "pred_H_params":{
+            "qubit_frequency_GHz":3.278974185,
+            "anharmonicity_MHz":-92.5516003439
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.15366,
+            "anharmonicity_MHz":-83.8157
+        },
+        "nn_bin":8,
+        "nn_distance_scaled":0.340036,
+        "simulation_time":370.9191577006,
+        "percent_err_freq":3.8217496671,
+        "percent_err_alpha":9.4389511488
+    },
+    {
+        "Sample":80,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2915811233,
             "anharmonicity_MHz":-93.3113814698
@@ -1017,12 +1289,14 @@
             "qubit_frequency_GHz":3.14114,
             "anharmonicity_MHz":-82.8594
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.390107,
-        "simulation_time":131.4445957001
+        "simulation_time":138.5671532992,
+        "percent_err_freq":4.5704820165,
+        "percent_err_alpha":11.2011860774
     },
     {
-        "Sample":73,
+        "Sample":81,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3134422238,
             "anharmonicity_MHz":-94.6372270014
@@ -1031,12 +1305,14 @@
             "qubit_frequency_GHz":3.1739,
             "anharmonicity_MHz":-85.1526
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.383607,
-        "simulation_time":218.8662060001
+        "simulation_time":234.9760866007,
+        "percent_err_freq":4.2113975248,
+        "percent_err_alpha":10.0220888776
     },
     {
-        "Sample":74,
+        "Sample":82,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2989756685,
             "anharmonicity_MHz":-93.7586647175
@@ -1045,12 +1321,14 @@
             "qubit_frequency_GHz":3.15479,
             "anharmonicity_MHz":-83.8085
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.383221,
-        "simulation_time":223.1047407002
+        "simulation_time":242.1777939005,
+        "percent_err_freq":4.3706193373,
+        "percent_err_alpha":10.6125281834
     },
     {
-        "Sample":75,
+        "Sample":83,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2842850325,
             "anharmonicity_MHz":-92.8712400951
@@ -1059,26 +1337,30 @@
             "qubit_frequency_GHz":3.14556,
             "anharmonicity_MHz":-83.2189
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.380976,
-        "simulation_time":176.9490768001
+        "simulation_time":187.3106767004,
+        "percent_err_freq":4.2239035628,
+        "percent_err_alpha":10.3932499288
     },
     {
-        "Sample":76,
+        "Sample":84,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3112954601,
             "anharmonicity_MHz":-94.5065594045
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.17501,
-            "anharmonicity_MHz":-85.2438
+            "anharmonicity_MHz":-85.2437
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.410932,
-        "simulation_time":175.8050747998
+        "simulation_time":183.0280979993,
+        "percent_err_freq":4.1157746792,
+        "percent_err_alpha":9.8012872999
     },
     {
-        "Sample":77,
+        "Sample":85,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3008021917,
             "anharmonicity_MHz":-93.8693345261
@@ -1087,26 +1369,30 @@
             "qubit_frequency_GHz":3.16771,
             "anharmonicity_MHz":-84.7595
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.388327,
-        "simulation_time":180.1305199
+        "simulation_time":187.2085955003,
+        "percent_err_freq":4.0321165574,
+        "percent_err_alpha":9.7048035677
     },
     {
-        "Sample":78,
+        "Sample":86,
         "pred_H_params":{
-            "qubit_frequency_GHz":3.3721070385,
-            "anharmonicity_MHz":-98.2476952337
+            "qubit_frequency_GHz":3.3721103047,
+            "anharmonicity_MHz":-98.2478983894
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.25785,
             "anharmonicity_MHz":-90.5684
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.379174,
-        "simulation_time":179.7987975003
+        "simulation_time":185.8957016002,
+        "percent_err_freq":3.388391671,
+        "percent_err_alpha":7.8164505453
     },
     {
-        "Sample":79,
+        "Sample":87,
         "pred_H_params":{
             "qubit_frequency_GHz":3.29479234,
             "anharmonicity_MHz":-93.5054736334
@@ -1115,12 +1401,14 @@
             "qubit_frequency_GHz":3.14645,
             "anharmonicity_MHz":-83.2591
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.384315,
-        "simulation_time":175.7996326
+        "simulation_time":181.9099460999,
+        "percent_err_freq":4.5023274517,
+        "percent_err_alpha":10.9580468771
     },
     {
-        "Sample":80,
+        "Sample":88,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3554392516,
             "anharmonicity_MHz":-97.2140875395
@@ -1129,12 +1417,30 @@
             "qubit_frequency_GHz":3.23149,
             "anharmonicity_MHz":-88.9774
         },
-        "nn_bin":9.0,
+        "nn_bin":9,
         "nn_distance_scaled":0.382259,
-        "simulation_time":176.0434506
+        "simulation_time":180.3265494006,
+        "percent_err_freq":3.6939799027,
+        "percent_err_alpha":8.4727303912
     },
     {
-        "Sample":81,
+        "Sample":89,
+        "pred_H_params":{
+            "qubit_frequency_GHz":3.2863118145,
+            "anharmonicity_MHz":-92.993388862
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.13554,
+            "anharmonicity_MHz":-82.4746
+        },
+        "nn_bin":9,
+        "nn_distance_scaled":0.410764,
+        "simulation_time":189.3997219997,
+        "percent_err_freq":4.5878730629,
+        "percent_err_alpha":11.3113297523
+    },
+    {
+        "Sample":90,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2805489187,
             "anharmonicity_MHz":-92.6463125436
@@ -1143,12 +1449,14 @@
             "qubit_frequency_GHz":3.13298,
             "anharmonicity_MHz":-82.3172
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.431028,
-        "simulation_time":180.3000942003
+        "simulation_time":184.7244155994,
+        "percent_err_freq":4.4982995943,
+        "percent_err_alpha":11.1489731863
     },
     {
-        "Sample":82,
+        "Sample":91,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2974497586,
             "anharmonicity_MHz":-93.6662658757
@@ -1157,12 +1465,14 @@
             "qubit_frequency_GHz":3.15006,
             "anharmonicity_MHz":-83.4873
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.437633,
-        "simulation_time":178.0936229001
+        "simulation_time":184.0958131999,
+        "percent_err_freq":4.4698105927,
+        "percent_err_alpha":10.8672698549
     },
     {
-        "Sample":83,
+        "Sample":92,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2955944497,
             "anharmonicity_MHz":-93.5539903483
@@ -1171,12 +1481,14 @@
             "qubit_frequency_GHz":3.14726,
             "anharmonicity_MHz":-83.291
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.472281,
-        "simulation_time":178.6568439999
+        "simulation_time":186.6224774001,
+        "percent_err_freq":4.5009922175,
+        "percent_err_alpha":10.9701257104
     },
     {
-        "Sample":84,
+        "Sample":93,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2944547748,
             "anharmonicity_MHz":-93.4850597969
@@ -1185,12 +1497,14 @@
             "qubit_frequency_GHz":3.15683,
             "anharmonicity_MHz":-83.9977
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.427132,
-        "simulation_time":174.4979615002
+        "simulation_time":181.4247632995,
+        "percent_err_freq":4.1774674175,
+        "percent_err_alpha":10.1485304898
     },
     {
-        "Sample":85,
+        "Sample":94,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2890010003,
             "anharmonicity_MHz":-93.1555992518
@@ -1199,12 +1513,14 @@
             "qubit_frequency_GHz":3.14145,
             "anharmonicity_MHz":-82.8961
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.426758,
-        "simulation_time":174.6811521999
+        "simulation_time":181.4093567999,
+        "percent_err_freq":4.486195057,
+        "percent_err_alpha":11.0132931721
     },
     {
-        "Sample":86,
+        "Sample":95,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3002124637,
             "anharmonicity_MHz":-93.8335945747
@@ -1213,26 +1529,30 @@
             "qubit_frequency_GHz":3.15394,
             "anharmonicity_MHz":-83.7616
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.452956,
-        "simulation_time":178.4943198003
+        "simulation_time":184.8844724,
+        "percent_err_freq":4.4322135411,
+        "percent_err_alpha":10.7338897336
     },
     {
-        "Sample":87,
+        "Sample":96,
         "pred_H_params":{
             "qubit_frequency_GHz":3.293537926,
             "anharmonicity_MHz":-93.4296272398
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.14447,
-            "anharmonicity_MHz":-83.0974
+            "anharmonicity_MHz":-83.0975
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.454214,
-        "simulation_time":171.5402778997
+        "simulation_time":177.8372472003,
+        "percent_err_freq":4.5260728539,
+        "percent_err_alpha":11.058726814
     },
     {
-        "Sample":88,
+        "Sample":97,
         "pred_H_params":{
             "qubit_frequency_GHz":3.3278920742,
             "anharmonicity_MHz":-95.5194134393
@@ -1241,22 +1561,42 @@
             "qubit_frequency_GHz":3.18759,
             "anharmonicity_MHz":-86.1063
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.435537,
-        "simulation_time":176.4570179
+        "simulation_time":184.0920766005,
+        "percent_err_freq":4.2159442395,
+        "percent_err_alpha":9.8546600114
     },
     {
-        "Sample":89,
+        "Sample":98,
         "pred_H_params":{
             "qubit_frequency_GHz":3.2884360059,
             "anharmonicity_MHz":-93.1215057826
         },
         "surrogate_H_params":{
             "qubit_frequency_GHz":3.13832,
-            "anharmonicity_MHz":-82.6685
+            "anharmonicity_MHz":-82.6686
         },
-        "nn_bin":10.0,
+        "nn_bin":10,
         "nn_distance_scaled":0.431391,
-        "simulation_time":186.0170800998
+        "simulation_time":194.6162844999,
+        "percent_err_freq":4.5649666173,
+        "percent_err_alpha":11.2250179964
+    },
+    {
+        "Sample":99,
+        "pred_H_params":{
+            "qubit_frequency_GHz":3.2862132697,
+            "anharmonicity_MHz":-92.9874477322
+        },
+        "surrogate_H_params":{
+            "qubit_frequency_GHz":3.1435,
+            "anharmonicity_MHz":-83.0631
+        },
+        "nn_bin":10,
+        "nn_distance_scaled":0.449022,
+        "simulation_time":185.0636803005,
+        "percent_err_freq":4.3427878226,
+        "percent_err_alpha":10.6727821596
     }
 ]
