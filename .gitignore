@@ -56,3 +56,13 @@ keras/hyper_tuning*/
 */keras/hyper_tuning*/
 .ipynb_checkpoints/
 __pycache__/
+
+# Generated runtime comparison plots
+experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/plots/runtime_comparison_*.pdf
+experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/plots/runtime_comparison_*.png
+
+# Generated/cache files
+experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/results/cache/
+*/results/cache/
+.cache/
+fontlist-v*.json
