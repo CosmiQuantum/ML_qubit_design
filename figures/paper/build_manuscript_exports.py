@@ -131,6 +131,7 @@ def regenerate_generated_sources() -> None:
         PAPER_DIR / "generate_transmon_resonator_system_figure.py",
         PAPER_DIR / "generate_inverse_training_pipeline_figure.py",
         PAPER_DIR / "generate_inverse_design_workflow_figure.py",
+        PAPER_DIR / "generate_compact_overview_figure.py",
         PAPER_DIR / "generate_forward_testing_pipeline_figure.py",
         PAPER_DIR / "generate_gaussian_stress_test_methodology_figure.py",
     ]
