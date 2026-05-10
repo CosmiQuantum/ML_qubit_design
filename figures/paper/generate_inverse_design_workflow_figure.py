@@ -98,9 +98,8 @@ STAGES = [
      "valid"),
 
     ("back",
-     "Recovered Hamiltonian",
-     [r"$\hat{\omega}_q,\ \hat{\alpha}$",
-      r"$\hat{\omega}_r,\ \hat{g}$"],
+     "Recovered\nHamiltonian",
+     [r"$\hat{\omega}_q,\ \hat{\alpha};\ \hat{\omega}_r,\ \hat{g}$"],
      "valid"),
 
     ("cmp",
@@ -214,11 +213,14 @@ def draw_box(sid: str) -> None:
         ha="left", va="top",
         fontsize=8.9, fontweight="bold",
         color=style["title"],
+        linespacing=0.9,
         zorder=5,
     )
+    title_lines = title.count("\n") + 1
+    body_start_offset = TITLE_PAD_Y + 2.9 + (title_lines - 1) * 2.3
     for idx, line in enumerate(body):
         ax.text(
-            x + TITLE_PAD_X, y + h - TITLE_PAD_Y - 2.9 - idx * BODY_GAP,
+            x + TITLE_PAD_X, y + h - body_start_offset - idx * BODY_GAP,
             line,
             ha="left", va="top",
             fontsize=7.9,
