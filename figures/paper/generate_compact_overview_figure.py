@@ -98,11 +98,12 @@ def draw_scope_card(page: fitz.Page, rect: fitz.Rect) -> None:
     note_lines = (
         "Learned/varied: TransmonCross qubit",
         "geometry.",
+        "Predicted: claw length, ground",
+        "spacing, and cross length.",
         "Targets: qubit frequency and",
         "anharmonicity.",
-        "Held fixed: resonator/cavity and",
-        "NCap/coupler settings at reference",
-        "SQuADDS values.",
+        "Held fixed: all other SQuADDS",
+        "layout settings.",
     )
     y = rect.y0 + header_h + 14
     for line in note_lines:
@@ -133,7 +134,7 @@ def compose_pdf(out_path: Path) -> None:
     page.show_pdf_page(panel_a_dest, fragments_doc, 0, clip=fragments_clip, keep_proportion=True)
     fragments_doc.close()
 
-    draw_scope_card(page, fitz.Rect(11, 204, 202, 316))
+    draw_scope_card(page, fitz.Rect(11, 198, 214, 332))
 
     # Panel b: keep the original inverse-training workflow from Fig. 1b.
     inverse_doc = fitz.open(INVERSE_PIPELINE_PDF)
@@ -148,9 +149,9 @@ def compose_pdf(out_path: Path) -> None:
     # text width, so the text size remains comparable to the original figure.
     workflow_doc = fitz.open(WORKFLOW_PDF)
     workflow_src = workflow_doc[0].rect
-    panel_c_box = fitz.Rect(9, 387, PAGE_W - 9, PAGE_H - 16)
+    panel_c_box = fitz.Rect(9, 400, PAGE_W - 9, PAGE_H - 16)
     panel_c_dest = fit_rect(workflow_src, panel_c_box)
-    draw_section_title(page, 10, 373, "End-to-end inverse-design workflow")
+    draw_section_title(page, 10, 386, "Inference-time transmon-cross workflow")
     page.show_pdf_page(panel_c_dest, workflow_doc, 0, keep_proportion=True)
     workflow_doc.close()
 
