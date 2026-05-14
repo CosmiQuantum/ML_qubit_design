@@ -121,10 +121,10 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
 <rect x="138" y="20" width="284" height="48" rx="10" ry="10"
         fill="{INPUT_FILL}" stroke="{INPUT_STROKE}" stroke-width="2"
         filter="url(#softShadow)"/>
-  <text x="280" y="50" text-anchor="middle"
-        font-size="17" font-weight="bold" fill="{INPUT_TEXT}">
-    Target Hamiltonian Input
-  </text>
+    <text x="170" y="105" class="label" text-anchor="middle">
+      <tspan x="170" dy="0">Target Hamiltonian Input</tspan>
+      <tspan x="170" dy="16">ω<tspan baseline-shift="sub" font-size="9">q</tspan>, α</tspan>
+    </text>
 
 
 <rect x="64" y="82" width="432" height="400" rx="16" ry="16"
@@ -211,7 +211,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
         filter="url(#softShadow)"/>
   <text x="280" y="528" text-anchor="middle"
         font-size="17" font-weight="bold" fill="{OUTPUT_TEXT}">
-    Highest Scoring Quantum Metal Design Output
+    Trained Inverse Model Output
   </text>
 
 </svg>

@@ -60,57 +60,76 @@ FEEDBACK      = DUSTY_BLUE_DARK
 # Stage content.
 # Keep the figure terse. The manuscript text explains the details.
 STAGES = [
-    ("inputs",
-     "Target Hamiltonian",
-     [r"$\omega_q,\ \alpha$",
-      r"$\omega_r,\ g,\ \kappa$"],
-     "physics"),
-
-    ("map",
-     "Physics features",
-     [r"$\omega_q \approx \sqrt{8E_JE_C}-E_C$",
-      r"$\alpha \approx -E_C$"],
-     "physics"),
-
-    ("pre",
-     "Scale and encode",
-     [r"Min-max scaling",
-      r"Categorical masks"],
-     "physics"),
-
-    ("mlps",
-     "Inverse MLPs",
-     [r"TransmonCross",
-      r"NCap Coupler",
-      r"Resonator"],
-     "ml"),
-
-    ("post",
-     "Decode predictions",
-     [r"Physical units",
-      r"Valid design fields"],
-     "ml"),
-
-    ("fwd",
-     "Forward check",
-     [r"Quantum Metal layout",
-      r"Ansys or surrogate"],
-     "valid"),
-
-    ("back",
-     "Recovered Hamiltonian",
-     [r"$\hat{\omega}_q,\ \hat{\alpha}$",
-      r"$\hat{\omega}_r,\ \hat{g}$"],
-     "valid"),
-
-    ("cmp",
-     "Compare",
-     [r"Percent error",
-      r"Iterate if needed"],
-     "valid"),
+    (
+        "inputs",
+        "Target Hamiltonian",
+        [r"$\omega_q,\ \alpha$"],
+        "physics",
+    ),
+    (
+        "map",
+        "Physics relation",
+        [
+            r"$\omega_q \approx \sqrt{8E_JE_C}-E_C$",
+            r"$\alpha \approx -E_C$",
+        ],
+        "physics",
+    ),
+    (
+        "pre",
+        "Scale inputs",
+        [
+            r"Min--max scaling",
+            r"Training-set scalers",
+        ],
+        "physics",
+    ),
+    (
+        "mlps",
+        "Inverse MLP",
+        [
+            r"TransmonCross model",
+            r"$\omega_q,\alpha \rightarrow \ell_{\mathrm{claw}},s_{\mathrm{ground}},\ell_{\mathrm{cross}}$",
+        ],
+        "ml",
+    ),
+    (
+        "post",
+        "Decode prediction",
+        [
+            r"Physical units",
+            r"Valid geometry range",
+        ],
+        "ml",
+    ),
+    (
+        "fwd",
+        "Forward check",
+        [
+            r"Quantum Metal layout",
+            r"Surrogate or Ansys Q3D",
+        ],
+        "valid",
+    ),
+    (
+        "back",
+        "Recovered\nHamiltonian",
+        [
+            r"$\hat{\omega}_q,\ \hat{\alpha}$",
+        ],
+        "valid",
+    ),
+    (
+        "cmp",
+        "Compare",
+        [
+            r"Percent error",
+            r"Validate or refine",
+        ],
+        "valid",
+    ),
 ]
-
-FEEDBACK_LABEL = "Iterate"
+FEEDBACK_LABEL = "Refine if needed"
 
 CATEGORY_STYLE = {
     "neutral": dict(fill=NEUTRAL_FILL, stroke=NEUTRAL_STROKE, title=TEXT_MAIN, body=TEXT_DIM),
@@ -214,11 +233,14 @@ def draw_box(sid: str) -> None:
         ha="left", va="top",
         fontsize=8.9, fontweight="bold",
         color=style["title"],
+        linespacing=0.9,
         zorder=5,
     )
+    title_lines = title.count("\n") + 1
+    body_start_offset = TITLE_PAD_Y + 2.9 + (title_lines - 1) * 2.3
     for idx, line in enumerate(body):
         ax.text(
-            x + TITLE_PAD_X, y + h - TITLE_PAD_Y - 2.9 - idx * BODY_GAP,
+            x + TITLE_PAD_X, y + h - body_start_offset - idx * BODY_GAP,
             line,
             ha="left", va="top",
             fontsize=7.9,
@@ -300,8 +322,9 @@ cmp_left = edge_mid("cmp", "left")
 
 feedback_start = (cmp_left[0] - 0.1, cmp_left[1])
 feedback_elbow_1 = (0.6, cmp_left[1])
-feedback_elbow_2 = (0.6, 21.2)
-feedback_elbow_3 = (map_bottom[0], 21.2)
+feedback_y = 20.3
+feedback_elbow_2 = (0.6, feedback_y)
+feedback_elbow_3 = (map_bottom[0], feedback_y)
 
 arrow_tip = (map_bottom[0], map_bottom[1] - 0.02)
 arrow_base_y = arrow_tip[1] - 1.2
@@ -345,7 +368,7 @@ ax.add_patch(
 
 ax.text(
     13.0,
-    22.35,
+    feedback_y + 1,
     FEEDBACK_LABEL,
     ha="center", va="center",
     fontsize=7.6, fontweight="bold", fontstyle="italic",

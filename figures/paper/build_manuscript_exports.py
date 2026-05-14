@@ -131,6 +131,7 @@ def regenerate_generated_sources() -> None:
         PAPER_DIR / "generate_transmon_resonator_system_figure.py",
         PAPER_DIR / "generate_inverse_training_pipeline_figure.py",
         PAPER_DIR / "generate_inverse_design_workflow_figure.py",
+        PAPER_DIR / "generate_compact_overview_figure.py",
         PAPER_DIR / "generate_forward_testing_pipeline_figure.py",
         PAPER_DIR / "generate_gaussian_stress_test_methodology_figure.py",
     ]
@@ -447,19 +448,45 @@ def plot_sample_data_distribution() -> None:
 def plot_data_amount_sweep() -> None:
     use_paper_style()
 
-    df = pd.read_csv(TRANSMON_DIR / "data_amount_sweep.csv")
-    summary = (
-        df.groupby(["fraction", "n_samples"], as_index=False)
-        .agg(
-            train_mean=("train_mae", "mean"),
-            train_std=("train_mae", "std"),
-            val_mean=("val_mae", "mean"),
-            val_std=("val_mae", "std"),
-            test_mean=("test_mae", "mean"),
-            test_std=("test_mae", "std"),
+    far_to_near_path = TRANSMON_DIR / "data_amount_sweep_far_to_near.csv"
+    if far_to_near_path.exists():
+        df = pd.read_csv(far_to_near_path)
+        summary = (
+            df.groupby(["training_percent", "n_samples"], as_index=False)
+            .agg(
+                train_mean=("train_mean_hamiltonian_pct", "mean"),
+                train_std=("train_mean_hamiltonian_pct", "std"),
+                val_mean=("val_mean_hamiltonian_pct", "mean"),
+                val_std=("val_mean_hamiltonian_pct", "std"),
+                test_mean=("test_mean_hamiltonian_pct", "mean"),
+                test_std=("test_mean_hamiltonian_pct", "std"),
+            )
+            .sort_values("training_percent")
         )
-        .sort_values("n_samples")
-    )
+        x = summary["training_percent"].to_numpy()
+        x_tick_labels = [f"{value:.0f}" for value in x]
+        x_label = "Training set used [%]"
+        y_label = "Mean Hamiltonian percent error [%]"
+        title = "Training fraction sweep"
+    else:
+        df = pd.read_csv(TRANSMON_DIR / "data_amount_sweep.csv")
+        summary = (
+            df.groupby(["fraction", "n_samples"], as_index=False)
+            .agg(
+                train_mean=("train_mae", "mean"),
+                train_std=("train_mae", "std"),
+                val_mean=("val_mae", "mean"),
+                val_std=("val_mae", "std"),
+                test_mean=("test_mae", "mean"),
+                test_std=("test_mae", "std"),
+            )
+            .sort_values("n_samples")
+        )
+        x = (summary["fraction"] * 100).to_numpy()
+        x_tick_labels = [f"{frac * 100:.0f}" for frac in summary["fraction"]]
+        x_label = "Training set used [%]"
+        y_label = "MAE loss"
+        title = "Learning curve for the inverse model"
 
     series = [
         ("Training", "train_mean", "train_std", GREEN, GREEN_LIGHT),
@@ -467,7 +494,6 @@ def plot_data_amount_sweep() -> None:
         ("Test", "test_mean", "test_std", PURPLE, PURPLE_LIGHT),
     ]
 
-    x = summary["n_samples"].to_numpy()
     fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 3.05))
     for label, mean_col, std_col, color, fill in series:
         mean = summary[mean_col].to_numpy()
@@ -475,26 +501,30 @@ def plot_data_amount_sweep() -> None:
         ax.plot(x, mean, marker="o", markersize=4.0, linewidth=1.6, color=color, label=label)
         ax.fill_between(x, mean - std, mean + std, color=fill, alpha=0.62, linewidth=0)
 
-    ax.set_xlabel("Training samples")
-    ax.set_ylabel("MAE loss")
-    ax.set_title("Learning curve for the inverse model")
+    ax.set_xticks(x)
+    ax.set_xticklabels(x_tick_labels)
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    ax.set_title(title)
     ax.grid(axis="y", linestyle=":", color=GRID)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.legend(loc="upper right", frameon=True, edgecolor="#CCCCCC", facecolor="white")
     ax.set_ylim(bottom=0)
-    ax.margins(x=0.03)
-
-    top = ax.twiny()
-    top.set_xlim(ax.get_xlim())
-    top.set_xticks(x)
-    top.set_xticklabels([f"{frac * 100:.0f}" for frac in summary["fraction"]])
-    top.set_xlabel("Fraction of full training set [%]")
-    top.tick_params(axis="x", labelsize=8.0, colors=TEXT)
-    top.spines["top"].set_color(SPINE)
+    ax.margins(x=0.04)
 
     fig.tight_layout()
-    save_figure(fig, EXPORT_DIR / "data_amount_sweep-v2.pdf")
+    for out_path in [
+        EXPORT_DIR / "data_amount_sweep-v2.pdf",
+        EXPORT_DIR / "data_amount_sweep-v2.png",
+    ]:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        if out_path.suffix == ".png":
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
+        else:
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
 
 
 def plot_architecture_sweep() -> None:
@@ -759,15 +789,6 @@ def plot_inverse_surrogate_boxplot() -> None:
             zorder=5,
         )
 
-    means = [np.mean(values) for values in data]
-    medians = [np.median(values) for values in data]
-    legend_handles = [
-        Line2D([0], [0], marker="D", linestyle="none", markerfacecolor="white", markeredgecolor=ORANGE, markeredgewidth=1.2, markersize=5.5, label=fr"$\omega_q$ mean: {means[0]:.2f}%"),
-        Line2D([0], [0], color=ORANGE, linewidth=1.8, label=fr"$\omega_q$ median: {medians[0]:.2f}%"),
-        Line2D([0], [0], marker="D", linestyle="none", markerfacecolor="white", markeredgecolor=PURPLE, markeredgewidth=1.2, markersize=5.5, label=fr"$\alpha$ mean: {means[1]:.2f}%"),
-        Line2D([0], [0], color=PURPLE, linewidth=1.8, label=fr"$\alpha$ median: {medians[1]:.2f}%"),
-    ]
-    ax.legend(handles=legend_handles, loc="upper left", frameon=True, edgecolor="#CCCCCC", facecolor="white")
     ax.set_xticklabels([r"$\omega_q$", r"$\alpha$"])
     ax.set_ylabel("Percent error [%]")
     ax.set_title("Inverse + surrogate reconstruction error")
@@ -836,14 +857,17 @@ def plot_inverse_surrogate_error_histograms() -> None:
 def plot_ansys_validation_vs_nn_distance() -> None:
     use_paper_style()
 
-    data = json.loads((TRANSMON_DIR / "results" / "validation" / "random_candidates_tested_with_ansys_nn_bins.json").read_text())
+    validation_dir = TRANSMON_DIR / "results" / "validation"
+    data_path = validation_dir / "random_candidates_tested_with_ansys_nn_bins.json"
+    if not data_path.exists():
+        data_path = validation_dir / "surrogate_stress_test_ansys_results.json"
+    data = json.loads(data_path.read_text())
     bins = sorted({int(row["nn_bin"]) for row in data})
     eps = 1e-15
 
     fq_pts = []
     ah_pts = []
     nn_pts = []
-    bin_labels = []
 
     for bin_id in bins:
         rows = [row for row in data if int(row["nn_bin"]) == bin_id]
@@ -861,12 +885,11 @@ def plot_ansys_validation_vs_nn_distance() -> None:
                 for row in rows
             ]
         )
-        nn = np.array([row["nn_distance_scaled"] * 100 for row in rows])
+        nn = np.array([row["nn_distance_scaled"] for row in rows])
 
         fq_pts.append(fq)
         ah_pts.append(ah)
         nn_pts.append(nn)
-        bin_labels.append(f"{np.mean([row['nn_distance_scaled'] for row in rows]):.3f}")
 
     def qstats(values: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         med = np.array([np.median(v) for v in values])
@@ -878,15 +901,10 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     ah_med, ah_q1, ah_q3 = qstats(ah_pts)
     nn_med, nn_q1, nn_q3 = qstats(nn_pts)
 
-    x = np.arange(len(bins))
-    width = 0.35
-    jitter_amp = 0.055
-
     fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 3.3))
-    rng = np.random.default_rng(42)
     for idx in range(len(bins)):
         ax.scatter(
-            x[idx] - width / 2 + rng.uniform(-jitter_amp, jitter_amp, size=len(fq_pts[idx])),
+            nn_pts[idx],
             fq_pts[idx],
             color=ORANGE,
             alpha=0.26,
@@ -895,7 +913,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
             zorder=2,
         )
         ax.scatter(
-            x[idx] + width / 2 + rng.uniform(-jitter_amp, jitter_amp, size=len(ah_pts[idx])),
+            nn_pts[idx],
             ah_pts[idx],
             color=PURPLE,
             alpha=0.26,
@@ -904,44 +922,66 @@ def plot_ansys_validation_vs_nn_distance() -> None:
             zorder=2,
         )
 
-    ax.bar(x - width / 2, fq_med, width=width, color=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.2, zorder=3)
-    ax.bar(x + width / 2, ah_med, width=width, color=PURPLE_LIGHT, edgecolor=PURPLE, linewidth=1.2, zorder=3)
+    ax.errorbar(
+        nn_med,
+        fq_med,
+        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
+        yerr=[fq_med - fq_q1, fq_q3 - fq_med],
+        color=ORANGE,
+        marker="o",
+        markersize=5,
+        linewidth=1.7,
+        elinewidth=1.3,
+        capsize=3.5,
+        capthick=1.1,
+        label=r"$\omega_q$ error median + IQR",
+        zorder=5,
+    )
+    ax.errorbar(
+        nn_med,
+        ah_med,
+        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
+        yerr=[ah_med - ah_q1, ah_q3 - ah_med],
+        color=PURPLE,
+        marker="s",
+        markersize=5,
+        linewidth=1.7,
+        elinewidth=1.3,
+        capsize=3.5,
+        capthick=1.1,
+        label=r"$\alpha$ error median + IQR",
+        zorder=5,
+    )
 
-    ax.errorbar(x - width / 2, fq_med, yerr=[fq_med - fq_q1, fq_q3 - fq_med], fmt="none", ecolor=ORANGE, elinewidth=2.0, capsize=5, capthick=1.6, zorder=5)
-    ax.errorbar(x + width / 2, ah_med, yerr=[ah_med - ah_q1, ah_q3 - ah_med], fmt="none", ecolor=PURPLE, elinewidth=2.0, capsize=5, capthick=1.6, zorder=5)
-
-    ax.scatter(x - width / 2, fq_med, marker="o", s=28, color=ORANGE, edgecolors="none", linewidths=0, zorder=7)
-    ax.scatter(x + width / 2, ah_med, marker="s", s=28, color=PURPLE, edgecolors="none", linewidths=0, zorder=7)
-    ax.fill_between(x, nn_q1, nn_q3, color=GREEN, alpha=0.16, zorder=1)
-    ax.plot(x, nn_med, color=GREEN, linewidth=1.5, zorder=4)
-    ax.plot(x, nn_med, "D", color=GREEN, markersize=4.5, markeredgecolor="none", markeredgewidth=0, zorder=6)
-
-    legend_handles = [
-        Patch(facecolor=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.0, label=r"$f_q$ error IQR"),
-        Line2D([0], [0], marker="o", color=ORANGE, linestyle="none", markersize=5, label=r"$f_q$ error median"),
-        Patch(facecolor=PURPLE_LIGHT, edgecolor=PURPLE, linewidth=1.0, label=r"$\alpha$ error IQR"),
-        Line2D([0], [0], marker="s", color=PURPLE, linestyle="none", markersize=5, label=r"$\alpha$ error median"),
-        Patch(facecolor=GREEN_LIGHT, edgecolor=GREEN, linewidth=1.0, label="NN distance IQR"),
-        Line2D([0], [0], marker="D", color=GREEN, linestyle="-", markersize=4.5, label="NN distance median"),
-    ]
-    ax.legend(handles=legend_handles, loc="upper left", frameon=True, edgecolor="#CCCCCC", facecolor="white")
-    ax.set_xticks(x)
-    ax.set_xticklabels(bin_labels)
-    ax.set_xlabel("Scaled [0,1] Euclidean distance to nearest neighbor")
-    ax.set_ylabel("Percent error / NN distance (%)")
+    ax.legend(loc="upper left", frameon=True, edgecolor="#CCCCCC", facecolor="white")
+    ax.set_xlabel("Scaled Euclidean distance to nearest training sample")
+    ax.set_ylabel("Ansys vs surrogate percent error [%]")
     ax.set_title("Ansys vs surrogate Hamiltonian error")
     y_max = max(
         np.nanmax(fq_q3),
         np.nanmax(ah_q3),
-        np.nanmax(nn_q3),
         np.nanmax([np.nanmax(v) for v in fq_pts + ah_pts]),
     )
+    ax.set_xlim(0, max(np.nanmax(v) for v in nn_pts) * 1.06)
     ax.set_ylim(0, y_max * 1.18)
     ax.grid(axis="y", linestyle=":", color=GRID)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     fig.tight_layout()
-    save_figure(fig, EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.pdf")
+    out_paths = [
+        EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.pdf",
+        EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.png",
+        TRANSMON_DIR / "plots" / "ansys_validation_error_vs_nn_distance-v2.pdf",
+        TRANSMON_DIR / "plots" / "ansys_validation_error_vs_nn_distance-v2.png",
+    ]
+    for out_path in out_paths:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        if out_path.suffix == ".png":
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
+        else:
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
 
 
 def plot_surrogate_stress_random_points_pairs() -> None:
