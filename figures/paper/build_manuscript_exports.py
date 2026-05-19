@@ -489,16 +489,16 @@ def plot_data_amount_sweep() -> None:
         title = "Learning curve for the inverse model"
 
     series = [
-        ("Training", "train_mean", "train_std", GREEN, GREEN_LIGHT),
-        ("Validation", "val_mean", "val_std", ORANGE, ORANGE_LIGHT),
+        ("Train", "train_mean", "train_std", GREEN, GREEN_LIGHT),
+        ("Val.", "val_mean", "val_std", ORANGE, ORANGE_LIGHT),
         ("Test", "test_mean", "test_std", PURPLE, PURPLE_LIGHT),
     ]
 
-    fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 3.05))
+    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.45))
     for label, mean_col, std_col, color, fill in series:
         mean = summary[mean_col].to_numpy()
         std = summary[std_col].fillna(0).to_numpy()
-        ax.plot(x, mean, marker="o", markersize=4.0, linewidth=1.6, color=color, label=label)
+        ax.plot(x, mean, marker="o", markersize=3.6, linewidth=1.35, color=color, label=label)
         ax.fill_between(x, mean - std, mean + std, color=fill, alpha=0.62, linewidth=0)
 
     ax.set_xticks(x)
@@ -509,9 +509,19 @@ def plot_data_amount_sweep() -> None:
     ax.grid(axis="y", linestyle=":", color=GRID)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.legend(loc="upper right", frameon=True, edgecolor="#CCCCCC", facecolor="white")
+    ax.legend(
+        loc="upper center",
+        ncol=3,
+        frameon=True,
+        edgecolor="#CCCCCC",
+        facecolor="white",
+        bbox_to_anchor=(0.5, 0.995),
+        handlelength=1.2,
+        columnspacing=0.75,
+        borderpad=0.25,
+    )
     ax.set_ylim(bottom=0)
-    ax.margins(x=0.04)
+    ax.margins(x=0.06)
 
     fig.tight_layout()
     for out_path in [
@@ -547,15 +557,18 @@ def plot_architecture_sweep() -> None:
         reference_rows = pd.DataFrame()
     reference_row = reference_rows.iloc[0] if not reference_rows.empty else df.loc[df["best_val_loss"].idxmin()]
 
-    fig, ax0 = plt.subplots(figsize=(FULL_WIDTH_IN, 2.85))
+    fig = plt.figure(figsize=(COLUMN_WIDTH_IN, 2.9))
+    gs = gridspec.GridSpec(2, 1, height_ratios=[1.0, 0.065], hspace=0.5, figure=fig)
+    ax0 = fig.add_subplot(gs[0, 0])
+    cax = fig.add_subplot(gs[1, 0])
     im = ax0.imshow(heatmap_df.values, cmap=cmap, aspect="auto", origin="lower", interpolation="nearest")
     ax0.set_xticks(np.arange(len(heatmap_df.columns)))
     ax0.set_xticklabels([str(int(v)) for v in heatmap_df.columns])
     ax0.set_yticks(np.arange(len(heatmap_df.index)))
     ax0.set_yticklabels([str(int(v)) for v in heatmap_df.index])
-    ax0.set_xlabel("Width (Neurons per Layer)")
-    ax0.set_ylabel("Depth (Hidden Layers)")
-    ax0.set_title("Validation Loss vs Inverse MLP Architecture")
+    ax0.set_xlabel("Width")
+    ax0.set_ylabel("Depth")
+    ax0.set_title("Inverse MLP architecture sweep")
     for spine in ax0.spines.values():
         spine.set_linewidth(0.9)
         spine.set_color(SPINE)
@@ -571,7 +584,7 @@ def plot_architecture_sweep() -> None:
                 f"{value:.4f}",
                 ha="center",
                 va="center",
-                fontsize=7.6,
+                fontsize=7.2,
                 color=TEXT if value > np.nanmin(heatmap_df.values) + 0.004 else "#173717",
                 fontweight="bold",
             )
@@ -591,12 +604,12 @@ def plot_architecture_sweep() -> None:
         zorder=5,
     )
 
-    cbar = fig.colorbar(im, ax=ax0, fraction=0.046, pad=0.03)
+    cbar = fig.colorbar(im, cax=cax, orientation="horizontal")
     cbar.set_label("Best Validation Loss")
     cbar.outline.set_edgecolor(SPINE)
     cbar.outline.set_linewidth(0.8)
 
-    fig.tight_layout()
+    fig.subplots_adjust(left=0.16, right=0.985, bottom=0.24, top=0.88)
     png_path = EXPORT_DIR / "architecture_sweep-v2.png"
     fig.savefig(png_path, dpi=300, bbox_inches="tight", pad_inches=0.04)
     print(f"wrote {png_path.relative_to(REPO_ROOT)}")
@@ -758,12 +771,12 @@ def plot_inverse_surrogate_boxplot() -> None:
         data,
         patch_artist=True,
         widths=0.54,
+        showfliers=False,
         showmeans=True,
         meanprops=dict(marker="D", markerfacecolor="white", markeredgecolor=TEXT, markersize=5),
         medianprops=dict(color=TEXT_DIM, linewidth=1.5),
         whiskerprops=dict(color=TEXT_DIM, linewidth=1.0),
         capprops=dict(color=TEXT_DIM, linewidth=1.0),
-        flierprops=dict(marker="", markersize=0),
     )
     for patch, face, edge in zip(box["boxes"], fill_colors, edge_colors):
         patch.set_facecolor(face)
@@ -777,10 +790,15 @@ def plot_inverse_surrogate_boxplot() -> None:
 
     rng = np.random.default_rng(0)
     for idx, (values, color) in enumerate(zip(data, edge_colors), start=1):
-        jitter = rng.normal(0, 0.045, size=len(values))
+        q1, q3 = np.percentile(values, [25, 75])
+        iqr = q3 - q1
+        lower = q1 - 1.5 * iqr
+        upper = q3 + 1.5 * iqr
+        visible_values = values[(values >= lower) & (values <= upper)]
+        jitter = rng.normal(0, 0.045, size=len(visible_values))
         ax.scatter(
-            np.full_like(values, idx) + jitter,
-            values,
+            np.full_like(visible_values, idx) + jitter,
+            visible_values,
             s=11,
             color=color,
             alpha=0.42,
@@ -901,7 +919,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     ah_med, ah_q1, ah_q3 = qstats(ah_pts)
     nn_med, nn_q1, nn_q3 = qstats(nn_pts)
 
-    fig, ax = plt.subplots(figsize=(FULL_WIDTH_IN, 3.3))
+    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.65))
     for idx in range(len(bins)):
         ax.scatter(
             nn_pts[idx],
@@ -934,7 +952,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\omega_q$ error median + IQR",
+        label=r"$\omega_q$ median + IQR",
         zorder=5,
     )
     ax.errorbar(
@@ -949,13 +967,20 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\alpha$ error median + IQR",
+        label=r"$\alpha$ median + IQR",
         zorder=5,
     )
 
-    ax.legend(loc="upper left", frameon=True, edgecolor="#CCCCCC", facecolor="white")
-    ax.set_xlabel("Scaled Euclidean distance to nearest training sample")
-    ax.set_ylabel("Ansys vs surrogate percent error [%]")
+    ax.legend(
+        loc="upper left",
+        frameon=True,
+        edgecolor="#CCCCCC",
+        facecolor="white",
+        handlelength=1.35,
+        borderpad=0.35,
+    )
+    ax.set_xlabel("Scaled NN distance")
+    ax.set_ylabel("Ansys-surrogate error [%]")
     ax.set_title("Ansys vs surrogate Hamiltonian error")
     y_max = max(
         np.nanmax(fq_q3),
@@ -1002,10 +1027,10 @@ def plot_surrogate_stress_random_points_pairs() -> None:
     pair_indices = [(0, 1), (0, 2), (1, 2)]
 
     paper_cmap = LinearSegmentedColormap.from_list("paper_GPO", [GREEN, PURPLE, ORANGE], N=256)
-    fig = plt.figure(figsize=(FULL_WIDTH_IN, 2.45))
-    gs = gridspec.GridSpec(1, 4, width_ratios=[1.0, 1.0, 1.0, 0.06], wspace=0.48, figure=fig)
-    axes = np.array([fig.add_subplot(gs[0, idx]) for idx in range(3)])
-    cax = fig.add_subplot(gs[0, 3])
+    fig = plt.figure(figsize=(COLUMN_WIDTH_IN, 6.55))
+    gs = gridspec.GridSpec(4, 1, height_ratios=[1.0, 1.0, 1.0, 0.055], hspace=0.58, figure=fig)
+    axes = np.array([fig.add_subplot(gs[idx, 0]) for idx in range(3)])
+    cax = fig.add_subplot(gs[3, 0])
 
     sc = None
     for ax, (i, j) in zip(axes, pair_indices):
@@ -1055,12 +1080,12 @@ def plot_surrogate_stress_random_points_pairs() -> None:
     )
 
     assert sc is not None
-    cbar = fig.colorbar(sc, cax=cax)
+    cbar = fig.colorbar(sc, cax=cax, orientation="horizontal")
     cbar.set_label("NN distance")
     cbar.outline.set_edgecolor(SPINE)
     cbar.outline.set_linewidth(0.8)
 
-    fig.subplots_adjust(left=0.075, right=0.965, bottom=0.22, top=0.97)
+    fig.subplots_adjust(left=0.2, right=0.965, bottom=0.09, top=0.985)
     out_paths = [
         TRANSMON_DIR / "plots" / "surrogate_stress_random_points_pairs.pdf",
         EXPORT_DIR / "surrogate_stress_random_points_pairs.pdf",
