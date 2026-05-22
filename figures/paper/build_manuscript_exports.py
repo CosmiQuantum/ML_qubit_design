@@ -16,7 +16,7 @@ import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import LinearSegmentedColormap, LogNorm
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Patch
 from matplotlib.ticker import LogFormatterMathtext, LogLocator
@@ -355,6 +355,55 @@ def load_transmon_design_splits_um() -> dict[str, np.ndarray]:
     }
 
 
+def load_transmon_hamiltonian_splits() -> dict[str, np.ndarray]:
+    npy_dirs = [
+        TRANSMON_ARTIFACT_DIR / "data" / "npy",
+        TRANSMON_DIR / "data" / "npy",
+    ]
+    for data_dir in npy_dirs:
+        train_path = data_dir / "x_train_linear_encoding.npy"
+        val_path = data_dir / "x_val_linear_encoding.npy"
+        test_path = data_dir / "x_test_linear_encoding.npy"
+        if train_path.exists() and val_path.exists() and test_path.exists():
+            return {
+                "Train": np.asarray(np.load(train_path), dtype=float),
+                "Validation": np.asarray(np.load(val_path), dtype=float),
+                "Test": np.asarray(np.load(test_path), dtype=float),
+            }
+
+    rows = json.loads((TRANSMON_DIR / "metadata" / "qubit-TransmonCross-Hamiltonian_params.json").read_text())
+    values = []
+    for row in rows:
+        h_params = row["Hamiltonian_params"]
+        values.append(
+            [
+                float(h_params["qubit_frequency_GHz"]),
+                float(h_params["anharmonicity_MHz"]),
+            ]
+        )
+    all_values = np.asarray(values, dtype=float)
+    train_idx, val_idx, test_idx = split_indices_like_ml00(len(all_values))
+    return {
+        "Train": all_values[train_idx],
+        "Validation": all_values[val_idx],
+        "Test": all_values[test_idx],
+    }
+
+
+def nearest_training_hamiltonian_for_candidates(candidate_values_um: np.ndarray) -> np.ndarray:
+    train_design_um = load_transmon_design_splits_um()["Train"]
+    train_hamiltonian = load_transmon_hamiltonian_splits()["Train"]
+
+    scale_min = train_design_um.min(axis=0)
+    scale_range = np.maximum(train_design_um.max(axis=0) - scale_min, 1e-15)
+    train_scaled = (train_design_um - scale_min) / scale_range
+    candidate_scaled = (candidate_values_um - scale_min) / scale_range
+
+    distances = np.linalg.norm(candidate_scaled[:, None, :] - train_scaled[None, :, :], axis=2)
+    nearest_idx = np.argmin(distances, axis=1)
+    return train_hamiltonian[nearest_idx]
+
+
 def draw_split_histograms(fig: plt.Figure, axes: np.ndarray, splits: dict[str, np.ndarray], *, legend_y: float = 0.98) -> None:
     labels = [
         r"Claw length ($\mu$m)",
@@ -561,7 +610,19 @@ def plot_architecture_sweep() -> None:
     gs = gridspec.GridSpec(2, 1, height_ratios=[1.0, 0.065], hspace=0.5, figure=fig)
     ax0 = fig.add_subplot(gs[0, 0])
     cax = fig.add_subplot(gs[1, 0])
-    im = ax0.imshow(heatmap_df.values, cmap=cmap, aspect="auto", origin="lower", interpolation="nearest")
+    heatmap_values = heatmap_df.values.astype(float)
+    positive_values = heatmap_values[np.isfinite(heatmap_values) & (heatmap_values > 0)]
+    if positive_values.size == 0:
+        raise ValueError("Architecture sweep heatmap needs positive values for log color scaling.")
+    norm = LogNorm(vmin=positive_values.min(), vmax=positive_values.max())
+    im = ax0.imshow(
+        heatmap_values,
+        cmap=cmap,
+        norm=norm,
+        aspect="auto",
+        origin="lower",
+        interpolation="nearest",
+    )
     ax0.set_xticks(np.arange(len(heatmap_df.columns)))
     ax0.set_xticklabels([str(int(v)) for v in heatmap_df.columns])
     ax0.set_yticks(np.arange(len(heatmap_df.index)))
@@ -585,7 +646,7 @@ def plot_architecture_sweep() -> None:
                 ha="center",
                 va="center",
                 fontsize=7.2,
-                color=TEXT if value > np.nanmin(heatmap_df.values) + 0.004 else "#173717",
+                color="white" if norm(value) < 0.12 else TEXT,
                 fontweight="bold",
             )
 
@@ -605,7 +666,10 @@ def plot_architecture_sweep() -> None:
     )
 
     cbar = fig.colorbar(im, cax=cax, orientation="horizontal")
-    cbar.set_label("Best Validation Loss")
+    cbar.set_label("Best Validation Loss (log scale)")
+    cbar.locator = LogLocator(base=10)
+    cbar.formatter = LogFormatterMathtext(base=10)
+    cbar.update_ticks()
     cbar.outline.set_edgecolor(SPINE)
     cbar.outline.set_linewidth(0.8)
 
@@ -880,33 +944,72 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     if not data_path.exists():
         data_path = validation_dir / "surrogate_stress_test_ansys_results.json"
     data = json.loads(data_path.read_text())
+    candidate_path = validation_dir / "random_candidates_for_ansys_validation_nn_bins.csv"
+    candidate_df = pd.read_csv(candidate_path)
+    param_cols = [
+        "design_options.connection_pads.readout.claw_length",
+        "design_options.connection_pads.readout.ground_spacing",
+        "design_options.cross_length",
+    ]
+    candidate_values_um = candidate_df[param_cols].to_numpy(dtype=float)
+    if np.nanmax(np.abs(candidate_values_um)) < 1.0:
+        candidate_values_um = candidate_values_um * 1e6
+    nearest_hamiltonian = nearest_training_hamiltonian_for_candidates(candidate_values_um)
+
+    raw_sample_ids = [
+        int(row.get("Sample", row.get("sample_number", row_idx)))
+        for row_idx, row in enumerate(data)
+    ]
+    sample_offset = 1 if min(raw_sample_ids) == 1 and max(raw_sample_ids) == len(candidate_df) else 0
+    for row, sample_id in zip(data, raw_sample_ids):
+        row["_candidate_idx"] = sample_id - sample_offset
+
     bins = sorted({int(row["nn_bin"]) for row in data})
     eps = 1e-15
 
     fq_pts = []
     ah_pts = []
+    nn_fq_pts = []
+    nn_ah_pts = []
     nn_pts = []
 
     for bin_id in bins:
         rows = [row for row in data if int(row["nn_bin"]) == bin_id]
+        sample_idx = np.array([int(row["_candidate_idx"]) for row in rows])
         fq = np.array(
             [
-                100 * abs(row["pred_H_params"]["qubit_frequency_GHz"] - row["surrogate_H_params"]["qubit_frequency_GHz"])
+                abs(row["pred_H_params"]["qubit_frequency_GHz"] - row["surrogate_H_params"]["qubit_frequency_GHz"])
                 / (abs(row["pred_H_params"]["qubit_frequency_GHz"]) + eps)
                 for row in rows
             ]
         )
         ah = np.array(
             [
-                100 * abs(row["pred_H_params"]["anharmonicity_MHz"] - row["surrogate_H_params"]["anharmonicity_MHz"])
+                abs(row["pred_H_params"]["anharmonicity_MHz"] - row["surrogate_H_params"]["anharmonicity_MHz"])
                 / (abs(row["pred_H_params"]["anharmonicity_MHz"]) + eps)
                 for row in rows
+            ]
+        )
+        nn_fq = np.array(
+            [
+                abs(row["pred_H_params"]["qubit_frequency_GHz"] - nearest_hamiltonian[sample_idx[i], 0])
+                / (abs(row["pred_H_params"]["qubit_frequency_GHz"]) + eps)
+                for i, row in enumerate(rows)
+            ]
+        )
+        nn_ah = np.array(
+            [
+                abs(row["pred_H_params"]["anharmonicity_MHz"] - nearest_hamiltonian[sample_idx[i], 1])
+                / (abs(row["pred_H_params"]["anharmonicity_MHz"]) + eps)
+                for i, row in enumerate(rows)
             ]
         )
         nn = np.array([row["nn_distance_scaled"] for row in rows])
 
         fq_pts.append(fq)
         ah_pts.append(ah)
+        nn_fq_pts.append(nn_fq)
+        nn_ah_pts.append(nn_ah)
         nn_pts.append(nn)
 
     def qstats(values: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -917,11 +1020,21 @@ def plot_ansys_validation_vs_nn_distance() -> None:
 
     fq_med, fq_q1, fq_q3 = qstats(fq_pts)
     ah_med, ah_q1, ah_q3 = qstats(ah_pts)
+    nn_fq_med, nn_fq_q1, nn_fq_q3 = qstats(nn_fq_pts)
+    nn_ah_med, nn_ah_q1, nn_ah_q3 = qstats(nn_ah_pts)
     nn_med, nn_q1, nn_q3 = qstats(nn_pts)
 
-    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.65))
+    fig, axes = plt.subplots(
+        2,
+        1,
+        figsize=(COLUMN_WIDTH_IN, 4.05),
+        sharex=True,
+        sharey=True,
+        gridspec_kw={"hspace": 0.08},
+    )
+    ax_top, ax_bottom = axes
     for idx in range(len(bins)):
-        ax.scatter(
+        ax_top.scatter(
             nn_pts[idx],
             fq_pts[idx],
             color=ORANGE,
@@ -930,7 +1043,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
             linewidths=0,
             zorder=2,
         )
-        ax.scatter(
+        ax_top.scatter(
             nn_pts[idx],
             ah_pts[idx],
             color=PURPLE,
@@ -939,8 +1052,26 @@ def plot_ansys_validation_vs_nn_distance() -> None:
             linewidths=0,
             zorder=2,
         )
+        ax_bottom.scatter(
+            nn_pts[idx],
+            nn_fq_pts[idx],
+            color=ORANGE,
+            alpha=0.22,
+            s=9,
+            linewidths=0,
+            zorder=2,
+        )
+        ax_bottom.scatter(
+            nn_pts[idx],
+            nn_ah_pts[idx],
+            color=PURPLE,
+            alpha=0.22,
+            s=9,
+            linewidths=0,
+            zorder=2,
+        )
 
-    ax.errorbar(
+    ax_top.errorbar(
         nn_med,
         fq_med,
         xerr=[nn_med - nn_q1, nn_q3 - nn_med],
@@ -952,10 +1083,10 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\omega_q$ median + IQR",
+        label=r"$\omega_q$ surrogate",
         zorder=5,
     )
-    ax.errorbar(
+    ax_top.errorbar(
         nn_med,
         ah_med,
         xerr=[nn_med - nn_q1, nn_q3 - nn_med],
@@ -967,32 +1098,78 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\alpha$ median + IQR",
+        label=r"$\alpha$ surrogate",
+        zorder=5,
+    )
+    ax_bottom.errorbar(
+        nn_med,
+        nn_fq_med,
+        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
+        yerr=[nn_fq_med - nn_fq_q1, nn_fq_q3 - nn_fq_med],
+        color=ORANGE,
+        marker="o",
+        markersize=5,
+        linewidth=1.7,
+        elinewidth=1.3,
+        capsize=3.5,
+        capthick=1.1,
+        label=r"$\omega_q$ nearest neighbor",
+        zorder=5,
+    )
+    ax_bottom.errorbar(
+        nn_med,
+        nn_ah_med,
+        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
+        yerr=[nn_ah_med - nn_ah_q1, nn_ah_q3 - nn_ah_med],
+        color=PURPLE,
+        marker="s",
+        markersize=5,
+        linewidth=1.7,
+        elinewidth=1.3,
+        capsize=3.5,
+        capthick=1.1,
+        label=r"$\alpha$ nearest neighbor",
         zorder=5,
     )
 
-    ax.legend(
+    ax_top.legend(
         loc="upper left",
         frameon=True,
         edgecolor="#CCCCCC",
         facecolor="white",
         handlelength=1.35,
         borderpad=0.35,
+        title="median + IQR",
+        title_fontsize=8.5,
     )
-    ax.set_xlabel("Scaled NN distance")
-    ax.set_ylabel("Ansys-surrogate error [%]")
-    ax.set_title("Ansys vs surrogate Hamiltonian error")
+    ax_bottom.legend(
+        loc="upper left",
+        frameon=True,
+        edgecolor="#CCCCCC",
+        facecolor="white",
+        handlelength=1.35,
+        borderpad=0.35,
+        title="median + IQR",
+        title_fontsize=8.5,
+    )
+    ax_bottom.set_xlabel("Scaled NN distance")
+    ax_top.set_ylabel("Surrogate\nnormalized error")
+    ax_bottom.set_ylabel("Nearest-neighbor\nnormalized error")
+    ax_top.set_title("Validation error vs NN distance")
     y_max = max(
         np.nanmax(fq_q3),
         np.nanmax(ah_q3),
-        np.nanmax([np.nanmax(v) for v in fq_pts + ah_pts]),
+        np.nanmax(nn_fq_q3),
+        np.nanmax(nn_ah_q3),
+        np.nanmax([np.nanmax(v) for v in fq_pts + ah_pts + nn_fq_pts + nn_ah_pts]),
     )
-    ax.set_xlim(0, max(np.nanmax(v) for v in nn_pts) * 1.06)
-    ax.set_ylim(0, y_max * 1.18)
-    ax.grid(axis="y", linestyle=":", color=GRID)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    fig.tight_layout()
+    ax_bottom.set_xlim(0, max(np.nanmax(v) for v in nn_pts) * 1.06)
+    ax_top.set_ylim(0, y_max * 1.18)
+    for ax in axes:
+        ax.grid(axis="y", linestyle=":", color=GRID)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+    fig.subplots_adjust(left=0.25, right=0.98, top=0.91, bottom=0.13, hspace=0.10)
     out_paths = [
         EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.pdf",
         EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.png",
