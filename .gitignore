@@ -66,3 +66,10 @@ experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/results/cache/
 */results/cache/
 .cache/
 fontlist-v*.json
+
+# Local AI agent tooling
+dual_agent_edit.sh
+dual_agent_review.sh
+task.md
+agent_outputs/
+agent_worktrees/
