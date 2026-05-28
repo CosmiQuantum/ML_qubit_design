@@ -871,7 +871,7 @@ def plot_inverse_surrogate_boxplot() -> None:
             zorder=5,
         )
 
-    ax.set_xticklabels([r"$\omega_q$", r"$\alpha$"])
+    ax.set_xticklabels([r"$f_q$", r"$\alpha$"])
     ax.set_ylabel("Percent error [%]")
     ax.set_title("Inverse + surrogate reconstruction error")
     ax.grid(axis="y", linestyle=":", color=GRID)
@@ -898,7 +898,7 @@ def plot_inverse_surrogate_error_histograms() -> None:
 
     df = pd.read_csv(TRANSMON_DIR / "results" / "validation" / "inverse+surrogate_percentErrors.csv")
     series = [
-        (df["frequency"].to_numpy(), r"$\omega_q$", ORANGE, ORANGE_LIGHT),
+        (df["frequency"].to_numpy(), r"$f_q$", ORANGE, ORANGE_LIGHT),
         (df["anharmonicity"].to_numpy(), r"$\alpha$", PURPLE, PURPLE_LIGHT),
     ]
 
@@ -1083,7 +1083,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\omega_q$ surrogate",
+        label=r"$f_q$ surrogate",
         zorder=5,
     )
     ax_top.errorbar(
@@ -1113,7 +1113,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\omega_q$ nearest neighbor",
+        label=r"$f_q$ nearest neighbor",
         zorder=5,
     )
     ax_bottom.errorbar(
@@ -1392,10 +1392,10 @@ def plot_model_architecture_combined() -> None:
         zorder=1,
     )
 
-    block(*boxes["input"], "Targets", [r"$\omega_q,\ \alpha$", "Scaled inputs"], edge=physics_edge, face=physics_fill)
+    block(*boxes["input"], "Targets", [r"$f_q,\ \alpha$", "Scaled inputs"], edge=physics_edge, face=physics_fill)
     block(*boxes["inverse"], "Inverse MLP", ["1 hidden layer", "64 neurons", "387 trainable"], edge=ml_edge, face=ml_fill)
     block(*boxes["geom"], "Design", ["3 Quantum Metal", "geometry params"], edge=ml_edge, face=ml_fill)
-    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{\omega}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
+    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{f}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
     block(
         *boxes["output"],
         "Loss",
@@ -1549,7 +1549,7 @@ def plot_inverse_architecture_standalone() -> None:
     block(
         *input_box,
         "Targets",
-        [r"$\omega_q,\ \alpha$", "Scaled inputs"],
+        [r"$f_q,\ \alpha$", "Scaled inputs"],
         edge=physics_edge,
         face=physics_fill,
     )

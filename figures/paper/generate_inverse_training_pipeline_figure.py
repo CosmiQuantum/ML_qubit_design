@@ -123,7 +123,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
         filter="url(#softShadow)"/>
     <text x="170" y="105" class="label" text-anchor="middle">
       <tspan x="170" dy="0">Target Hamiltonian Input</tspan>
-      <tspan x="170" dy="16">ω<tspan baseline-shift="sub" font-size="9">q</tspan>, α</tspan>
+      <tspan x="170" dy="16">f<tspan baseline-shift="sub" font-size="9">q</tspan>, α</tspan>
     </text>
 
 

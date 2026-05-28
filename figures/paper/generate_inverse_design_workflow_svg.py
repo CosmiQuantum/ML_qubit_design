@@ -72,7 +72,7 @@ ANN_W     = 170
 STAGES = [
     ("inputs",
      "Inputs — target Hamiltonian",
-     ["ω_q, α, ω_r, g, κ, …",
+     ["f_q, α, f_r, g, κ, …",
       "(user-specified targets)"],
      "physics", 60),
 
@@ -80,7 +80,7 @@ STAGES = [
      "Physics mapping",
      ["Convert Hamiltonian targets to",
       "ML-friendly features using analytic",
-      "approximations (α ≈ −E_C, etc.)."],
+      "approximations (α ≈ −f_C, etc.)."],
      "physics", 75),
 
     ("pre",
@@ -114,7 +114,7 @@ STAGES = [
     ("back",
      "Map back to Hamiltonian",
      ["Convert capacitances & modes",
-      "back to achieved ω_q, α, ω_r, g",
+      "back to achieved f_q, α, f_r, g",
       "via inverse physics map."],
      "valid", 75),
 
@@ -128,7 +128,7 @@ STAGES = [
 
 ANNOTATIONS = {
     "map":  ("target vector",
-             ["H_target = (ω_q, α, …)"]),
+             ["H_target = (f_q, α, …)"]),
     "pre":  ("feature vector",
              ["x_raw ∈ R^d_in",
               "physical quantities"]),
@@ -144,7 +144,7 @@ ANNOTATIONS = {
              ["C_ij matrix",
               "f_mode (HFSS)"]),
     "cmp":  ("achieved Hamiltonian",
-             ["H_pred = (ω_q, α, …)"]),
+             ["H_pred = (f_q, α, …)"]),
 }
 
 # Feedback annotation
