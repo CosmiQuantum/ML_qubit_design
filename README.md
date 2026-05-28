@@ -35,7 +35,8 @@ Please contact Olivia Seidel at `olivias@fnal.gov` with questions or comments.
 Contributors
 
 1. Firas Abouzahr from Northwestern as code contributor and EM validation lead
-2. Sara Sussman from Fermilab for ideas and project guidence 
+2. Sara Sussman from Fermilab for ideas and project guidence
+3. Abhishek from Chapman University for enabling SQuADDS + Ansys simulations on Linux to validate results
 
 ## Quick Start
 
