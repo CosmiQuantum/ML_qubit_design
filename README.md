@@ -36,7 +36,7 @@ Contributors
 
 1. Firas Abouzahr from Northwestern as code contributor and EM validation lead
 2. Sara Sussman from Fermilab for ideas and project guidence
-3. Abhishek from Chapman University for enabling SQuADDS + Ansys simulations on Linux to validate results
+3. Abhishek Chakraborty from Chapman University for enabling SQuADDS + Ansys simulations on Linux to validate results
 
 ## Quick Start
 
