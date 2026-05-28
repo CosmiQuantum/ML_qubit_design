@@ -34,9 +34,8 @@ Please contact Olivia Seidel at `olivias@fnal.gov` with questions or comments.
 
 Contributors
 
-1. Sara Sussman from Fermilab for ideas
-2. Giuseppe Di Guglielmo from Fermilab for ML advice
-3. Firas Abouzahr from Northwestern for code testing and bug reports
+1. Firas Abouzahr from Northwestern as code contributor and EM validation lead
+2. Sara Sussman from Fermilab for ideas and project guidence 
 
 ## Quick Start
 
