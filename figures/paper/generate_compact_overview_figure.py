@@ -353,15 +353,33 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
 
     bw = 109
     frame_hw = 107
-    iw = 95
+
+    def _hw(text: str, fs: float) -> float:
+        return fitz.get_text_length(text, fontname="helv", fontsize=fs) / 2 + 13
+
+    inv_hw  = _hw("Inverse neural network", 8.5)
+    geo_hw  = _hw("Quantum Metal Parameter Prediction", 8.0)
+    sur_hw  = _hw("Ansys surrogate neural network", 8.0)
+    rec_hw  = _hw("Hamiltonian Reconstruction", 8.0)
+    loss_hw = max(_hw("Compute loss", 7.4),
+                  _hw("Average absolute difference between", 5.6),
+                  _hw("target and reconstructed Hamiltonian", 5.6))
+
+    cap = frame_hw - 4
+    inv_hw  = min(inv_hw,  cap)
+    geo_hw  = min(geo_hw,  cap)
+    sur_hw  = min(sur_hw,  cap)
+    rec_hw  = min(rec_hw,  cap)
+    loss_hw = min(loss_hw, cap)
+
     top_box = fitz.Rect(cx - bw, y0 + 24, cx + bw, y0 + 46)
     frame = fitz.Rect(cx - frame_hw, y0 + 52, cx + frame_hw, y0 + 217)
-    inverse = fitz.Rect(cx - iw, y0 + 65, cx + iw, y0 + 85)
-    geometry = fitz.Rect(cx - iw, y0 + 95, cx + iw, y0 + 115)
-    surrogate = fitz.Rect(cx - iw, y0 + 125, cx + iw, y0 + 145)
-    reconstruction = fitz.Rect(cx - iw, y0 + 155, cx + iw, y0 + 175)
-    loss = fitz.Rect(cx - iw, y0 + 183, cx + iw, y0 + 211)
-    output = fitz.Rect(cx - bw, y0 + 219, cx + bw, y0 + 234)
+    inverse      = fitz.Rect(cx - inv_hw,  y0 + 60, cx + inv_hw,  y0 + 80)
+    geometry     = fitz.Rect(cx - geo_hw,  y0 + 90, cx + geo_hw,  y0 + 110)
+    surrogate    = fitz.Rect(cx - sur_hw,  y0 + 120, cx + sur_hw, y0 + 140)
+    reconstruction = fitz.Rect(cx - rec_hw, y0 + 150, cx + rec_hw, y0 + 170)
+    loss         = fitz.Rect(cx - loss_hw, y0 + 178, cx + loss_hw, y0 + 206)
+    output       = fitz.Rect(cx - bw, y0 + 219, cx + bw, y0 + 234)
 
     rounded_box(
         top_box,
@@ -379,8 +397,15 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
         overlay=True,
         radius=0.075,
     )
+    _training_w = fitz.get_text_length("Training", fontname="helv", fontsize=7.4)
+    _tx = frame.x1 - _training_w - 9
+    _ty = frame.y0 + 5   # baseline sits on the top border line
+    page.draw_rect(
+        fitz.Rect(_tx - 8, _ty - 9, _tx + _training_w + 8, _ty + 2),
+        color=None, fill=WHITE, width=0, overlay=True,
+    )
     page.insert_text(
-        fitz.Point(frame.x1 - 39, frame.y0 + 12),
+        fitz.Point(_tx, _ty),
         "Training",
         fontsize=7.4,
         fontname="helv",
@@ -458,7 +483,7 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
         head=5.8,
     )
 
-    update_x = frame.x0 + 8
+    update_x = cx - geo_hw - 10  # just left of the widest (geometry) box
     draw_elbow_arrow(
         page,
         [
@@ -472,8 +497,14 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
         head=4.8,
         dashes=dash,
     )
+    _uw = fitz.get_text_length("update inverse weights", fontname="helv", fontsize=6.5)
+    _ux, _uy = update_x - 4, y0 + 162
+    page.draw_rect(
+        fitz.Rect(_ux - 3, _uy - _uw - 4, _ux + 6.5 + 3, _uy + 4),
+        color=None, fill=WHITE, width=0, overlay=True,
+    )
     page.insert_text(
-        fitz.Point(update_x - 4, y0 + 167),
+        fitz.Point(_ux, _uy),
         "update inverse weights",
         fontsize=6.5,
         fontname="helv",
