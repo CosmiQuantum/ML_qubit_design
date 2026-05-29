@@ -117,6 +117,8 @@ def use_paper_style() -> None:
             "figure.facecolor": "white",
             "savefig.facecolor": "white",
             "axes.grid": False,
+            "axes.spines.top": True,
+            "axes.spines.right": True,
             "grid.color": GRID,
             "grid.linewidth": 0.6,
             "grid.alpha": 0.6,
@@ -124,6 +126,13 @@ def use_paper_style() -> None:
             "ps.fonttype": 42,
         }
     )
+
+
+def close_plot_box(ax: plt.Axes, linewidth: float = 0.8) -> None:
+    for spine in ax.spines.values():
+        spine.set_visible(True)
+        spine.set_color(SPINE)
+        spine.set_linewidth(linewidth)
 
 
 def regenerate_generated_sources() -> None:
@@ -444,8 +453,7 @@ def draw_split_histograms(fig: plt.Figure, axes: np.ndarray, splits: dict[str, n
         ax.set_xlabel(label)
         ax.set_ylabel("Counts")
         ax.grid(axis="y", linestyle=":", color=GRID)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
+        close_plot_box(ax)
 
     legend_handles = [
         Patch(facecolor=GREEN_LIGHT, edgecolor=GREEN, linewidth=1.0, alpha=0.8, label="Train"),
@@ -556,8 +564,7 @@ def plot_data_amount_sweep() -> None:
     ax.set_ylabel(y_label)
     ax.set_title(title)
     ax.grid(axis="y", linestyle=":", color=GRID)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+    close_plot_box(ax)
     ax.legend(
         loc="upper center",
         ncol=3,
@@ -731,8 +738,7 @@ def plot_tuner_correlations() -> None:
     ax_bar.set_xlabel("Spearman correlation\nwith val loss")
     ax_bar.set_title("Hyperparameter sensitivity")
     ax_bar.grid(axis="x", linestyle=":", color=GRID)
-    ax_bar.spines["top"].set_visible(False)
-    ax_bar.spines["right"].set_visible(False)
+    close_plot_box(ax_bar)
 
     panel_axes = [
         fig.add_subplot(gs[0, 1]),
@@ -792,8 +798,7 @@ def plot_tuner_correlations() -> None:
         ax.set_title(f"{label}\nrho = {feature['rho']:+.2f}")
         ax.set_ylabel("Val loss")
         ax.grid(axis="y", linestyle=":", color=GRID)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
+        close_plot_box(ax)
 
         if col == "total_trainable_params":
             ax.set_xlabel("trainable params")
@@ -871,12 +876,11 @@ def plot_inverse_surrogate_boxplot() -> None:
             zorder=5,
         )
 
-    ax.set_xticklabels([r"$\omega_q$", r"$\alpha$"])
+    ax.set_xticklabels([r"$f_q$", r"$\alpha$"])
     ax.set_ylabel("Percent error [%]")
     ax.set_title("Inverse + surrogate reconstruction error")
     ax.grid(axis="y", linestyle=":", color=GRID)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+    close_plot_box(ax)
     fig.tight_layout()
     out_paths = [
         EXPORT_DIR / "inverse_surrogate_percent_error_boxplot.pdf",
@@ -898,7 +902,7 @@ def plot_inverse_surrogate_error_histograms() -> None:
 
     df = pd.read_csv(TRANSMON_DIR / "results" / "validation" / "inverse+surrogate_percentErrors.csv")
     series = [
-        (df["frequency"].to_numpy(), r"$\omega_q$", ORANGE, ORANGE_LIGHT),
+        (df["frequency"].to_numpy(), r"$f_q$", ORANGE, ORANGE_LIGHT),
         (df["anharmonicity"].to_numpy(), r"$\alpha$", PURPLE, PURPLE_LIGHT),
     ]
 
@@ -913,8 +917,7 @@ def plot_inverse_surrogate_error_histograms() -> None:
         ax.set_title(label)
         ax.set_xlabel("Percent error [%]")
         ax.grid(axis="y", linestyle=":", color=GRID)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
+        close_plot_box(ax)
         ax.legend(loc="upper right", frameon=True, edgecolor="#CCCCCC", facecolor="white")
 
     axes[0].set_ylabel("Counts")
@@ -1083,7 +1086,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\omega_q$ surrogate",
+        label=r"$f_q$ surrogate",
         zorder=5,
     )
     ax_top.errorbar(
@@ -1113,7 +1116,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         elinewidth=1.3,
         capsize=3.5,
         capthick=1.1,
-        label=r"$\omega_q$ nearest neighbor",
+        label=r"$f_q$ nearest neighbor",
         zorder=5,
     )
     ax_bottom.errorbar(
@@ -1153,8 +1156,8 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         title_fontsize=8.5,
     )
     ax_bottom.set_xlabel("Scaled NN distance")
-    ax_top.set_ylabel("Surrogate\nnormalized error")
-    ax_bottom.set_ylabel("Nearest-neighbor\nnormalized error")
+    ax_top.set_ylabel("Relative error\nsurrogate vs Ansys")
+    ax_bottom.set_ylabel("Relative error\nnearest training vs Ansys")
     ax_top.set_title("Validation error vs NN distance")
     y_max = max(
         np.nanmax(fq_q3),
@@ -1167,8 +1170,7 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     ax_top.set_ylim(0, y_max * 1.18)
     for ax in axes:
         ax.grid(axis="y", linestyle=":", color=GRID)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
+        close_plot_box(ax)
     fig.subplots_adjust(left=0.25, right=0.98, top=0.91, bottom=0.13, hspace=0.10)
     out_paths = [
         EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.pdf",
@@ -1240,8 +1242,7 @@ def plot_surrogate_stress_random_points_pairs() -> None:
         ax.set_xlabel(fr"{labels[i]} ($\mu$m)")
         ax.set_ylabel(fr"{labels[j]} ($\mu$m)")
         ax.grid(axis="both", linestyle=":", color=GRID)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
+        close_plot_box(ax)
         ax.ticklabel_format(axis="both", style="plain")
         ax.tick_params(axis="both", pad=2)
 
@@ -1392,10 +1393,10 @@ def plot_model_architecture_combined() -> None:
         zorder=1,
     )
 
-    block(*boxes["input"], "Targets", [r"$\omega_q,\ \alpha$", "Scaled inputs"], edge=physics_edge, face=physics_fill)
+    block(*boxes["input"], "Targets", [r"$f_q,\ \alpha$", "Scaled inputs"], edge=physics_edge, face=physics_fill)
     block(*boxes["inverse"], "Inverse MLP", ["1 hidden layer", "64 neurons", "387 trainable"], edge=ml_edge, face=ml_fill)
     block(*boxes["geom"], "Design", ["3 Quantum Metal", "geometry params"], edge=ml_edge, face=ml_fill)
-    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{\omega}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
+    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{f}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
     block(
         *boxes["output"],
         "Loss",
@@ -1549,7 +1550,7 @@ def plot_inverse_architecture_standalone() -> None:
     block(
         *input_box,
         "Targets",
-        [r"$\omega_q,\ \alpha$", "Scaled inputs"],
+        [r"$f_q,\ \alpha$", "Scaled inputs"],
         edge=physics_edge,
         face=physics_fill,
     )
