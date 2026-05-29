@@ -50,22 +50,22 @@ SVG_TEMPLATE = """\
     &#x03B1; (anharmonicity)
   </text>
   <text x="157" y="600" text-anchor="middle"
-        font-size="13" fill="#555">&#x2248; &#x2212;E_C from Q3D</text>
+        font-size="13" fill="#555">&#x2248; &#x2212;f_C from Q3D</text>
 
   <rect x="298" y="552" width="270" height="62" rx="5" ry="5"
         fill="#FFF4E6" stroke="%(FIG_ORANGE)s" stroke-width="1.5"/>
   <text x="433" y="576" text-anchor="middle"
         font-size="14" font-weight="bold" fill="%(FIG_ORANGE)s">
-    f_qubit (qubit frequency)
+    f_q (qubit frequency)
   </text>
   <text x="433" y="600" text-anchor="middle"
-        font-size="13" fill="#555">&#x2248; &#x221A;(8 E_J E_C) &#x2212; E_C from Q3D</text>
+        font-size="13" fill="#555">&#x2248; &#x221A;(8 f_J f_C) &#x2212; f_C from Q3D</text>
 
   <rect x="574" y="552" width="270" height="62" rx="5" ry="5"
         fill="#E8E4F0" stroke="%(FIG_PURPLE)s" stroke-width="1.5"/>
   <text x="709" y="576" text-anchor="middle"
         font-size="14" font-weight="bold" fill="%(FIG_PURPLE)s">
-    f_res (resonator freq.)
+    f_r (resonator freq.)
   </text>
   <text x="709" y="600" text-anchor="middle"
         font-size="13" fill="#555">HFSS eigenmode solver</text>

@@ -2,7 +2,7 @@
 r"""
 Generate the end-to-end inverse-design workflow figure.
 
-Uses matplotlib's mathtext renderer so variables like $\omega_q$, $\hat{y}_q$,
+Uses matplotlib's mathtext renderer so variables like $f_q$, $\hat{y}_q$,
 $\mathbb{R}^{d_{in}}$ appear as proper typeset math — no LaTeX install needed.
 
 Outputs:
@@ -63,15 +63,15 @@ STAGES = [
     (
         "inputs",
         "Target Hamiltonian",
-        [r"$\omega_q,\ \alpha$"],
+        [r"$f_q,\ \alpha$"],
         "physics",
     ),
     (
         "map",
         "Physics relation",
         [
-            r"$\omega_q \approx \sqrt{8E_JE_C}-E_C$",
-            r"$\alpha \approx -E_C$",
+            r"$f_q \approx \sqrt{8f_Jf_C}-f_C$",
+            r"$\alpha \approx -f_C$",
         ],
         "physics",
     ),
@@ -89,7 +89,7 @@ STAGES = [
         "Inverse MLP",
         [
             r"TransmonCross model",
-            r"$\omega_q,\alpha \rightarrow \ell_{\mathrm{claw}},s_{\mathrm{ground}},\ell_{\mathrm{cross}}$",
+            r"$f_q,\alpha \rightarrow \ell_{\mathrm{claw}},s_{\mathrm{ground}},\ell_{\mathrm{cross}}$",
         ],
         "ml",
     ),
@@ -115,7 +115,7 @@ STAGES = [
         "back",
         "Recovered\nHamiltonian",
         [
-            r"$\hat{\omega}_q,\ \hat{\alpha}$",
+            r"$\hat{f}_q,\ \hat{\alpha}$",
         ],
         "valid",
     ),
@@ -140,7 +140,7 @@ CATEGORY_STYLE = {
 
 CATEGORY_BADGE = {
     "physics": ("Physics targets", FROST_DARK),
-    "ml":      ("ML", PALE_ICE_DARK),
+    "ml":      ("Machine Learning", PALE_ICE_DARK),
     "valid":   ("Validation", DUSTY_BLUE_DARK),
 }
 
@@ -203,7 +203,7 @@ def draw_group(x: float, y: float, w: float, h: float, cat: str) -> None:
         x + w / 2, y + h - 0.6,
         label,
         ha="center", va="top",
-        fontsize=8.5, fontweight="bold", fontstyle="italic",
+        fontsize=9.1, fontweight="bold", fontstyle="italic",
         color=badge_color,
         zorder=7,
     )
@@ -231,7 +231,7 @@ def draw_box(sid: str) -> None:
         x + TITLE_PAD_X, y + h - TITLE_PAD_Y,
         title,
         ha="left", va="top",
-        fontsize=8.9, fontweight="bold",
+        fontsize=9.5, fontweight="bold",
         color=style["title"],
         linespacing=0.9,
         zorder=5,
@@ -243,7 +243,7 @@ def draw_box(sid: str) -> None:
             x + TITLE_PAD_X, y + h - body_start_offset - idx * BODY_GAP,
             line,
             ha="left", va="top",
-            fontsize=7.9,
+            fontsize=8.5,
             color=style["body"],
             zorder=5,
         )
@@ -371,7 +371,7 @@ ax.text(
     feedback_y + 1,
     FEEDBACK_LABEL,
     ha="center", va="center",
-    fontsize=7.6, fontweight="bold", fontstyle="italic",
+    fontsize=8.1, fontweight="bold", fontstyle="italic",
     color=FEEDBACK,
     bbox=dict(facecolor="white", edgecolor="none", alpha=0.85, pad=0.5),
     zorder=10,
