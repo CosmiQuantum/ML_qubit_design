@@ -483,7 +483,7 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
         head=5.8,
     )
 
-    update_x = cx - geo_hw - 10  # just left of the widest (geometry) box
+    update_x = cx - geo_hw - 6  # just left of the widest (geometry) box
     draw_elbow_arrow(
         page,
         [
@@ -498,7 +498,7 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
         dashes=dash,
     )
     _uw = fitz.get_text_length("update inverse weights", fontname="helv", fontsize=6.5)
-    _ux, _uy = update_x - 4, y0 + 162
+    _ux, _uy = update_x - 12, y0 + 162
     page.draw_rect(
         fitz.Rect(_ux - 3, _uy - _uw - 4, _ux + 6.5 + 3, _uy + 4),
         color=None, fill=WHITE, width=0, overlay=True,
