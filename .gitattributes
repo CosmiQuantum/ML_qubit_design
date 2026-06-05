@@ -98,3 +98,4 @@
 /experiments/model_predict_qubit_TransmonCross_cap_matrix/metadata/qubit-TransmonCross-cap_matrix.json filter=lfs diff=lfs merge=lfs -text
 /experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/metadata/qubit-TransmonCross-Hamiltonian_params.json filter=lfs diff=lfs merge=lfs -text
 /experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/metadata/qubit-TransmonCross-cap_matrix.json filter=lfs diff=lfs merge=lfs -text
+/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/metadata/qubit-TransmonCross-EC.json filter=lfs diff=lfs merge=lfs -text
