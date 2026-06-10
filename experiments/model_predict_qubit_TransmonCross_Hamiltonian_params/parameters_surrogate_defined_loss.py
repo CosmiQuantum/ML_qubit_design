@@ -27,11 +27,11 @@ RESULTS_DIR = str(EXPERIMENT_DIR / 'results')
 PLOTS_DIR = str(EXPERIMENT_DIR / 'plots')
 DATASETS_JSON = str(Path(DATA_DIR) / 'datasets.json')
 
-SWEEP_PARAM_NUM = False
-SWEEP_DATA_AMOUNT = False
+SWEEP_PARAM_NUM = True
+SWEEP_DATA_AMOUNT = True
 VISUALIZE_GRADIENTS = False
 
-KERAS_TUNER = True
+KERAS_TUNER = False
 KERAS_TUNER_TRIALS = 722
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
 
