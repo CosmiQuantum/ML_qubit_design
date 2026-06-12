@@ -4,13 +4,13 @@
   "python": "3.10.13",
   "tf": "2.20.0",
   "n_test": 291,
-  "inverse_batch_total_ms": 99.787951502949,
-  "inverse_per_sample_ms": 0.3429139226905464,
-  "inverse_single_call_ms": 87.32088604941964,
-  "combined_batch_total_ms": 99.55586967989802,
-  "combined_per_sample_ms": 0.34211639065257055,
-  "combined_single_call_ms": 86.81101334281266,
+  "inverse_batch_total_ms": 117.7537839487195,
+  "inverse_per_sample_ms": 0.40465217851793644,
+  "inverse_single_call_ms": 104.30987963452935,
+  "combined_batch_total_ms": 120.48653966747224,
+  "combined_per_sample_ms": 0.4140430916407981,
+  "combined_single_call_ms": 102.94802168384194,
   "ansys_min_per_sample": 2.0,
-  "speedup_combined_per_sample": 350757.82183690695,
-  "speedup_combined_single_call": 1382.3130888488258
+  "speedup_combined_per_sample": 289824.90572287014,
+  "speedup_combined_single_call": 1165.6367751147802
 }
