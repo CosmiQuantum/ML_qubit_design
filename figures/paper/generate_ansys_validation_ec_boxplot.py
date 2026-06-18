@@ -32,7 +32,7 @@ from build_manuscript_exports import (
     use_paper_style,
 )
 
-DEFAULT_CSV = Path.home() / "Downloads" / "ref_vs_pred_EC.csv"
+DEFAULT_CSV = Path.home() / "Downloads" / "inverse_model_ansys_results.csv"
 
 
 def main() -> None:
