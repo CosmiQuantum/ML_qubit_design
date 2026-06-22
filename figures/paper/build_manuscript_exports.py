@@ -343,7 +343,7 @@ def load_transmon_design_splits_um() -> dict[str, np.ndarray]:
                 splits[key] = values
             return splits
 
-    rows = json.loads((TRANSMON_DIR / "metadata" / "qubit-TransmonCross-EC.json").read_text())
+    rows = json.loads((TRANSMON_DIR / "metadata" / "qubit-TransmonCross-Hamiltonian_params.json").read_text())
     values = []
     for row in rows:
         opts = row["design"]["design_options"]
@@ -380,12 +380,14 @@ def load_transmon_hamiltonian_splits() -> dict[str, np.ndarray]:
                 "Test": np.asarray(np.load(test_path), dtype=float),
             }
 
-    rows = json.loads((TRANSMON_DIR / "metadata" / "qubit-TransmonCross-EC.json").read_text())
+    rows = json.loads((TRANSMON_DIR / "metadata" / "qubit-TransmonCross-Hamiltonian_params.json").read_text())
     values = []
     for row in rows:
+        h_params = row["Hamiltonian_params"]
         values.append(
             [
-                float(row["EC_GHz"]),
+                float(h_params["qubit_frequency_GHz"]),
+                float(h_params["anharmonicity_MHz"]),
             ]
         )
     all_values = np.asarray(values, dtype=float)
@@ -829,9 +831,9 @@ def plot_inverse_surrogate_boxplot() -> None:
     use_paper_style()
 
     df = pd.read_csv(TRANSMON_DIR / "results" / "validation" / "inverse+surrogate_percentErrors.csv")
-    data = [df["EC"].to_numpy()]
-    edge_colors = [ORANGE]
-    fill_colors = [ORANGE_LIGHT]
+    data = [df["frequency"].to_numpy(), df["anharmonicity"].to_numpy()]
+    edge_colors = [ORANGE, PURPLE]
+    fill_colors = [ORANGE_LIGHT, PURPLE_LIGHT]
 
     fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.6))
     box = ax.boxplot(
@@ -874,7 +876,7 @@ def plot_inverse_surrogate_boxplot() -> None:
             zorder=5,
         )
 
-    ax.set_xticklabels([r"$E_C$"])
+    ax.set_xticklabels([r"$f_q$", r"$\alpha$"])
     ax.set_ylabel("Percent error [%]")
     ax.set_title("Inverse + surrogate reconstruction error")
     ax.grid(axis="y", linestyle=":", color=GRID)
@@ -900,14 +902,14 @@ def plot_inverse_surrogate_error_histograms() -> None:
 
     df = pd.read_csv(TRANSMON_DIR / "results" / "validation" / "inverse+surrogate_percentErrors.csv")
     series = [
-        (df["EC"].to_numpy(), r"$E_C$", ORANGE, ORANGE_LIGHT),
+        (df["frequency"].to_numpy(), r"$f_q$", ORANGE, ORANGE_LIGHT),
+        (df["anharmonicity"].to_numpy(), r"$\alpha$", PURPLE, PURPLE_LIGHT),
     ]
 
     max_error = max(float(np.nanmax(values)) for values, _, _, _ in series)
     bins = np.linspace(0, max_error * 1.04, 18)
 
-    fig, ax_single = plt.subplots(1, 1, figsize=(COLUMN_WIDTH_IN, 2.45))
-    axes = [ax_single]
+    fig, axes = plt.subplots(1, 2, figsize=(FULL_WIDTH_IN, 2.45), sharey=True)
     for ax, (values, label, edge, fill) in zip(axes, series):
         ax.hist(values, bins=bins, color=fill, edgecolor=edge, linewidth=1.2, alpha=0.9)
         ax.axvline(np.median(values), color=edge, linewidth=1.5, linestyle="-", label=f"median {np.median(values):.2f}%")
@@ -979,29 +981,29 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         sample_idx = np.array([int(row["_candidate_idx"]) for row in rows])
         fq = np.array(
             [
-                abs(row["pred_H_params"]["EC_GHz"] - row["surrogate_H_params"]["EC_GHz"])
-                / (abs(row["pred_H_params"]["EC_GHz"]) + eps)
+                abs(row["pred_H_params"]["qubit_frequency_GHz"] - row["surrogate_H_params"]["qubit_frequency_GHz"])
+                / (abs(row["pred_H_params"]["qubit_frequency_GHz"]) + eps)
                 for row in rows
             ]
         )
         ah = np.array(
             [
-                abs(row["pred_H_params"]["EC_GHz"] - row["surrogate_H_params"]["EC_GHz"])
-                / (abs(row["pred_H_params"]["EC_GHz"]) + eps)
+                abs(row["pred_H_params"]["anharmonicity_MHz"] - row["surrogate_H_params"]["anharmonicity_MHz"])
+                / (abs(row["pred_H_params"]["anharmonicity_MHz"]) + eps)
                 for row in rows
             ]
         )
         nn_fq = np.array(
             [
-                abs(row["pred_H_params"]["EC_GHz"] - nearest_hamiltonian[sample_idx[i], 0])
-                / (abs(row["pred_H_params"]["EC_GHz"]) + eps)
+                abs(row["pred_H_params"]["qubit_frequency_GHz"] - nearest_hamiltonian[sample_idx[i], 0])
+                / (abs(row["pred_H_params"]["qubit_frequency_GHz"]) + eps)
                 for i, row in enumerate(rows)
             ]
         )
         nn_ah = np.array(
             [
-                abs(row["pred_H_params"]["EC_GHz"] - nearest_hamiltonian[sample_idx[i], 0])
-                / (abs(row["pred_H_params"]["EC_GHz"]) + eps)
+                abs(row["pred_H_params"]["anharmonicity_MHz"] - nearest_hamiltonian[sample_idx[i], 1])
+                / (abs(row["pred_H_params"]["anharmonicity_MHz"]) + eps)
                 for i, row in enumerate(rows)
             ]
         )

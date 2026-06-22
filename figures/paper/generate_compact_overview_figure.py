@@ -303,8 +303,8 @@ def draw_panel_a(page: fitz.Page, rect: fitz.Rect, label: str | None = "a") -> N
         "Component: transmon-cross qubit\n"
         "Geometry: readout claw length,\n"
         "ground spacing, cross length\n"
-        "Target: charging energy\n"
-        "E_C\n"
+        "Targets: qubit frequency,\n"
+        "anharmonicity\n"
         "Fixed context: remaining dataset\n"
         "layout settings."
     )
@@ -383,7 +383,7 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
 
     rounded_box(
         top_box,
-        ("Requested Hamiltonian value", "charging energy E_C"),
+        ("Requested Hamiltonian values", "qubit frequency, anharmonicity"),
         fontsize=7.6,
         lineheight=8.6,
         fill=BLUE_FILL,
