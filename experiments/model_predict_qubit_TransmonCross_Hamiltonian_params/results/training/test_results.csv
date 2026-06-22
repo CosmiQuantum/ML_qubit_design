@@ -1,2 +1,8 @@
-True,surrogate_loss_model,InverseModel_SurrogateLoss,0.0002867869334295392,mae,128
-True,surrogate_loss_model,InverseModel_SurrogateLoss,0.0004385739448480308,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.004306368064135313,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.002118996111676097,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.0010115195764228702,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.001035809749737382,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.0009075350244529545,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.0007396425935439765,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.0008132343064062297,mae,128
+True,surrogate_loss_model,InverseModel_SurrogateLoss,0.001155174570158124,mae,128

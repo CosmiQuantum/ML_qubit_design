@@ -32,7 +32,7 @@ SWEEP_DATA_AMOUNT = False
 VISUALIZE_GRADIENTS = False
 
 KERAS_TUNER = True
-KERAS_TUNER_TRIALS = 2000
+KERAS_TUNER_TRIALS = 100
 ENCODING_TYPE = 'one hot' # need to pass 'one hot' or 'linear' or 'Try Both'
 
 # Enable data augmentation/scaling, etc

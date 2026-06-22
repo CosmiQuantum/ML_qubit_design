@@ -2,8 +2,6 @@
 
 This experiment works in Hamiltonian parameter space for the transmon cross design and contains the most extensive validation and stress test analysis notebooks in the repo.
 
-**Target update:** the model target (and surrogate output) is now the single charging energy `E_C` (`EC_GHz`), replacing the previous two targets (qubit frequency + anharmonicity). The dataset lives in `metadata/qubit-TransmonCross-EC.json` and `metadata/X_names` holds the single input name `EC_GHz`.
-
 1. `ml_00_*` through `ml_03_*` cover the baseline Hamiltonian workflow.
 2. `ml_10_*` through `ml_22_*` contain surrogate model and defined loss variants.
 3. `validation_12_*`, `validation_20_*`, `validation_21_*`, and `validation_22_*` contain stress test analysis, Ansys validation, and design visualization work.
