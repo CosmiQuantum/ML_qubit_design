@@ -1,0 +1,2 @@
+training_percent,n_samples,train_mean,train_std,val_mean,val_std,test_mean,test_std,dist_min,dist_median,dist_max
+70.0,946,0.14295228418310296,,0.1144523553479413,,0.09614694283047481,,0.6949152542372881,0.8479992354991301,0.9711650080807196
