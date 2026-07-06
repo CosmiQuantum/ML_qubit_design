@@ -830,8 +830,16 @@ def plot_tuner_correlations() -> None:
 def plot_inverse_surrogate_boxplot() -> None:
     use_paper_style()
 
-    df = pd.read_csv(TRANSMON_DIR / "results" / "validation" / "inverse+surrogate_percentErrors.csv")
-    data = [df["frequency"].to_numpy(), df["anharmonicity"].to_numpy()]
+    # The 97 usable Ansys-validated designs quoted in the manuscript
+    # (median/mean f_q 0.532%/0.734%, alpha 1.138%/1.575%).
+    records = json.loads(
+        (TRANSMON_DIR / "results" / "validation" / "final_inverse+surrogate_ansys_results.json").read_text()
+    )
+    # Source JSON stores percent errors; the plot reports fractional error.
+    data = [
+        np.array([row["percent_error_frequency"] for row in records]) / 100.0,
+        np.array([row["percent_error_anharmonicity"] for row in records]) / 100.0,
+    ]
     edge_colors = [ORANGE, PURPLE]
     fill_colors = [ORANGE_LIGHT, PURPLE_LIGHT]
 
@@ -877,7 +885,7 @@ def plot_inverse_surrogate_boxplot() -> None:
         )
 
     ax.set_xticklabels([r"$f_q$", r"$\alpha$"])
-    ax.set_ylabel("Percent error [%]")
+    ax.set_ylabel("Error")
     ax.set_title("Inverse + surrogate reconstruction error")
     ax.grid(axis="y", linestyle=":", color=GRID)
     close_plot_box(ax)
@@ -1027,138 +1035,53 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     nn_ah_med, nn_ah_q1, nn_ah_q3 = qstats(nn_ah_pts)
     nn_med, nn_q1, nn_q3 = qstats(nn_pts)
 
-    fig, axes = plt.subplots(
-        2,
-        1,
-        figsize=(COLUMN_WIDTH_IN, 4.05),
-        sharex=True,
-        sharey=True,
-        gridspec_kw={"hspace": 0.08},
-    )
-    ax_top, ax_bottom = axes
+    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 3.0))
     for idx in range(len(bins)):
-        ax_top.scatter(
-            nn_pts[idx],
-            fq_pts[idx],
-            color=ORANGE,
-            alpha=0.26,
-            s=9,
-            linewidths=0,
-            zorder=2,
-        )
-        ax_top.scatter(
-            nn_pts[idx],
-            ah_pts[idx],
-            color=PURPLE,
-            alpha=0.26,
-            s=9,
-            linewidths=0,
-            zorder=2,
-        )
-        ax_bottom.scatter(
-            nn_pts[idx],
-            nn_fq_pts[idx],
-            color=ORANGE,
-            alpha=0.22,
-            s=9,
-            linewidths=0,
-            zorder=2,
-        )
-        ax_bottom.scatter(
-            nn_pts[idx],
-            nn_ah_pts[idx],
-            color=PURPLE,
-            alpha=0.22,
-            s=9,
-            linewidths=0,
-            zorder=2,
+        ax.scatter(nn_pts[idx], fq_pts[idx], color=ORANGE, alpha=0.16, s=8, linewidths=0, zorder=2)
+        ax.scatter(nn_pts[idx], ah_pts[idx], color=PURPLE, alpha=0.16, s=8, linewidths=0, zorder=2)
+        ax.scatter(nn_pts[idx], nn_fq_pts[idx], color=ORANGE, alpha=0.16, s=8, linewidths=0, zorder=2)
+        ax.scatter(nn_pts[idx], nn_ah_pts[idx], color=PURPLE, alpha=0.16, s=8, linewidths=0, zorder=2)
+
+    series = [
+        (fq_med, fq_q1, fq_q3, ORANGE, "o", "-", ORANGE, r"$f_q$ surrogate"),
+        (ah_med, ah_q1, ah_q3, PURPLE, "s", "-", PURPLE, r"$\alpha$ surrogate"),
+        (nn_fq_med, nn_fq_q1, nn_fq_q3, ORANGE, "o", "--", "white", r"$f_q$ nearest neighbor"),
+        (nn_ah_med, nn_ah_q1, nn_ah_q3, PURPLE, "s", "--", "white", r"$\alpha$ nearest neighbor"),
+    ]
+    for med, q1, q3, color, marker, linestyle, face, label in series:
+        ax.errorbar(
+            nn_med,
+            med,
+            xerr=[nn_med - nn_q1, nn_q3 - nn_med],
+            yerr=[med - q1, q3 - med],
+            color=color,
+            marker=marker,
+            markersize=5,
+            markerfacecolor=face,
+            markeredgecolor=color,
+            linestyle=linestyle,
+            linewidth=1.6,
+            elinewidth=1.1,
+            capsize=3.0,
+            capthick=1.0,
+            label=label,
+            zorder=5,
         )
 
-    ax_top.errorbar(
-        nn_med,
-        fq_med,
-        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
-        yerr=[fq_med - fq_q1, fq_q3 - fq_med],
-        color=ORANGE,
-        marker="o",
-        markersize=5,
-        linewidth=1.7,
-        elinewidth=1.3,
-        capsize=3.5,
-        capthick=1.1,
-        label=r"$f_q$ surrogate",
-        zorder=5,
-    )
-    ax_top.errorbar(
-        nn_med,
-        ah_med,
-        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
-        yerr=[ah_med - ah_q1, ah_q3 - ah_med],
-        color=PURPLE,
-        marker="s",
-        markersize=5,
-        linewidth=1.7,
-        elinewidth=1.3,
-        capsize=3.5,
-        capthick=1.1,
-        label=r"$\alpha$ surrogate",
-        zorder=5,
-    )
-    ax_bottom.errorbar(
-        nn_med,
-        nn_fq_med,
-        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
-        yerr=[nn_fq_med - nn_fq_q1, nn_fq_q3 - nn_fq_med],
-        color=ORANGE,
-        marker="o",
-        markersize=5,
-        linewidth=1.7,
-        elinewidth=1.3,
-        capsize=3.5,
-        capthick=1.1,
-        label=r"$f_q$ nearest neighbor",
-        zorder=5,
-    )
-    ax_bottom.errorbar(
-        nn_med,
-        nn_ah_med,
-        xerr=[nn_med - nn_q1, nn_q3 - nn_med],
-        yerr=[nn_ah_med - nn_ah_q1, nn_ah_q3 - nn_ah_med],
-        color=PURPLE,
-        marker="s",
-        markersize=5,
-        linewidth=1.7,
-        elinewidth=1.3,
-        capsize=3.5,
-        capthick=1.1,
-        label=r"$\alpha$ nearest neighbor",
-        zorder=5,
-    )
-
-    ax_top.legend(
+    ax.legend(
         loc="upper left",
         frameon=True,
         edgecolor="#CCCCCC",
         facecolor="white",
-        handlelength=1.35,
+        handlelength=1.8,
         borderpad=0.35,
+        labelspacing=0.32,
         title="median + IQR",
         title_fontsize=8.5,
     )
-    ax_bottom.legend(
-        loc="upper left",
-        frameon=True,
-        edgecolor="#CCCCCC",
-        facecolor="white",
-        handlelength=1.35,
-        borderpad=0.35,
-        title="median + IQR",
-        title_fontsize=8.5,
-    )
-    ax_bottom.set_xlabel("Scaled NN distance")
-    ax_top.set_ylabel("Relative error\nsurrogate vs Ansys")
-    ax_bottom.set_ylabel("Relative error\nnearest training vs Ansys")
-    ax_top.set_title("Validation error vs NN distance")
+    ax.set_xlabel("Scaled NN distance")
+    ax.set_ylabel("Error")
+    ax.set_title("Validation error vs NN distance")
     y_max = max(
         np.nanmax(fq_q3),
         np.nanmax(ah_q3),
@@ -1166,17 +1089,164 @@ def plot_ansys_validation_vs_nn_distance() -> None:
         np.nanmax(nn_ah_q3),
         np.nanmax([np.nanmax(v) for v in fq_pts + ah_pts + nn_fq_pts + nn_ah_pts]),
     )
-    ax_bottom.set_xlim(0, max(np.nanmax(v) for v in nn_pts) * 1.06)
-    ax_top.set_ylim(0, y_max * 1.18)
-    for ax in axes:
-        ax.grid(axis="y", linestyle=":", color=GRID)
-        close_plot_box(ax)
-    fig.subplots_adjust(left=0.25, right=0.98, top=0.91, bottom=0.13, hspace=0.10)
+    ax.set_xlim(0, max(np.nanmax(v) for v in nn_pts) * 1.06)
+    ax.set_ylim(0, y_max * 1.18)
+    ax.grid(axis="y", linestyle=":", color=GRID)
+    close_plot_box(ax)
+    fig.subplots_adjust(left=0.16, right=0.98, top=0.91, bottom=0.15)
     out_paths = [
         EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.pdf",
         EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.png",
         TRANSMON_DIR / "plots" / "ansys_validation_error_vs_nn_distance-v2.pdf",
         TRANSMON_DIR / "plots" / "ansys_validation_error_vs_nn_distance-v2.png",
+    ]
+    for out_path in out_paths:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        if out_path.suffix == ".png":
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
+        else:
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
+
+
+def plot_corner_sweep_distance_and_ansys_error() -> None:
+    """Combined far-corner sweep figure: training-to-corner distance (top) and
+    Ansys-validated fractional errors for f_q and alpha (middle/bottom), all
+    sharing the training-pool-percent x axis."""
+    use_paper_style()
+
+    distance_path = (
+        TRANSMON_DIR / "plots" / "corner_far_to_near_sweep_retrained_surrogate" / "corner_distance_summary.csv"
+    )
+    error_path = (
+        TRANSMON_DIR
+        / "results"
+        / "validation"
+        / "data_amount_sweep_heldout_corner_ansys"
+        / "heldout_corner_test_ansys_error_summary_by_training_percent.csv"
+    )
+    dist = pd.read_csv(distance_path).sort_values("training_percent")
+    errs = pd.read_csv(error_path).sort_values("training_percent")
+
+    fig, axes = plt.subplots(
+        3,
+        1,
+        figsize=(COLUMN_WIDTH_IN, 5.4),
+        sharex=True,
+        gridspec_kw={"hspace": 0.34},
+    )
+    ax_dist, ax_fq, ax_ah = axes
+
+    x_dist = dist["training_percent"].to_numpy(dtype=float)
+    mean_d = dist["scaled_mean"].to_numpy(dtype=float)
+    std_d = dist["scaled_std"].to_numpy(dtype=float)
+    lower_d = np.minimum(std_d, mean_d)
+    ax_dist.fill_between(
+        x_dist,
+        dist["scaled_p25"].to_numpy(dtype=float),
+        dist["scaled_p75"].to_numpy(dtype=float),
+        color=GREEN_LIGHT,
+        alpha=0.7,
+        linewidth=0,
+        zorder=1,
+        label="Interquartile range",
+    )
+    ax_dist.errorbar(
+        x_dist,
+        mean_d,
+        yerr=np.vstack([lower_d, std_d]),
+        fmt="o-",
+        color=GREEN,
+        markersize=3.6,
+        linewidth=1.5,
+        elinewidth=0.9,
+        capsize=2.2,
+        capthick=0.9,
+        zorder=3,
+        label=r"Mean $\pm$ 1 SD",
+    )
+    ax_dist.set_ylabel("Scaled distance\nto corner")
+    ax_dist.set_title("Training data distance to held-out corner", loc="left", pad=2)
+    ax_dist.set_ylim(bottom=0)
+    ax_dist.legend(
+        loc="lower left",
+        frameon=True,
+        edgecolor="#CCCCCC",
+        facecolor="white",
+        handlelength=1.4,
+        borderpad=0.35,
+        labelspacing=0.3,
+    )
+
+    def draw_error_axis(ax: plt.Axes, metric: str, ylabel: str, panel_title: str, show_legend: bool) -> None:
+        x = errs["training_percent"].to_numpy(dtype=float)
+        mean = errs[f"ansys_{metric}_mean"].to_numpy(dtype=float) / 100.0
+        std = errs[f"ansys_{metric}_std"].fillna(0).to_numpy(dtype=float) / 100.0
+        median = errs[f"ansys_{metric}_median"].to_numpy(dtype=float) / 100.0
+        lower = np.maximum(mean - std, 1e-5)
+        upper = mean + std
+
+        ax.plot(x, mean, marker="o", markersize=3.7, linewidth=1.45, color=GREEN, label="Mean", zorder=3)
+        ax.fill_between(x, lower, upper, where=np.isfinite(mean), color=GREEN_LIGHT, alpha=0.65, linewidth=0, zorder=1)
+        ax.plot(x, median, marker="s", markersize=3.1, linewidth=1.0, color=PURPLE, linestyle="--", label="Median", zorder=4)
+
+        partial = errs["n_ansys"].lt(errs["n_requested"]) & errs[f"ansys_{metric}_mean"].notna()
+        ax.scatter(
+            errs.loc[partial, "training_percent"],
+            errs.loc[partial, f"ansys_{metric}_mean"] / 100.0,
+            s=30,
+            marker="o",
+            facecolors="white",
+            edgecolors=GREEN,
+            linewidths=1.0,
+            zorder=5,
+        )
+
+        finite_y = np.concatenate([values[np.isfinite(values) & (values > 0)] for values in [mean, median]])
+        if finite_y.size:
+            ax.set_yscale("log")
+            ax.set_ylim(max(finite_y.min() / 2.5, 5e-4), finite_y.max() * 2.0)
+        for _, row in errs.iterrows():
+            n = int(row["n_ansys"])
+            requested_n = int(row["n_requested"])
+            y_value = row[f"ansys_{metric}_mean"] / 100.0
+            if n == 0:
+                ax.text(row["training_percent"], ax.get_ylim()[0] * 1.18, "n=0", ha="center", va="bottom", fontsize=6.8, color=TEXT_DIM)
+            elif n < requested_n and pd.notna(y_value):
+                ax.text(row["training_percent"], y_value * 1.16, f"n={n}", ha="center", va="bottom", fontsize=6.8, color=TEXT_DIM)
+
+        ax.set_ylabel(ylabel)
+        ax.set_title(panel_title, loc="left", pad=2)
+        if show_legend:
+            ax.legend(
+                loc="upper right",
+                frameon=True,
+                edgecolor="#CCCCCC",
+                facecolor="white",
+                handlelength=1.2,
+                borderpad=0.32,
+                labelspacing=0.32,
+            )
+
+    draw_error_axis(ax_fq, "frequency", r"$f_q$ error", r"Ansys validation, qubit frequency ($f_q$)", True)
+    draw_error_axis(ax_ah, "anharmonicity", r"$\alpha$ error", r"Ansys validation, anharmonicity ($\alpha$)", False)
+
+    x_ticks = errs["training_percent"].to_numpy(dtype=float)
+    ax_ah.set_xticks(x_ticks)
+    ax_ah.set_xticklabels([f"{v:.0f}" for v in x_ticks])
+    ax_ah.set_xlabel("Far-corner training pool used [%]")
+    for ax in axes:
+        ax.grid(axis="y", linestyle=":", color=GRID)
+        close_plot_box(ax)
+        ax.margins(x=0.04)
+
+    fig.subplots_adjust(left=0.17, right=0.98, top=0.96, bottom=0.08)
+    out_paths = [
+        EXPORT_DIR / "corner_sweep_distance_and_ansys_error.pdf",
+        EXPORT_DIR / "corner_sweep_distance_and_ansys_error.png",
+        TRANSMON_DIR / "plots" / "corner_far_to_near_sweep_retrained_surrogate" / "corner_sweep_distance_and_ansys_error.pdf",
+        TRANSMON_DIR / "plots" / "corner_far_to_near_sweep_retrained_surrogate" / "corner_sweep_distance_and_ansys_error.png",
     ]
     for out_path in out_paths:
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1631,6 +1701,7 @@ def main() -> None:
     plot_inverse_surrogate_boxplot()
     plot_inverse_surrogate_error_histograms()
     plot_ansys_validation_vs_nn_distance()
+    plot_corner_sweep_distance_and_ansys_error()
     plot_surrogate_stress_random_points_pairs()
     plot_model_architecture_combined()
     plot_inverse_architecture_standalone()
