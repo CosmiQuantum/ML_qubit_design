@@ -39,6 +39,7 @@ TRANSMON_PLOTS_DIR = (
 FRAGMENTS_PDF = SOURCE_MATERIALS_DIR / "fragments.pdf"
 INVERSE_PIPELINE_PDF = MANUSCRIPT_EXPORTS_DIR / "inverse_pipeline.pdf"
 WORKFLOW_PDF = MANUSCRIPT_EXPORTS_DIR / "workflow.pdf"
+TRANSMON_PARAMS_PDF = MANUSCRIPT_EXPORTS_DIR / "figure1_transmon_qiskit_parameters.pdf"
 OUT_STEM = "overview_workflow_compact"
 
 PAGE_W = 7.10 * 72
@@ -299,20 +300,56 @@ def draw_panel_a(page: fitz.Page, rect: fitz.Rect, label: str | None = "a") -> N
         lineheight=8.0,
     )
 
-    scope_text = (
-        "Component: transmon-cross qubit\n"
-        "Geometry: readout claw length,\n"
-        "ground spacing, cross length\n"
-        "Targets: qubit frequency,\n"
-        "anharmonicity\n"
-        "Fixed context: remaining dataset\n"
-        "layout settings."
+    # Blown-up transmon-cross view with the three varied Quantum Metal
+    # parameters annotated (absorbed from the former standalone Figure 1).
+    params_doc = fitz.open(TRANSMON_PARAMS_PDF)
+    params_page = params_doc[0]
+    # Clip away the source figure's own title band. The annotated green
+    # substrate square in the source PDF spans x 49..351.5, y 31.25..333.75 pt.
+    params_clip = fitz.Rect(
+        params_page.rect.x0,
+        params_page.rect.y0 + 30,
+        params_page.rect.x1,
+        params_page.rect.y1,
     )
-    draw_header_card(
-        page,
-        fitz.Rect(rect.x0 + 24, rect.y0 + 164, rect.x1 - 24, rect.y0 + 281),
-        "Transmon model scope",
-        scope_text,
+    green_square_src = fitz.Rect(49.0, 31.25, 351.5, 333.75)
+    blowup_box = fitz.Rect(rect.x0 + 8, rect.y0 + 163, rect.x1 - 8, rect.y1 - 5)
+    blowup_dest = fit_rect(params_clip, blowup_box)
+    page.show_pdf_page(blowup_dest, params_doc, 0, clip=params_clip)
+    params_doc.close()
+
+    # Green square position inside the placed blow-up.
+    blow_scale = blowup_dest.width / params_clip.width
+    green_dest = fitz.Rect(
+        blowup_dest.x0 + (green_square_src.x0 - params_clip.x0) * blow_scale,
+        blowup_dest.y0 + (green_square_src.y0 - params_clip.y0) * blow_scale,
+        blowup_dest.x0 + (green_square_src.x1 - params_clip.x0) * blow_scale,
+        blowup_dest.y0 + (green_square_src.y1 - params_clip.y0) * blow_scale,
+    )
+
+    # Dashed zoom box centered on the transmon cross + claw in the layout art
+    # (measured in fragments.pdf source coordinates), with matching guides
+    # that land exactly on the top corners of the blown-up green square.
+    zoom_src_fragments = fitz.Rect(101.0, 14.5, 143.5, 85.5)
+    zoom_box = mapped_rect(zoom_src_fragments, fragments_src, art_dest)
+    dash = "[2 2] 0"
+    page.draw_rect(zoom_box, color=BLUE_EDGE, fill=None, width=0.9, dashes=dash, overlay=True)
+    page.draw_rect(green_dest, color=BLUE_EDGE, fill=None, width=0.9, dashes=dash, overlay=True)
+    page.draw_line(
+        fitz.Point(zoom_box.x0, zoom_box.y1),
+        fitz.Point(green_dest.x0, green_dest.y0),
+        color=BLUE_EDGE,
+        width=0.9,
+        dashes=dash,
+        overlay=True,
+    )
+    page.draw_line(
+        fitz.Point(zoom_box.x1, zoom_box.y1),
+        fitz.Point(green_dest.x1, green_dest.y0),
+        color=BLUE_EDGE,
+        width=0.9,
+        dashes=dash,
+        overlay=True,
     )
 
 
