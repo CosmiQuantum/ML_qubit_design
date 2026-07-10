@@ -909,8 +909,8 @@ def plot_inverse_surrogate_boxplot() -> None:
     ax.set_ylabel("Error")
     ax.set_title("Hamiltonian reconstruction error")
     legend_handles = [
-        Patch(facecolor="#E4E4E4", edgecolor=TEXT_DIM, linewidth=1.2, label="inverse + surrogate (Ansys)"),
-        Patch(facecolor="white", edgecolor=TEXT_DIM, linewidth=1.2, hatch="/////", label="surrogate only (test set)"),
+        Patch(facecolor="#E4E4E4", edgecolor=TEXT_DIM, linewidth=1.2, label="inverse + surrogate"),
+        Patch(facecolor="white", edgecolor=TEXT_DIM, linewidth=1.2, hatch="/////", label="surrogate only"),
     ]
     ax.legend(
         handles=legend_handles,
