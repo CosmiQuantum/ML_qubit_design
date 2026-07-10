@@ -836,57 +836,92 @@ def plot_inverse_surrogate_boxplot() -> None:
         (TRANSMON_DIR / "results" / "validation" / "final_inverse+surrogate_ansys_results.json").read_text()
     )
     # Source JSON stores percent errors; the plot reports fractional error.
-    data = [
-        np.array([row["percent_error_frequency"] for row in records]) / 100.0,
-        np.array([row["percent_error_anharmonicity"] for row in records]) / 100.0,
-    ]
-    edge_colors = [ORANGE, PURPLE]
-    fill_colors = [ORANGE_LIGHT, PURPLE_LIGHT]
+    inv_fq = np.array([row["percent_error_frequency"] for row in records]) / 100.0
+    inv_ah = np.array([row["percent_error_anharmonicity"] for row in records]) / 100.0
+
+    # Surrogate-only test-set errors for the same frozen forward surrogate used
+    # in the tandem (best_keras_model_model2_surrogate), exported by ml_15's
+    # E_C -> (f_q, alpha) conversion on the 291 held-out test samples.
+    surr_df = pd.read_csv(TRANSMON_DIR / "results" / "predictions" / "model2_fq_alpha_from_EC.csv")
+    surr_fq = np.abs((surr_df["fq_pred_GHz"] - surr_df["fq_ref_GHz"]) / surr_df["fq_ref_GHz"]).to_numpy()
+    surr_ah = np.abs((surr_df["alpha_pred_MHz"] - surr_df["alpha_ref_MHz"]) / surr_df["alpha_ref_MHz"]).to_numpy()
+
+    data = [inv_fq, surr_fq, inv_ah, surr_ah]
+    positions = [1.0, 1.72, 2.86, 3.58]
+    edge_colors = [ORANGE, ORANGE, PURPLE, PURPLE]
+    fill_colors = [ORANGE_LIGHT, "white", PURPLE_LIGHT, "white"]
+    hatches = [None, "/////", None, "/////"]
+
+    for label, values in zip(
+        ("inv+surr f_q", "surrogate f_q", "inv+surr alpha", "surrogate alpha"), data
+    ):
+        print(
+            f"  {label}: median {100 * np.median(values):.3f}%  mean {100 * np.mean(values):.3f}%  n={len(values)}"
+        )
 
     fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.6))
     box = ax.boxplot(
         data,
+        positions=positions,
         patch_artist=True,
-        widths=0.54,
+        widths=0.42,
         showfliers=False,
         showmeans=True,
-        meanprops=dict(marker="D", markerfacecolor="white", markeredgecolor=TEXT, markersize=5),
+        meanprops=dict(marker="D", markerfacecolor="white", markeredgecolor=TEXT, markersize=4.5),
         medianprops=dict(color=TEXT_DIM, linewidth=1.5),
         whiskerprops=dict(color=TEXT_DIM, linewidth=1.0),
         capprops=dict(color=TEXT_DIM, linewidth=1.0),
     )
-    for patch, face, edge in zip(box["boxes"], fill_colors, edge_colors):
+    for patch, face, edge, hatch in zip(box["boxes"], fill_colors, edge_colors, hatches):
         patch.set_facecolor(face)
         patch.set_edgecolor(edge)
         patch.set_linewidth(1.2)
         patch.set_alpha(0.46)
+        if hatch is not None:
+            patch.set_hatch(hatch)
         patch.set_zorder(2)
     for key in ("whiskers", "caps", "medians", "means"):
         for artist in box[key]:
             artist.set_zorder(6)
 
     rng = np.random.default_rng(0)
-    for idx, (values, color) in enumerate(zip(data, edge_colors), start=1):
+    for pos, values, color in zip(positions, data, edge_colors):
         q1, q3 = np.percentile(values, [25, 75])
         iqr = q3 - q1
         lower = q1 - 1.5 * iqr
         upper = q3 + 1.5 * iqr
         visible_values = values[(values >= lower) & (values <= upper)]
-        jitter = rng.normal(0, 0.045, size=len(visible_values))
+        jitter = rng.normal(0, 0.035, size=len(visible_values))
         ax.scatter(
-            np.full_like(visible_values, idx) + jitter,
+            np.full_like(visible_values, pos) + jitter,
             visible_values,
-            s=11,
+            s=9,
             color=color,
-            alpha=0.42,
+            alpha=0.36,
             edgecolors="none",
             linewidths=0,
             zorder=5,
         )
 
+    ax.set_xticks([np.mean(positions[:2]), np.mean(positions[2:])])
     ax.set_xticklabels([r"$f_q$", r"$\alpha$"])
+    ax.set_xlim(positions[0] - 0.55, positions[-1] + 0.55)
     ax.set_ylabel("Error")
-    ax.set_title("Inverse + surrogate reconstruction error")
+    ax.set_title("Hamiltonian reconstruction error")
+    legend_handles = [
+        Patch(facecolor="#E4E4E4", edgecolor=TEXT_DIM, linewidth=1.2, label="inverse + surrogate (Ansys)"),
+        Patch(facecolor="white", edgecolor=TEXT_DIM, linewidth=1.2, hatch="/////", label="surrogate only (test set)"),
+    ]
+    ax.legend(
+        handles=legend_handles,
+        loc="upper left",
+        frameon=True,
+        edgecolor="#CCCCCC",
+        facecolor="white",
+        handlelength=1.6,
+        borderpad=0.35,
+        labelspacing=0.32,
+    )
     ax.grid(axis="y", linestyle=":", color=GRID)
     close_plot_box(ax)
     fig.tight_layout()
@@ -1258,7 +1293,11 @@ def plot_corner_sweep_distance_and_ansys_error() -> None:
     plt.close(fig)
 
 
-def plot_surrogate_stress_random_points_pairs() -> None:
+def _plot_stress_pairs_panels(
+    pair_indices: list[tuple[int, int]],
+    out_names: list[str],
+    fig_height: float,
+) -> None:
     use_paper_style()
 
     train_values_um = load_transmon_design_splits_um()["Train"]
@@ -1273,13 +1312,22 @@ def plot_surrogate_stress_random_points_pairs() -> None:
     labels = ["claw_length", "ground_spacing", "cross_length"]
     candidate_values_um = df[param_cols].to_numpy(dtype=float) * 1e6
     nn_distance = df["nn_distance_scaled"].to_numpy(dtype=float)
-    pair_indices = [(0, 1), (0, 2), (1, 2)]
 
+    n_panels = len(pair_indices)
     paper_cmap = LinearSegmentedColormap.from_list("paper_GPO", [GREEN, PURPLE, ORANGE], N=256)
-    fig = plt.figure(figsize=(COLUMN_WIDTH_IN, 6.55))
-    gs = gridspec.GridSpec(4, 1, height_ratios=[1.0, 1.0, 1.0, 0.055], hspace=0.58, figure=fig)
-    axes = np.array([fig.add_subplot(gs[idx, 0]) for idx in range(3)])
-    cax = fig.add_subplot(gs[3, 0])
+    fig = plt.figure(figsize=(COLUMN_WIDTH_IN, fig_height))
+    # Keep the colorbar at roughly the same absolute height (~0.11 in)
+    # regardless of how many scatter panels sit above it.
+    cbar_ratio = 0.11 * n_panels / max(fig_height - 0.11, 1e-6)
+    gs = gridspec.GridSpec(
+        n_panels + 1,
+        1,
+        height_ratios=[1.0] * n_panels + [cbar_ratio],
+        hspace=0.58 if n_panels > 1 else 0.42,
+        figure=fig,
+    )
+    axes = np.array([fig.add_subplot(gs[idx, 0]) for idx in range(n_panels)])
+    cax = fig.add_subplot(gs[n_panels, 0])
 
     sc = None
     for ax, (i, j) in zip(axes, pair_indices):
@@ -1333,16 +1381,32 @@ def plot_surrogate_stress_random_points_pairs() -> None:
     cbar.outline.set_edgecolor(SPINE)
     cbar.outline.set_linewidth(0.8)
 
-    fig.subplots_adjust(left=0.2, right=0.965, bottom=0.09, top=0.985)
-    out_paths = [
-        TRANSMON_DIR / "plots" / "surrogate_stress_random_points_pairs.pdf",
-        EXPORT_DIR / "surrogate_stress_random_points_pairs.pdf",
-    ]
+    fig.subplots_adjust(left=0.2, right=0.965, bottom=0.09 * 3 / (n_panels + 1), top=0.985)
+    out_paths = []
+    for out_name in out_names:
+        out_paths.append(TRANSMON_DIR / "plots" / out_name)
+        out_paths.append(EXPORT_DIR / out_name)
     for out_path in out_paths:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
         print(f"wrote {out_path.relative_to(REPO_ROOT)}")
     plt.close(fig)
+
+
+def plot_surrogate_stress_random_points_pairs() -> None:
+    # Main-text panel: claw_length vs cross_length, combined in the manuscript
+    # with the error-vs-NN-distance plot as one two-panel figure.
+    _plot_stress_pairs_panels(
+        [(0, 2)],
+        ["surrogate_stress_random_points_middle.pdf"],
+        fig_height=2.85,
+    )
+    # Appendix panels: the remaining two parameter pairs.
+    _plot_stress_pairs_panels(
+        [(0, 1), (1, 2)],
+        ["surrogate_stress_random_points_pairs_appendix.pdf"],
+        fig_height=4.55,
+    )
 
 
 def plot_model_architecture_combined() -> None:
