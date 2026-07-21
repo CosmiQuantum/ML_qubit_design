@@ -67,6 +67,14 @@ PURPLE = "#7B68AE"
 PURPLE_LIGHT = "#E8E4F0"
 GREEN = "#3D8B3D"
 GREEN_LIGHT = "#E8F5E8"
+
+# Data-split categorical palette (Train/Validation/Test). Colorblind-safe
+# (Okabe-Ito blue + bluish-green + a neutral dark grey) and deliberately
+# distinct from the orange/purple reserved for f_q and alpha, from the
+# capacitance green, and from the process-flow blues used in the flowcharts.
+SPLIT_COLORS = {"Train": "#0072B2", "Validation": "#009E73", "Test": "#444444"}
+SPLIT_FILLS = {"Train": "#D6E6F2", "Validation": "#D5EFE7", "Test": "#DBDBDB"}
+
 TEXT = "#222222"
 TEXT_DIM = "#555555"
 GRID = "#D7D7D7"
@@ -419,16 +427,8 @@ def draw_split_histograms(fig: plt.Figure, axes: np.ndarray, splits: dict[str, n
         r"Ground spacing ($\mu$m)",
         r"Cross length ($\mu$m)",
     ]
-    colors = {
-        "Train": GREEN,
-        "Validation": ORANGE,
-        "Test": PURPLE,
-    }
-    fills = {
-        "Train": GREEN_LIGHT,
-        "Validation": ORANGE_LIGHT,
-        "Test": PURPLE_LIGHT,
-    }
+    colors = SPLIT_COLORS
+    fills = SPLIT_FILLS
 
     all_values = np.vstack(list(splits.values()))
     bin_specs = [
@@ -456,9 +456,9 @@ def draw_split_histograms(fig: plt.Figure, axes: np.ndarray, splits: dict[str, n
         close_plot_box(ax)
 
     legend_handles = [
-        Patch(facecolor=GREEN_LIGHT, edgecolor=GREEN, linewidth=1.0, alpha=0.8, label="Train"),
-        Patch(facecolor=ORANGE_LIGHT, edgecolor=ORANGE, linewidth=1.0, alpha=0.8, label="Validation"),
-        Patch(facecolor=PURPLE_LIGHT, edgecolor=PURPLE, linewidth=1.0, alpha=0.8, label="Test"),
+        Patch(facecolor=SPLIT_FILLS["Train"], edgecolor=SPLIT_COLORS["Train"], linewidth=1.0, alpha=0.8, label="Train"),
+        Patch(facecolor=SPLIT_FILLS["Validation"], edgecolor=SPLIT_COLORS["Validation"], linewidth=1.0, alpha=0.8, label="Validation"),
+        Patch(facecolor=SPLIT_FILLS["Test"], edgecolor=SPLIT_COLORS["Test"], linewidth=1.0, alpha=0.8, label="Test"),
     ]
     fig.legend(
         handles=legend_handles,
@@ -546,9 +546,9 @@ def plot_data_amount_sweep() -> None:
         title = "Learning curve for the inverse model"
 
     series = [
-        ("Train", "train_mean", "train_std", GREEN, GREEN_LIGHT),
-        ("Val.", "val_mean", "val_std", ORANGE, ORANGE_LIGHT),
-        ("Test", "test_mean", "test_std", PURPLE, PURPLE_LIGHT),
+        ("Train", "train_mean", "train_std", SPLIT_COLORS["Train"], SPLIT_FILLS["Train"]),
+        ("Val.", "val_mean", "val_std", SPLIT_COLORS["Validation"], SPLIT_FILLS["Validation"]),
+        ("Test", "test_mean", "test_std", SPLIT_COLORS["Test"], SPLIT_FILLS["Test"]),
     ]
 
     fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.45))
@@ -585,6 +585,75 @@ def plot_data_amount_sweep() -> None:
         EXPORT_DIR / "data_amount_sweep-v2.png",
     ]:
         out_path.parent.mkdir(parents=True, exist_ok=True)
+        if out_path.suffix == ".png":
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
+        else:
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
+
+
+def plot_surrogate_data_amount_sweep() -> None:
+    use_paper_style()
+
+    diag_dir = TRANSMON_DIR / "results" / "data_amount_sweep_uniform_diag"
+    tuned_df = pd.read_csv(diag_dir / "data_amount_sweep_uniform_diag_surrogate_only_tuned_hp.csv")
+
+    metrics = [
+        (r"$f_q$", "surrogate_test_omega_q_mean_pct", ORANGE, ORANGE_LIGHT, "o"),
+        (r"$\alpha$", "surrogate_test_alpha_mean_pct", PURPLE, PURPLE_LIGHT, "s"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.45))
+    for label, col, color, fill, marker in metrics:
+        tuned = tuned_df.groupby("training_percent")[col].agg(["mean", "std"]).reset_index()
+        ax.plot(
+            tuned["training_percent"],
+            tuned["mean"],
+            marker=marker,
+            markersize=3.6,
+            linewidth=1.35,
+            color=color,
+            label=label,
+            zorder=3,
+        )
+        ax.fill_between(
+            tuned["training_percent"],
+            tuned["mean"] - tuned["std"].fillna(0),
+            tuned["mean"] + tuned["std"].fillna(0),
+            color=fill,
+            alpha=0.62,
+            linewidth=0,
+            zorder=1,
+        )
+
+    x_ticks = np.sort(tuned_df["training_percent"].unique())
+    ax.set_xticks(x_ticks)
+    ax.set_xticklabels([f"{v:.0f}" for v in x_ticks])
+    ax.set_xlabel("Training set used [%]")
+    ax.set_ylabel("Mean test error [%]")
+    ax.set_title("Surrogate training fraction sweep")
+    ax.grid(axis="y", linestyle=":", color=GRID)
+    close_plot_box(ax)
+    ax.legend(
+        loc="upper right",
+        ncol=2,
+        frameon=True,
+        edgecolor="#CCCCCC",
+        facecolor="white",
+        handlelength=1.6,
+        columnspacing=0.75,
+        borderpad=0.3,
+        labelspacing=0.3,
+    )
+    ax.set_ylim(bottom=0)
+    ax.margins(x=0.05)
+
+    fig.tight_layout()
+    for out_path in [
+        EXPORT_DIR / "data_amount_sweep_surrogate-v2.pdf",
+        EXPORT_DIR / "data_amount_sweep_surrogate-v2.png",
+    ]:
         if out_path.suffix == ".png":
             fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
         else:
@@ -932,6 +1001,223 @@ def plot_inverse_surrogate_boxplot() -> None:
     ]
     for out_path in out_paths:
         out_path.parent.mkdir(parents=True, exist_ok=True)
+        if out_path.suffix == ".png":
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
+        else:
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
+
+
+def _draw_error_boxplot(
+    ax: plt.Axes,
+    data: list[np.ndarray],
+    positions: list[float],
+    edge_colors: list[str],
+    fill_colors: list[str],
+    *,
+    width: float = 0.42,
+) -> None:
+    """Shared boxplot styling used by the inverse-only appendix figures.
+
+    Matches the main-text Hamiltonian-reconstruction boxplot
+    (plot_inverse_surrogate_boxplot): light colored boxes at alpha 0.46,
+    grey medians/whiskers, white diamond means, and jittered sample points.
+    """
+    box = ax.boxplot(
+        data,
+        positions=positions,
+        patch_artist=True,
+        widths=width,
+        showfliers=False,
+        showmeans=True,
+        meanprops=dict(marker="D", markerfacecolor="white", markeredgecolor=TEXT, markersize=4.5),
+        medianprops=dict(color=TEXT_DIM, linewidth=1.5),
+        whiskerprops=dict(color=TEXT_DIM, linewidth=1.0),
+        capprops=dict(color=TEXT_DIM, linewidth=1.0),
+    )
+    for patch, face, edge in zip(box["boxes"], fill_colors, edge_colors):
+        patch.set_facecolor(face)
+        patch.set_edgecolor(edge)
+        patch.set_linewidth(1.2)
+        patch.set_alpha(0.46)
+        patch.set_zorder(2)
+    for key in ("whiskers", "caps", "medians", "means"):
+        for artist in box[key]:
+            artist.set_zorder(6)
+
+    rng = np.random.default_rng(0)
+    for pos, values, color in zip(positions, data, edge_colors):
+        q1, q3 = np.percentile(values, [25, 75])
+        iqr = q3 - q1
+        visible = values[(values >= q1 - 1.5 * iqr) & (values <= q3 + 1.5 * iqr)]
+        jitter = rng.normal(0, 0.035, size=len(visible))
+        ax.scatter(
+            np.full_like(visible, pos) + jitter,
+            visible,
+            s=9,
+            color=color,
+            alpha=0.36,
+            edgecolors="none",
+            linewidths=0,
+            zorder=5,
+        )
+
+
+def plot_inverse_only_ansys_boxplot() -> None:
+    use_paper_style()
+
+    # EM-validated results for the 50 inverse-only designs (cap-matrix inverse
+    # model trained with a geometry-matching loss, no surrogate in the loop).
+    # Each record pairs the SQuADDS reference (ref_*) with the Ansys Q3D
+    # capacitance matrix and scqubits Hamiltonian of the predicted design
+    # (pred_*). This replaces the legacy transmon2/transmon3 appendix panels
+    # with figures in the main-text boxplot style.
+    records = json.loads(
+        (TRANSMON_DIR / "results" / "validation" / "inverse_only_cap_matrix_ansys_results.json").read_text()
+    )
+    frac_err = lambda a, r: np.abs((a - r) / r)
+
+    # --- Hamiltonian-level errors: f_q, alpha ----------------------------
+    # f_q and alpha come straight from the recorded scqubits Hamiltonians.
+    fq_ref = np.array([r["ref_H_params"]["qubit_frequency_GHz"] for r in records])
+    fq_prd = np.array([r["pred_H_params"]["qubit_frequency_GHz"] for r in records])
+    al_ref = np.array([r["ref_H_params"]["anharmonicity_MHz"] for r in records])
+    al_prd = np.array([r["pred_H_params"]["anharmonicity_MHz"] for r in records])
+
+    ham_data = [frac_err(fq_prd, fq_ref), frac_err(al_prd, al_ref)]
+    ham_labels = (r"$f_q$", r"$\alpha$")
+    ham_colors = [ORANGE, PURPLE]
+    ham_fills = [ORANGE_LIGHT, PURPLE_LIGHT]
+
+    for name, values in zip(("f_q", "alpha"), ham_data):
+        print(f"  inverse-only {name}: median {100 * np.median(values):.3f}%  mean {100 * np.mean(values):.3f}%  n={len(values)}")
+
+    positions = [1.0, 2.0]
+    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.6))
+    _draw_error_boxplot(ax, ham_data, positions, ham_colors, ham_fills)
+    ax.set_xticks(positions)
+    ax.set_xticklabels(ham_labels)
+    ax.set_xlim(positions[0] - 0.55, positions[-1] + 0.55)
+    ax.set_ylabel("Error")
+    ax.set_title("Inverse-only Hamiltonian error, EM validated")
+    ax.grid(axis="y", linestyle=":", color=GRID)
+    close_plot_box(ax)
+    fig.tight_layout()
+    for out_path in [
+        EXPORT_DIR / "inverse_only_hamiltonian_error_boxplot.pdf",
+        EXPORT_DIR / "inverse_only_hamiltonian_error_boxplot.png",
+    ]:
+        if out_path.suffix == ".png":
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
+        else:
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
+
+    # --- Capacitance-matrix element errors -------------------------------
+    # All capacitances are one homogeneous quantity, so they share the green
+    # capacitance accent. Compact subscripts: c=cross, l=claw, g=ground.
+    cap_elems = [
+        ("cross_to_cross", r"$C_{cc}$"),
+        ("claw_to_claw", r"$C_{ll}$"),
+        ("ground_to_ground", r"$C_{gg}$"),
+        ("cross_to_ground", r"$C_{cg}$"),
+        ("claw_to_ground", r"$C_{lg}$"),
+        ("cross_to_claw", r"$C_{cl}$"),
+    ]
+    cap_data, cap_labels = [], []
+    for key, label in cap_elems:
+        ref = np.array([r["ref_cap_matrix"][key] for r in records])
+        prd = np.array([r["pred_cap_matrix"][key] for r in records])
+        errs = frac_err(prd, ref)
+        cap_data.append(errs)
+        cap_labels.append(label)
+        print(f"  inverse-only {key}: median {100 * np.median(errs):.3f}%  mean {100 * np.mean(errs):.3f}%  n={len(errs)}")
+
+    cap_positions = [float(i + 1) for i in range(len(cap_data))]
+    cap_colors = [GREEN] * len(cap_data)
+    cap_fills = [GREEN_LIGHT] * len(cap_data)
+    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.6))
+    _draw_error_boxplot(ax, cap_data, cap_positions, cap_colors, cap_fills, width=0.5)
+    ax.set_xticks(cap_positions)
+    ax.set_xticklabels(cap_labels)
+    ax.set_xlim(cap_positions[0] - 0.6, cap_positions[-1] + 0.6)
+    ax.set_ylabel("Error")
+    ax.set_title("Inverse-only capacitance error, EM validated")
+    ax.grid(axis="y", linestyle=":", color=GRID)
+    close_plot_box(ax)
+    fig.tight_layout()
+    for out_path in [
+        EXPORT_DIR / "inverse_only_capacitance_error_boxplot.pdf",
+        EXPORT_DIR / "inverse_only_capacitance_error_boxplot.png",
+    ]:
+        if out_path.suffix == ".png":
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
+        else:
+            fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
+        print(f"wrote {out_path.relative_to(REPO_ROOT)}")
+    plt.close(fig)
+
+
+def plot_combined_capacitance_error_vs_ansys_boxplot() -> None:
+    """Capacitance-matrix error of the Ansys-simulated designs vs. SQuADDS.
+
+    Replaces the old predicted-vs-reference capacitance comparison figure with
+    a boxplot in the shared main-text style. The CSV stores one row per
+    (sample, capacitance element) with the SQuADDS target (ref_unscaled) and
+    the Ansys EM simulation of the predicted design (ansys_unscaled); we plot
+    the fractional error |ansys - ref| / ref for each element, i.e. how well
+    the realized (EM-simulated) capacitances match the SQuADDS targets, using
+    the same green capacitance accent and _draw_error_boxplot styling as the
+    inverse-only figure.
+    """
+    use_paper_style()
+
+    csv_path = (
+        TRANSMON_DIR / "results" / "validation" / "combined_models_ansys_capacitance_results.csv"
+    )
+    df = pd.read_csv(csv_path)
+    frac_err = lambda a, r: np.abs((a - r) / r)
+
+    # Same subscript convention as the inverse-only figure: c=cross, l=claw,
+    # g=ground. Ordered diagonal-first (self-capacitances) then off-diagonal.
+    cap_elems = [
+        ("cross_to_cross", r"$C_{cc}$"),
+        ("claw_to_claw", r"$C_{ll}$"),
+        ("ground_to_ground", r"$C_{gg}$"),
+        ("cross_to_ground", r"$C_{cg}$"),
+        ("claw_to_ground", r"$C_{lg}$"),
+        ("cross_to_claw", r"$C_{cl}$"),
+    ]
+    cap_data, cap_labels = [], []
+    for key, label in cap_elems:
+        rows = df[df["param"] == key]
+        errs = frac_err(rows["ansys_unscaled"].to_numpy(), rows["ref_unscaled"].to_numpy())
+        cap_data.append(errs)
+        cap_labels.append(label)
+        print(
+            f"  ansys vs squadds {key}: median {100 * np.median(errs):.3f}%  "
+            f"mean {100 * np.mean(errs):.3f}%  n={len(errs)}"
+        )
+
+    cap_positions = [float(i + 1) for i in range(len(cap_data))]
+    cap_colors = [GREEN] * len(cap_data)
+    cap_fills = [GREEN_LIGHT] * len(cap_data)
+    fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.6))
+    _draw_error_boxplot(ax, cap_data, cap_positions, cap_colors, cap_fills, width=0.5)
+    ax.set_xticks(cap_positions)
+    ax.set_xticklabels(cap_labels)
+    ax.set_xlim(cap_positions[0] - 0.6, cap_positions[-1] + 0.6)
+    ax.set_ylabel("Error")
+    ax.set_title("Inverse + surrogate capacitance error, EM validated")
+    ax.grid(axis="y", linestyle=":", color=GRID)
+    close_plot_box(ax)
+    fig.tight_layout()
+    for out_path in [
+        EXPORT_DIR / "combined_capacitance_error_vs_ansys_boxplot.pdf",
+        EXPORT_DIR / "combined_capacitance_error_vs_ansys_boxplot.png",
+    ]:
         if out_path.suffix == ".png":
             fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
         else:
@@ -1314,7 +1600,10 @@ def _plot_stress_pairs_panels(
     nn_distance = df["nn_distance_scaled"].to_numpy(dtype=float)
 
     n_panels = len(pair_indices)
-    paper_cmap = LinearSegmentedColormap.from_list("paper_GPO", [GREEN, PURPLE, ORANGE], N=256)
+    # NN distance is a continuous scale, so it gets a perceptually-uniform,
+    # colorblind-safe sequential colormap (distinct from the categorical
+    # orange/purple and split palettes used elsewhere).
+    paper_cmap = plt.get_cmap("cividis")
     fig = plt.figure(figsize=(COLUMN_WIDTH_IN, fig_height))
     # Keep the colorbar at roughly the same absolute height (~0.11 in)
     # regardless of how many scatter panels sit above it.
@@ -1760,9 +2049,12 @@ def main() -> None:
     plot_dataset_distributions()
     plot_sample_data_distribution()
     plot_data_amount_sweep()
+    plot_surrogate_data_amount_sweep()
     plot_architecture_sweep()
     plot_tuner_correlations()
     plot_inverse_surrogate_boxplot()
+    plot_inverse_only_ansys_boxplot()
+    plot_combined_capacitance_error_vs_ansys_boxplot()
     plot_inverse_surrogate_error_histograms()
     plot_ansys_validation_vs_nn_distance()
     plot_corner_sweep_distance_and_ansys_error()
