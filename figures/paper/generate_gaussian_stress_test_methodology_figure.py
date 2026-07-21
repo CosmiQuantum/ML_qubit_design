@@ -51,13 +51,22 @@ NEUTRAL_STROKE = "#999999"
 TEXT_MAIN     = "#222222"
 TEXT_DIM      = "#555555"
 
-ARROW         = "#555555"
+ARROW         = "#2C7A7B"   # teal, matching the step-card accent
 
-# Step cards rotate through physics > ml > validation accents, so each
-# step feels visually distinct but all three live in the same family.
+# These three cards are sequential process steps. They deliberately use a
+# single TEAL accent (NOT the flowchart blue shades) so the figure does not
+# read as if it were re-using the workflow slides' blue color code
+# (light blue = Hamiltonian params, dark blue = compute loss). Teal is
+# colorblind-safe and is not used anywhere else in the paper, whose accents
+# are reserved: blue (workflow), orange (physics / f_q, alpha), green
+# (ML / data), purple (validation). A uniform teal border + soft teal title
+# bar on a white body keeps the cards clean and avoids any shade-coding.
+STEP_FILL   = "#FFFFFF"
+STEP_STROKE = "#2C7A7B"   # teal border + title bar tint
+STEP_ACCENT = "#1D4E4F"   # dark teal title text
 STEP_STYLES = [
     dict(title="1. Sample uniformly",
-         fill=ORANGE_LIGHT, stroke=ORANGE, accent=ORANGE_DARK,
+         fill=STEP_FILL, stroke=STEP_STROKE, accent=STEP_ACCENT,
          body=[
              r"Generate 50,000 uniformly random",
              r"Quantum Metal parameter sets inside",
@@ -65,7 +74,7 @@ STEP_STYLES = [
              r"(pure interpolation, no extrapolation).",
          ]),
     dict(title="2. Measure NN distance",
-         fill=GREEN_LIGHT, stroke=GREEN, accent=GREEN_DARK,
+         fill=STEP_FILL, stroke=STEP_STROKE, accent=STEP_ACCENT,
          body=[
              r"For each random point, compute",
              r"$d_{\rm NN}$ = Euclidean distance to its",
@@ -73,12 +82,12 @@ STEP_STYLES = [
              r"scaled $[0,\,1]$ parameter space.",
          ]),
     dict(title="3. Bin and select",
-         fill=PURPLE_LIGHT, stroke=PURPLE, accent=PURPLE_DARK,
+         fill=STEP_FILL, stroke=STEP_STROKE, accent=STEP_ACCENT,
          body=[
              r"Split the $d_{\rm NN}$ range into",
              r"10 equal-width bins (close $\rightarrow$ far).",
-             r"Randomly draw 9 points per bin",
-             r"$\rightarrow$ 90 total for Ansys validation.",
+             r"Randomly draw 10 points per bin",
+             r"$\rightarrow$ 100 total for EM validation.",
          ]),
 ]
 
@@ -129,7 +138,7 @@ ax.add_patch(banner)
 # Bold "Goal" label + wrapped question + italic subtitle.
 ax.text(
     W / 2, BANNER_Y + BANNER_H * 0.78,
-    r"$\bf{Goal:}$  How well does the inverse + surrogate pipeline generalize to",
+    r"$\bf{Goal:}$  How well does the forward surrogate generalize to",
     ha="center", va="center",
     fontsize=16, color=TEXT_MAIN,
 )
@@ -232,7 +241,7 @@ ax.text(
 )
 ax.text(
     PUNCH_X + PUNCH_W / 2, PUNCH_Y + PUNCH_H * 0.30,
-    r"90 selected across distance bins sent to Ansys for validation.",
+    r"100 selected across distance bins sent to the EM solver for validation.",
     ha="center", va="center",
     fontsize=13, fontweight="bold", color=TEXT_MAIN,
 )

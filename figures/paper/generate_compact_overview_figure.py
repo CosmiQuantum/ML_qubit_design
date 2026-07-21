@@ -395,9 +395,9 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
         return fitz.get_text_length(text, fontname="helv", fontsize=fs) / 2 + 13
 
     inv_hw  = _hw("Inverse neural network", 8.5)
-    geo_hw  = _hw("Quantum Metal Parameter Prediction", 8.0)
-    sur_hw  = _hw("Ansys surrogate neural network", 8.0)
-    rec_hw  = _hw("Hamiltonian Reconstruction", 8.0)
+    geo_hw  = _hw("Quantum Metal parameter prediction", 8.0)
+    sur_hw  = _hw("Forward surrogate neural network", 8.0)
+    rec_hw  = _hw("Hamiltonian reconstruction", 8.0)
     loss_hw = max(_hw("Compute loss", 7.4),
                   _hw("Average absolute difference between", 5.6),
                   _hw("target and reconstructed Hamiltonian", 5.6))
@@ -456,17 +456,17 @@ def draw_panel_b(page: fitz.Page, rect: fitz.Rect, label: str | None = "b") -> N
     )
     rounded_box(
         geometry,
-        ("Quantum Metal Parameter Prediction",),
+        ("Quantum Metal parameter prediction",),
         fontsize=8.0,
     )
     rounded_box(
         surrogate,
-        ("Ansys surrogate neural network",),
+        ("Forward surrogate neural network",),
         fontsize=8.0,
     )
     rounded_box(
         reconstruction,
-        ("Hamiltonian Reconstruction",),
+        ("Hamiltonian reconstruction",),
         fontsize=8.0,
     )
 
@@ -594,7 +594,7 @@ def draw_workflow_acronym_overlays(
     )
     draw_replacement(
         fitz.Rect(248, 148.0, 351, 166.0),
-        "Surrogate or Ansys\ncapacitance solver",
+        "Surrogate or\nEM solver",
         fill=DARK_BLUE,
         color=WHITE,
         fontsize=7.4,
