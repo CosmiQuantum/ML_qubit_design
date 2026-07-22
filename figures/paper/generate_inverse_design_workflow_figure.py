@@ -107,7 +107,7 @@ STAGES = [
         "Forward check",
         [
             r"Quantum Metal layout",
-            r"Surrogate or Ansys Q3D",
+            r"Surrogate or the EM simulator",
         ],
         "valid",
     ),

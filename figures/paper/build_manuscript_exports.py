@@ -505,7 +505,7 @@ def plot_sample_data_distribution() -> None:
 def plot_data_amount_sweep() -> None:
     use_paper_style()
 
-    far_to_near_path = TRANSMON_DIR / "data_amount_sweep_far_to_near.csv"
+    far_to_near_path = TRANSMON_DIR / "results/data_amount_sweep_corner/data_amount_sweep_far_to_near.csv"
     if far_to_near_path.exists():
         df = pd.read_csv(far_to_near_path)
         summary = (
@@ -526,7 +526,7 @@ def plot_data_amount_sweep() -> None:
         y_label = "Mean Hamiltonian percent error [%]"
         title = "Training fraction sweep"
     else:
-        df = pd.read_csv(TRANSMON_DIR / "data_amount_sweep.csv")
+        df = pd.read_csv(TRANSMON_DIR / "results/data_amount_sweep_uniform/data_amount_sweep.csv")
         summary = (
             df.groupby(["fraction", "n_samples"], as_index=False)
             .agg(
@@ -899,10 +899,10 @@ def plot_tuner_correlations() -> None:
 def plot_inverse_surrogate_boxplot() -> None:
     use_paper_style()
 
-    # The 97 usable Ansys-validated designs quoted in the manuscript
+    # The 97 usable EM simulator-validated designs quoted in the manuscript
     # (median/mean f_q 0.532%/0.734%, alpha 1.138%/1.575%).
     records = json.loads(
-        (TRANSMON_DIR / "results" / "validation" / "final_inverse+surrogate_ansys_results.json").read_text()
+        (TRANSMON_DIR / "results" / "validation" / "final_inverse+surrogate_em_sim_results.json").read_text()
     )
     # Source JSON stores percent errors; the plot reports fractional error.
     inv_fq = np.array([row["percent_error_frequency"] for row in records]) / 100.0
@@ -1064,17 +1064,17 @@ def _draw_error_boxplot(
         )
 
 
-def plot_inverse_only_ansys_boxplot() -> None:
+def plot_inverse_only_em_sim_boxplot() -> None:
     use_paper_style()
 
     # EM-validated results for the 50 inverse-only designs (cap-matrix inverse
     # model trained with a geometry-matching loss, no surrogate in the loop).
-    # Each record pairs the SQuADDS reference (ref_*) with the Ansys Q3D
+    # Each record pairs the SQuADDS reference (ref_*) with the EM simulator
     # capacitance matrix and scqubits Hamiltonian of the predicted design
     # (pred_*). This replaces the legacy transmon2/transmon3 appendix panels
     # with figures in the main-text boxplot style.
     records = json.loads(
-        (TRANSMON_DIR / "results" / "validation" / "inverse_only_cap_matrix_ansys_results.json").read_text()
+        (TRANSMON_DIR / "results" / "validation" / "inverse_only_cap_matrix_em_sim_results.json").read_text()
     )
     frac_err = lambda a, r: np.abs((a - r) / r)
 
@@ -1160,14 +1160,14 @@ def plot_inverse_only_ansys_boxplot() -> None:
     plt.close(fig)
 
 
-def plot_combined_capacitance_error_vs_ansys_boxplot() -> None:
-    """Capacitance-matrix error of the Ansys-simulated designs vs. SQuADDS.
+def plot_combined_capacitance_error_vs_em_sim_boxplot() -> None:
+    """Capacitance-matrix error of the EM-simulated designs vs. SQuADDS.
 
     Replaces the old predicted-vs-reference capacitance comparison figure with
     a boxplot in the shared main-text style. The CSV stores one row per
     (sample, capacitance element) with the SQuADDS target (ref_unscaled) and
-    the Ansys EM simulation of the predicted design (ansys_unscaled); we plot
-    the fractional error |ansys - ref| / ref for each element, i.e. how well
+    the EM simulation of the predicted design (ansys_unscaled); we plot
+    the fractional error |simulated - ref| / ref for each element, i.e. how well
     the realized (EM-simulated) capacitances match the SQuADDS targets, using
     the same green capacitance accent and _draw_error_boxplot styling as the
     inverse-only figure.
@@ -1175,7 +1175,7 @@ def plot_combined_capacitance_error_vs_ansys_boxplot() -> None:
     use_paper_style()
 
     csv_path = (
-        TRANSMON_DIR / "results" / "validation" / "combined_models_ansys_capacitance_results.csv"
+        TRANSMON_DIR / "results" / "validation" / "combined_models_em_sim_capacitance_results.csv"
     )
     df = pd.read_csv(csv_path)
     frac_err = lambda a, r: np.abs((a - r) / r)
@@ -1197,7 +1197,7 @@ def plot_combined_capacitance_error_vs_ansys_boxplot() -> None:
         cap_data.append(errs)
         cap_labels.append(label)
         print(
-            f"  ansys vs squadds {key}: median {100 * np.median(errs):.3f}%  "
+            f"  EM simulator vs squadds {key}: median {100 * np.median(errs):.3f}%  "
             f"mean {100 * np.mean(errs):.3f}%  n={len(errs)}"
         )
 
@@ -1215,8 +1215,8 @@ def plot_combined_capacitance_error_vs_ansys_boxplot() -> None:
     close_plot_box(ax)
     fig.tight_layout()
     for out_path in [
-        EXPORT_DIR / "combined_capacitance_error_vs_ansys_boxplot.pdf",
-        EXPORT_DIR / "combined_capacitance_error_vs_ansys_boxplot.png",
+        EXPORT_DIR / "combined_capacitance_error_vs_em_sim_boxplot.pdf",
+        EXPORT_DIR / "combined_capacitance_error_vs_em_sim_boxplot.png",
     ]:
         if out_path.suffix == ".png":
             fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04, dpi=300)
@@ -1268,15 +1268,15 @@ def plot_inverse_surrogate_error_histograms() -> None:
     plt.close(fig)
 
 
-def plot_ansys_validation_vs_nn_distance() -> None:
+def plot_em_sim_validation_vs_nn_distance() -> None:
     use_paper_style()
 
     validation_dir = TRANSMON_DIR / "results" / "validation"
     data_path = validation_dir / "random_candidates_tested_with_ansys_nn_bins.json"
     if not data_path.exists():
-        data_path = validation_dir / "surrogate_stress_test_ansys_results.json"
+        data_path = validation_dir / "surrogate_stress_test_em_sim_results.json"
     data = json.loads(data_path.read_text())
-    candidate_path = validation_dir / "random_candidates_for_ansys_validation_nn_bins.csv"
+    candidate_path = validation_dir / "random_candidates_for_em_sim_validation_nn_bins.csv"
     candidate_df = pd.read_csv(candidate_path)
     param_cols = [
         "design_options.connection_pads.readout.claw_length",
@@ -1416,10 +1416,10 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     close_plot_box(ax)
     fig.subplots_adjust(left=0.16, right=0.98, top=0.91, bottom=0.15)
     out_paths = [
-        EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.pdf",
-        EXPORT_DIR / "ansys_validation_error_vs_nn_distance-v2.png",
-        TRANSMON_DIR / "plots" / "ansys_validation_error_vs_nn_distance-v2.pdf",
-        TRANSMON_DIR / "plots" / "ansys_validation_error_vs_nn_distance-v2.png",
+        EXPORT_DIR / "em_sim_validation_error_vs_nn_distance-v2.pdf",
+        EXPORT_DIR / "em_sim_validation_error_vs_nn_distance-v2.png",
+        TRANSMON_DIR / "plots" / "em_sim_validation_error_vs_nn_distance-v2.pdf",
+        TRANSMON_DIR / "plots" / "em_sim_validation_error_vs_nn_distance-v2.png",
     ]
     for out_path in out_paths:
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1431,9 +1431,9 @@ def plot_ansys_validation_vs_nn_distance() -> None:
     plt.close(fig)
 
 
-def plot_corner_sweep_distance_and_ansys_error() -> None:
+def plot_corner_sweep_distance_and_em_sim_error() -> None:
     """Combined far-corner sweep figure: training-to-corner distance (top) and
-    Ansys-validated fractional errors for f_q and alpha (middle/bottom), all
+    EM-simulator-validated fractional errors for f_q and alpha (middle/bottom), all
     sharing the training-pool-percent x axis."""
     use_paper_style()
 
@@ -1444,8 +1444,8 @@ def plot_corner_sweep_distance_and_ansys_error() -> None:
         TRANSMON_DIR
         / "results"
         / "validation"
-        / "data_amount_sweep_heldout_corner_ansys"
-        / "heldout_corner_test_ansys_error_summary_by_training_percent.csv"
+        / "data_amount_sweep_heldout_corner_em_sim"
+        / "heldout_corner_test_em_sim_error_summary_by_training_percent.csv"
     )
     dist = pd.read_csv(distance_path).sort_values("training_percent")
     errs = pd.read_csv(error_path).sort_values("training_percent")
@@ -1550,8 +1550,8 @@ def plot_corner_sweep_distance_and_ansys_error() -> None:
                 labelspacing=0.32,
             )
 
-    draw_error_axis(ax_fq, "frequency", r"$f_q$ error", r"Ansys validation, qubit frequency ($f_q$)", True)
-    draw_error_axis(ax_ah, "anharmonicity", r"$\alpha$ error", r"Ansys validation, anharmonicity ($\alpha$)", False)
+    draw_error_axis(ax_fq, "frequency", r"$f_q$ error", r"EM simulator validation, qubit frequency ($f_q$)", True)
+    draw_error_axis(ax_ah, "anharmonicity", r"$\alpha$ error", r"EM simulator validation, anharmonicity ($\alpha$)", False)
 
     x_ticks = errs["training_percent"].to_numpy(dtype=float)
     ax_ah.set_xticks(x_ticks)
@@ -1564,10 +1564,10 @@ def plot_corner_sweep_distance_and_ansys_error() -> None:
 
     fig.subplots_adjust(left=0.17, right=0.98, top=0.96, bottom=0.08)
     out_paths = [
-        EXPORT_DIR / "corner_sweep_distance_and_ansys_error.pdf",
-        EXPORT_DIR / "corner_sweep_distance_and_ansys_error.png",
-        TRANSMON_DIR / "plots" / "corner_far_to_near_sweep_retrained_surrogate" / "corner_sweep_distance_and_ansys_error.pdf",
-        TRANSMON_DIR / "plots" / "corner_far_to_near_sweep_retrained_surrogate" / "corner_sweep_distance_and_ansys_error.png",
+        EXPORT_DIR / "corner_sweep_distance_and_em_sim_error.pdf",
+        EXPORT_DIR / "corner_sweep_distance_and_em_sim_error.png",
+        TRANSMON_DIR / "plots" / "corner_far_to_near_sweep_retrained_surrogate" / "corner_sweep_distance_and_em_sim_error.pdf",
+        TRANSMON_DIR / "plots" / "corner_far_to_near_sweep_retrained_surrogate" / "corner_sweep_distance_and_em_sim_error.png",
     ]
     for out_path in out_paths:
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1587,7 +1587,7 @@ def _plot_stress_pairs_panels(
     use_paper_style()
 
     train_values_um = load_transmon_design_splits_um()["Train"]
-    candidate_path = TRANSMON_DIR / "results" / "validation" / "random_candidates_for_ansys_validation_nn_bins.csv"
+    candidate_path = TRANSMON_DIR / "results" / "validation" / "random_candidates_for_em_sim_validation_nn_bins.csv"
     df = pd.read_csv(candidate_path)
 
     param_cols = [
@@ -1819,7 +1819,7 @@ def plot_model_architecture_combined() -> None:
     block(*boxes["input"], "Targets", [r"$f_q,\ \alpha$", "Scaled inputs"], edge=physics_edge, face=physics_fill)
     block(*boxes["inverse"], "Inverse MLP", ["1 hidden layer", "64 neurons", "387 trainable"], edge=ml_edge, face=ml_fill)
     block(*boxes["geom"], "Design", ["3 Quantum Metal", "geometry params"], edge=ml_edge, face=ml_fill)
-    block(*boxes["surrogate"], "Ansys surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{f}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
+    block(*boxes["surrogate"], "EM simulator surrogate", ["736 hidden units", "4,418 non-trainable", r"$\hat{f}_q,\ \hat{\alpha}$ check"], edge=ml_edge, face=ml_fill)
     block(
         *boxes["output"],
         "Loss",
@@ -2053,11 +2053,11 @@ def main() -> None:
     plot_architecture_sweep()
     plot_tuner_correlations()
     plot_inverse_surrogate_boxplot()
-    plot_inverse_only_ansys_boxplot()
-    plot_combined_capacitance_error_vs_ansys_boxplot()
+    plot_inverse_only_em_sim_boxplot()
+    plot_combined_capacitance_error_vs_em_sim_boxplot()
     plot_inverse_surrogate_error_histograms()
-    plot_ansys_validation_vs_nn_distance()
-    plot_corner_sweep_distance_and_ansys_error()
+    plot_em_sim_validation_vs_nn_distance()
+    plot_corner_sweep_distance_and_em_sim_error()
     plot_surrogate_stress_random_points_pairs()
     plot_model_architecture_combined()
     plot_inverse_architecture_standalone()

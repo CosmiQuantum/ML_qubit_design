@@ -107,7 +107,7 @@ STAGES = [
     ("fwd",
      "Forward validation",
      ["Assemble design in Quantum Metal;",
-      "run Ansys Q3D (capacitance) and",
+      "run the EM simulator (capacitance) and",
       "HFSS to extract physical values."],
      "valid", 75),
 

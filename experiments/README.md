@@ -16,7 +16,7 @@ The notebook workflows live here. Each experiment folder keeps its plots, export
 3. `ml_02_*` contains result inspection and CSV export.
 4. `ml_03_*` contains hyperparameter analysis.
 5. `ml_10_*` and `ml_20_*` contain surrogate model or alternative loss variants.
-6. `validation_*` contains downstream simulation and Ansys validation notebooks.
+6. `validation_*` contains downstream simulation and EM simulator validation notebooks.
 7. `parameters*.py` contains notebook configuration for each training variant.
 
 Large local artifacts such as cached datasets, trained models, and scalers are ignored through the root `.gitignore`.
@@ -26,4 +26,4 @@ Each experiment root keeps notebooks at top level while ancillary files are grou
 1. `metadata` contains schema files, saved column lists, and design or config JSON.
 2. `results/training` contains loss histories and test summaries.
 3. `results/predictions` contains exported prediction and reconstruction CSV files.
-4. `results/validation` contains sweep summaries, candidate exports, and Ansys comparison tables.
+4. `results/validation` contains sweep summaries, candidate exports, and EM simulator comparison tables.
