@@ -3,7 +3,7 @@
 Generate the Testing Pipeline (Forward Pass) figure as a standalone PDF.
 
 This shows the forward-validation tool chain:
-    ML Model → SQuADDS → Quantum Metal → pyEPR ↔ PyAEDT ↔ Ansys HFSS & Q3D
+    ML Model → SQuADDS → Quantum Metal → pyEPR ↔ PyAEDT ↔ EM simulator
 
 with the validation-loss cross comparing Reference (SQuADDS dataset)
 vs Predicted (forward-pass simulation) results.

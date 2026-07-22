@@ -36,7 +36,7 @@ Contributors
 
 1. Firas Abouzahr from Northwestern as code contributor and EM validation lead
 2. Sara Sussman from Fermilab for ideas and project guidence
-3. Abhishek Chakraborty from Chapman University for enabling SQuADDS + Ansys simulations on Linux to validate results
+3. Abhishek Chakraborty from Chapman University for enabling SQuADDS + EM simulations on Linux to validate results
 
 ## Quick Start
 
@@ -126,7 +126,7 @@ Within each experiment folder, the common notebooks follow this pattern.
 3. `ml_03_hyperparameter_search_analysis` plots the hyperparameter search results.
 4. `ml_02_print_results` loads a model and makes predictions with it.
 5. `ml_10` through `ml_22` notebooks contain surrogate and defined loss variants.
-6. `validation` notebooks contain Ansys and downstream validation studies.
+6. `validation` notebooks contain EM simulation and downstream validation studies.
 
 Each experiment directory also contains local `parameters*.py` configuration files plus generated CSV and plot outputs that stay next to the notebooks that produced them.
 

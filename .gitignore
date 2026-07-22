@@ -5,17 +5,15 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# Large or regenerated experiment artifacts.
+## large or regenerated experiment artifacts
 experiments/*/data/*
 experiments/*/hyper_tuning*/
-experiments/*/hyper_tuning*/*
 experiments/*/keras/*
 experiments/*/kt_dir*/
-experiments/*/kt_dir*/*
 experiments/*/model/*
 experiments/*/scalers/*
 
-# ML model artifacts and tuner outputs
+## ML model artifacts and tuner outputs
 *.h5
 *.keras
 *.weights.h5
@@ -26,50 +24,12 @@ keras/hyper_tuning*/
 */kt_dir/
 */kt_dir2/
 */keras/hyper_tuning*/
-.ipynb_checkpoints/
-__pycache__/
 
-# ML model artifacts and tuner outputs
-*.h5
-*.keras
-*.weights.h5
-*.zip
-kt_dir/
-kt_dir2/
-keras/hyper_tuning*/
-*/kt_dir/
-*/kt_dir2/
-*/keras/hyper_tuning*/
-.ipynb_checkpoints/
-__pycache__/
-
-# ML model artifacts and tuner outputs
-*.h5
-*.keras
-*.weights.h5
-*.zip
-kt_dir/
-kt_dir2/
-keras/hyper_tuning*/
-*/kt_dir/
-*/kt_dir2/
-*/keras/hyper_tuning*/
-.ipynb_checkpoints/
-__pycache__/
-
-# Generated runtime comparison plots
+## generated runtime comparison plots
 experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/plots/runtime_comparison_*.pdf
 experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/plots/runtime_comparison_*.png
 
-# Generated/cache files
-experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/results/cache/
+## generated/cache files
 */results/cache/
 .cache/
 fontlist-v*.json
-
-# Local AI agent tooling
-dual_agent_edit.sh
-dual_agent_review.sh
-task.md
-agent_outputs/
-agent_worktrees/

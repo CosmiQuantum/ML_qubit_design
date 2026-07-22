@@ -4,7 +4,7 @@ Generate the Inverse Design Training Pipeline PDF figure.
 
 This produces an overall flowchart of the inverse-design training loop:
   Desired Hamiltonian -> Inverse MLP -> Quantum Metal params
-      -> Ansys Surrogate MLP -> Hamiltonian Reconstruction
+      -> EM Surrogate MLP -> Hamiltonian Reconstruction
       -> Loss (fed back to Inverse MLP)
   and finally: best Quantum Metal design output.
 
@@ -164,7 +164,7 @@ SVG = f"""<svg xmlns="http://www.w3.org/2000/svg"
 <rect x="172" y="244" width="216" height="58" rx="10" ry="10"
         fill="{SURR_FILL}" stroke="{SURR_STROKE}" stroke-width="2"/>
   <text x="280" y="267" text-anchor="middle"
-        font-size="16" font-weight="bold" fill="{SURR_TEXT}">Ansys Surrogate</text>
+        font-size="16" font-weight="bold" fill="{SURR_TEXT}">EM Surrogate</text>
   <text x="280" y="286" text-anchor="middle"
         font-size="16" font-weight="bold" fill="{SURR_TEXT}">NN</text>
 
