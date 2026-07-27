@@ -3,7 +3,7 @@
 Generate the Testing Pipeline (Forward Pass) figure as a standalone PDF.
 
 This shows the forward-validation tool chain:
-    ML Model → SQuADDS → Quantum Metal → pyEPR ↔ PyAEDT ↔ EM simulator
+    ML Model → SQuADDS → Quantum Metal → scQubits LOM ↔ PyAEDT ↔ EM simulator
 
 with the validation-loss cross comparing Reference (SQuADDS dataset)
 vs Predicted (forward-pass simulation) results.
@@ -42,7 +42,7 @@ OUT_PDF = MANUSCRIPT_EXPORTS_DIR / "testing_pipeline.pdf"
 # font size scales as font_svg * (\textwidth / PAGE_W), so a tight canvas keeps
 # the labels legible. Fonts are enlarged and box padding trimmed so the canvas
 # stays compact (bigger text at the same printed width).
-PAGE_W = 1030
+PAGE_W = 1078
 PAGE_H = 362
 
 SVG_TEMPLATE = """\
@@ -51,7 +51,7 @@ SVG_TEMPLATE = """\
      width="%(PAGE_W)s" height="%(PAGE_H)s"
      font-family="Arial, Helvetica, sans-serif">
   <rect width="%(PAGE_W)s" height="%(PAGE_H)s" fill="white"/>
-  <text x="515" y="36"
+  <text x="535" y="36"
         text-anchor="middle" font-size="22" font-weight="bold" fill="#222"
         >Testing Pipeline (Forward Pass)</text>
 
@@ -70,15 +70,15 @@ SVG_TEMPLATE = """\
         fill="%(VALID_STROKE)s">Reference</text>
   <text x="235" y="149"
         text-anchor="middle" font-size="17" fill="#555">SQuADDS dataset results</text>
-  <text x="690" y="132"
+  <text x="712" y="132"
         text-anchor="middle" font-size="17" font-weight="bold"
         fill="%(VALID_STROKE)s">Predicted</text>
-  <text x="690" y="149"
+  <text x="712" y="149"
         text-anchor="middle" font-size="17" fill="#555">forward pass results</text>
   <path d="M 98,178 L 98,112 L 414,112"
         fill="none" stroke="%(VALID_STROKE)s" stroke-width="2.5"/>
   <polygon points="414,112 405,107 405,117" fill="%(VALID_STROKE)s"/>
-  <path d="M 610,178 L 610,112 L 446,112"
+  <path d="M 634,178 L 634,112 L 446,112"
         fill="none" stroke="%(VALID_STROKE)s" stroke-width="2.5"/>
   <polygon points="446,112 455,107 455,117" fill="%(VALID_STROKE)s"/>
 
@@ -102,7 +102,7 @@ SVG_TEMPLATE = """\
         >&#x03B1;, f_qubit</text>
 
   <!-- Python tool chain -->
-  <rect x="192" y="153" width="816" height="112" rx="5" ry="5"
+  <rect x="192" y="153" width="864" height="112" rx="5" ry="5"
         fill="none" stroke="#888" stroke-width="2" stroke-dasharray="8,4"/>
   <text x="210" y="173"
         font-size="15" fill="#888" font-style="italic" font-weight="bold">Python</text>
@@ -124,33 +124,33 @@ SVG_TEMPLATE = """\
   <line x1="529" y1="206" x2="557" y2="206" stroke="#777" stroke-width="2"/>
   <polygon points="557,206 549,201 549,211" fill="#777"/>
 
-  <rect x="559" y="182" width="102" height="48" rx="4" ry="4"
+  <rect x="559" y="182" width="150" height="48" rx="4" ry="4"
         fill="%(DUSTY_BLUE)s" stroke="%(VALID_STROKE)s" stroke-width="2.5"/>
-  <text x="610" y="212" text-anchor="middle"
-        font-size="18" font-weight="bold" fill="#333">pyEPR</text>
-  <path d="M 269,182 C 269,156 610,156 610,182"
+  <text x="634" y="212" text-anchor="middle"
+        font-size="18" font-weight="bold" fill="#333">scQubits LOM</text>
+  <path d="M 269,182 C 269,156 634,156 634,182"
         fill="none" stroke="#777" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <polygon points="610,182 605,174 615,174" fill="#777"/>
+  <polygon points="634,182 629,174 639,174" fill="#777"/>
 
-  <line x1="661" y1="199" x2="711" y2="199" stroke="#777" stroke-width="1.5"/>
-  <polygon points="711,199 703,195 703,203" fill="#777"/>
-  <line x1="711" y1="213" x2="661" y2="213"
+  <line x1="709" y1="199" x2="759" y2="199" stroke="#777" stroke-width="1.5"/>
+  <polygon points="759,199 751,195 751,203" fill="#777"/>
+  <line x1="759" y1="213" x2="709" y2="213"
         stroke="%(VALID_STROKE)s" stroke-width="1.5"/>
-  <polygon points="661,213 669,209 669,217" fill="%(VALID_STROKE)s"/>
+  <polygon points="709,213 717,209 717,217" fill="%(VALID_STROKE)s"/>
 
-  <rect x="713" y="182" width="114" height="48" rx="4" ry="4"
+  <rect x="761" y="182" width="114" height="48" rx="4" ry="4"
         fill="%(DUSTY_BLUE)s" stroke="%(VALID_STROKE)s" stroke-width="1.5"/>
-  <text x="770" y="212" text-anchor="middle"
+  <text x="818" y="212" text-anchor="middle"
         font-size="18" font-weight="bold" fill="#333">PyAEDT</text>
 
-  <line x1="827" y1="199" x2="877" y2="199" stroke="#777" stroke-width="1.5"/>
-  <polygon points="877,199 869,195 869,203" fill="#777"/>
-  <line x1="877" y1="213" x2="827" y2="213" stroke="#777" stroke-width="1.5"/>
-  <polygon points="827,213 835,209 835,217" fill="%(VALID_STROKE)s"/>
+  <line x1="875" y1="199" x2="925" y2="199" stroke="#777" stroke-width="1.5"/>
+  <polygon points="925,199 917,195 917,203" fill="#777"/>
+  <line x1="925" y1="213" x2="875" y2="213" stroke="#777" stroke-width="1.5"/>
+  <polygon points="875,213 883,209 883,217" fill="%(VALID_STROKE)s"/>
 
-  <rect x="879" y="182" width="122" height="48" rx="4" ry="4"
+  <rect x="927" y="182" width="122" height="48" rx="4" ry="4"
         fill="%(DUSTY_BLUE)s" stroke="%(VALID_STROKE)s" stroke-width="1.5"/>
-  <text x="940" y="212" text-anchor="middle"
+  <text x="988" y="212" text-anchor="middle"
         font-size="18" font-weight="bold" fill="#333">EM solver</text>
 </svg>"""
 

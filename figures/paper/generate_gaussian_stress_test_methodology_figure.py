@@ -8,7 +8,7 @@ Same palette family and rendering approach as generate_workflow_mpl.py:
     purple = validation / stress-test accent
   - rounded FancyBboxPatch cards with a title bar + body text
   - horizontal three-step pipeline: Sample → Measure → Select
-  - headline banner at top and punchline strip at bottom
+  - bold goal-statement banner at top and punchline strip at bottom
 
 Outputs:
     manuscript_exports/stress_test_methodology.pdf
@@ -64,30 +64,33 @@ ARROW         = "#2C7A7B"   # teal, matching the step-card accent
 STEP_FILL   = "#FFFFFF"
 STEP_STROKE = "#2C7A7B"   # teal border + title bar tint
 STEP_ACCENT = "#1D4E4F"   # dark teal title text
+## card bodies read like little algorithms: a lead line at indent 0
+## and its sub-steps indented one level, per reviewer request
 STEP_STYLES = [
     dict(title="1. Sample uniformly",
          fill=STEP_FILL, stroke=STEP_STROKE, accent=STEP_ACCENT,
          body=[
-             r"Generate 50,000 uniformly random",
-             r"Quantum Metal parameter sets inside",
-             r"the convex hull of the training data",
-             r"(pure interpolation, no extrapolation).",
+             (0, r"Generate 50,000 random design"),
+             (0, r"parameter sets:"),
+             (1, r"uniform inside the convex hull"),
+             (1, r"of the training data"),
+             (1, r"(interpolation only)."),
          ]),
     dict(title="2. Measure NN distance",
          fill=STEP_FILL, stroke=STEP_STROKE, accent=STEP_ACCENT,
          body=[
-             r"For each random point, compute",
-             r"$d_{\rm NN}$ = Euclidean distance to its",
-             r"nearest training sample in the",
-             r"scaled $[0,\,1]$ parameter space.",
+             (0, r"For each random point:"),
+             (1, r"compute $d_{\rm NN}$ = Euclidean"),
+             (1, r"distance to its nearest training"),
+             (1, r"sample in scaled $[0,\,1]$ space."),
          ]),
     dict(title="3. Bin and select",
          fill=STEP_FILL, stroke=STEP_STROKE, accent=STEP_ACCENT,
          body=[
-             r"Split the $d_{\rm NN}$ range into",
-             r"10 equal-width bins (close $\rightarrow$ far).",
-             r"Randomly draw 10 points per bin",
-             r"$\rightarrow$ 100 total for EM validation.",
+             (0, r"Split the $d_{\rm NN}$ range into 10"),
+             (0, r"equal-width bins (close $\rightarrow$ far):"),
+             (1, r"draw 10 random points per bin"),
+             (1, r"$\rightarrow$ 100 total for EM validation."),
          ]),
 ]
 
@@ -99,7 +102,7 @@ FIG_H_IN = 7.1
 W = 100
 H = 60
 
-# Headline banner (top), "Goal" strip.
+# Headline banner (top), goal statement strip.
 # Widened near the full canvas width so the long italic subtitle fits.
 BANNER_X, BANNER_Y = 0.5, 43
 BANNER_W, BANNER_H = 99, 13
@@ -125,7 +128,7 @@ ax.set_ylim(0, H)
 ax.set_aspect("equal")
 ax.axis("off")
 
-# Goal banner (neutral card with green label)
+# Goal banner (neutral card)
 banner = FancyBboxPatch(
     (BANNER_X, BANNER_Y), BANNER_W, BANNER_H,
     boxstyle="round,pad=0,rounding_size=1.2",
@@ -135,18 +138,19 @@ banner = FancyBboxPatch(
 )
 ax.add_patch(banner)
 
-# Bold "Goal" label + wrapped question + italic subtitle.
+## goal stated as a bold sentence (same sans font as everything else),
+## not a question and no separate mathtext "Goal" label
 ax.text(
     W / 2, BANNER_Y + BANNER_H * 0.78,
-    r"$\bf{Goal:}$  How well does the forward surrogate generalize to",
+    "Quantify how well the forward surrogate generalizes to",
     ha="center", va="center",
-    fontsize=16, color=TEXT_MAIN,
+    fontsize=16, fontweight="bold", color=TEXT_MAIN,
 )
 ax.text(
     W / 2, BANNER_Y + BANNER_H * 0.52,
-    r"Quantum Metal parameters it has never seen before",
+    "design parameters it has never seen before",
     ha="center", va="center",
-    fontsize=16, color=TEXT_MAIN,
+    fontsize=16, fontweight="bold", color=TEXT_MAIN,
 )
 ax.text(
     W / 2, BANNER_Y + BANNER_H * 0.20,
@@ -193,13 +197,14 @@ for i, style in enumerate(STEP_STYLES):
         fontsize=15, fontweight="bold", color=style["accent"],
     )
 
-    # Body text leftaligned, one line per entry.
+    # Body text leftaligned, one line per entry, indented by level.
     # 11 pt keeps the math formula from overflowing card width.
     body_top = y + CARD_H - title_bar_h - 2.0
     line_dy = 2.5
-    for j, line in enumerate(style["body"]):
+    indent_dx = 2.2
+    for j, (indent, line) in enumerate(style["body"]):
         ax.text(
-            x + 1.6, body_top - j * line_dy,
+            x + 1.6 + indent * indent_dx, body_top - j * line_dy,
             line,
             ha="left", va="top",
             fontsize=11, color=TEXT_MAIN,

@@ -2032,7 +2032,10 @@ def export_pdf_fallbacks() -> None:
 
 
 def export_png_fallbacks() -> None:
-    crop_png_page(21, (120, 48, 510, 166), EXPORT_DIR / "testing_pipeline.png")
+    # testing_pipeline.png is deliberately absent: the figure is built from
+    # source by generate_forward_testing_pipeline_figure.py. Cropping it out of
+    # an older compiled PDF resurrected a stale panel (pyEPR instead of the
+    # scqubits LOM analysis, vendor-named solver, clipped caption).
     crop_png_page(21, (22, 232, 280, 350), SIM_RESULTS_DIR / "transmon2.png")
     crop_png_page(21, (18, 462, 280, 552), SIM_RESULTS_DIR / "transmon3.png")
     crop_png_page(21, (312, 236, 562, 390), SIM_RESULTS_DIR / "predicted_vs_ref_ccapacitance.png")
