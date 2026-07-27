@@ -900,7 +900,8 @@ def plot_inverse_surrogate_boxplot() -> None:
     use_paper_style()
 
     # The 97 usable EM simulator-validated designs quoted in the manuscript
-    # (median/mean f_q 0.532%/0.734%, alpha 1.138%/1.575%).
+    # (median/mean f_q 0.532%/0.734%, alpha 1.138%/1.575%). Both box groups in
+    # this figure cover these same 97 designs -- see the matching note below.
     records = json.loads(
         (TRANSMON_DIR / "results" / "validation" / "final_inverse+surrogate_em_sim_results.json").read_text()
     )
@@ -908,10 +909,18 @@ def plot_inverse_surrogate_boxplot() -> None:
     inv_fq = np.array([row["percent_error_frequency"] for row in records]) / 100.0
     inv_ah = np.array([row["percent_error_anharmonicity"] for row in records]) / 100.0
 
-    # Surrogate-only test-set errors for the same frozen forward surrogate used
-    # in the tandem (best_keras_model_model2_surrogate), exported by ml_15's
-    # E_C -> (f_q, alpha) conversion on the 291 held-out test samples.
+    # Surrogate-only errors for the same frozen forward surrogate used in the
+    # tandem (best_keras_model_model2_surrogate), exported by ml_15's
+    # E_C -> (f_q, alpha) conversion over the 291 held-out test samples.
+    #
+    # Restrict to the SAME designs as the inverse+surrogate boxes so the two
+    # groups are a matched comparison rather than different populations. The
+    # JSON "Sample" field is a direct row index into this CSV (verified: the
+    # stored ref Hamiltonians agree to <0.06%), and spans 0-99 with 97 unique
+    # values -- the first 100 test designs, 3 of which were not EM-usable.
     surr_df = pd.read_csv(TRANSMON_DIR / "results" / "predictions" / "model2_fq_alpha_from_EC.csv")
+    matched_idx = np.array([row["Sample"] for row in records], dtype=int)
+    surr_df = surr_df.iloc[matched_idx]
     surr_fq = np.abs((surr_df["fq_pred_GHz"] - surr_df["fq_ref_GHz"]) / surr_df["fq_ref_GHz"]).to_numpy()
     surr_ah = np.abs((surr_df["alpha_pred_MHz"] - surr_df["alpha_ref_MHz"]) / surr_df["alpha_ref_MHz"]).to_numpy()
 
