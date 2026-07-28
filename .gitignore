@@ -33,3 +33,5 @@ experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/plots/runtime_c
 */results/cache/
 .cache/
 fontlist-v*.json
+
+.DS_Store

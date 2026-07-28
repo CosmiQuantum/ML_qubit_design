@@ -6,16 +6,10 @@ These instructions assume you are working from the repository root.
 
 Install Conda or Miniconda first if it is not already available on your machine.
 
-Create the environment with either:
+Create the environment with:
 
 ```bash
 conda env create -f environment.yml
-```
-
-or:
-
-```bash
-./scripts/environment/create_conda_env.sh
 ```
 
 Activate it with:
@@ -30,16 +24,10 @@ This environment file now covers the core ML notebooks plus the checked-in paper
 - training/tuning: `tensorflow`, `tensorflow-datasets`, `keras-tuner`
 - figures: `matplotlib`, `seaborn`, `cairosvg`, `pymupdf`, `svglib`, `reportlab`
 
-Remove it with either:
+Remove it with:
 
 ```bash
 conda env remove --name cryo-modelling-env --all
-```
-
-or:
-
-```bash
-./scripts/environment/remove_conda_env.sh
 ```
 
 ## Fermilab EAF / Remote Jupyter
@@ -100,13 +88,10 @@ The older metadata did not record the standalone Keras package version. New benc
 python -c "import platform, tensorflow as tf, keras; print('python', platform.python_version()); print('tensorflow', tf.__version__); print('keras', keras.__version__); print('gpus', tf.config.list_physical_devices('GPU'))"
 ```
 
-## Validation Notebook Caveat
+## Validation Notebooks
 
-The validation notebooks are not fully covered by `environment.yml`. They also import the SQuADDS and EM simulator stack, including packages such as `squadds` and `qiskit_metal`, and some of those workflows depend on external EM simulator tooling as well.
+The validation notebooks are not covered by `environment.yml`. They import the SQuADDS and Quantum Metal stack, including `squadds` and `qiskit_metal`, and they drive a licensed EM solver, so rerunning them from scratch needs a machine already set up for that toolchain.
 
-That means:
+Supporting that setup is deliberately outside the scope of this repo. `environment.yml` covers the core training, evaluation, and plotting notebooks, which is what most people will want.
 
-- the updated environment file is enough to get started with the core training, evaluation, and plotting notebooks
-- it is not, by itself, enough to run every validation notebook end to end
-
-If you want the validation workflows to be reproducible from scratch, the repo still needs a dedicated, explicit install recipe for that external toolchain.
+You do not need the EM toolchain to reproduce our results. The simulator outputs are committed under each experiment's `results/validation` folder, so every figure and number in the paper can be regenerated from what is already here. If you do want to set up the full validation stack, please send a note to `olivias@fnal.gov`.
