@@ -18,7 +18,7 @@ Activate it with:
 conda activate cryo-modelling-env
 ```
 
-This environment file now covers the core ML notebooks plus the checked-in paper figure scripts. In particular, it explicitly includes the packages used throughout the repo for:
+This environment file now covers the core ML notebooks plus the checked-in figure generation scripts. In particular, it explicitly includes the packages used throughout the repo for:
 
 - numerical work: `numpy`, `scipy`, `pandas`, `scikit-learn`, `joblib`
 - training/tuning: `tensorflow`, `tensorflow-datasets`, `keras-tuner`
@@ -94,4 +94,4 @@ The validation notebooks are not covered by `environment.yml`. They import the S
 
 Supporting that setup is deliberately outside the scope of this repo. `environment.yml` covers the core training, evaluation, and plotting notebooks, which is what most people will want.
 
-You do not need the EM toolchain to reproduce our results. The simulator outputs are committed under each experiment's `results/validation` folder, so every figure and number in the paper can be regenerated from what is already here. If you do want to set up the full validation stack, please send a note to `olivias@fnal.gov`.
+You do not need the EM toolchain to reproduce our results. The simulator outputs are committed under each experiment's `results/validation` folder, so every figure and summary number can be regenerated from what is already here. If you do want to set up the full validation stack, please send a note to `olivias@fnal.gov`.

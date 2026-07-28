@@ -57,7 +57,7 @@ ARROW         = "#2C7A7B"   # teal, matching the step-card accent
 # single TEAL accent (NOT the flowchart blue shades) so the figure does not
 # read as if it were re-using the workflow slides' blue color code
 # (light blue = Hamiltonian params, dark blue = compute loss). Teal is
-# colorblind-safe and is not used anywhere else in the paper, whose accents
+# colorblind-safe and is not used anywhere else in the figure set, whose accents
 # are reserved: blue (workflow), orange (physics / f_q, alpha), green
 # (ML / data), purple (validation). A uniform teal border + soft teal title
 # bar on a white body keeps the cards clean and avoids any shade-coding.

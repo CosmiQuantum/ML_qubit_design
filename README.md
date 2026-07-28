@@ -109,7 +109,7 @@ The main folders contain scripts and notebooks that use machine learning to pred
 
 Supporting folders
 
-1. `figures` contains paper figure sources, generation scripts, and checked in outputs.
+1. `figures` contains figure sources, generation scripts, and checked in outputs.
 2. `docs` contains setup notes and reference material.
 3. `environment.yml` defines the conda environment. `environment-eaf-gpu.yml` defines the GPU variant used on the Fermilab EAF.
 
@@ -126,7 +126,7 @@ Within each experiment folder, the common notebooks follow this pattern.
 5. `ml_10` through `ml_22` contain surrogate and defined loss variants.
 6. `validation` notebooks contain EM simulation and downstream validation studies.
 
-The transmon cross Hamiltonian experiment is the furthest developed and does not follow this numbering exactly. It begins at `ml_10`, since data preparation is shared with the capacitance matrix experiment, and continues past `ml_22` with the studies reported in the paper.
+The transmon cross Hamiltonian experiment is the furthest developed and does not follow this numbering exactly. It begins at `ml_10`, since data preparation is shared with the capacitance matrix experiment, and continues past `ml_22` with the runtime, sweep, and stress test studies.
 
 1. `ml_14` runs the nearest neighbor surrogate stress test.
 2. `ml_22` prints results and writes the single call runtime benchmark.
@@ -147,7 +147,7 @@ Three component level MLPs predict simulated electromagnetic behavior from Quant
 
 ### Inverse plus surrogate flow
 
-The transmon cross Hamiltonian experiment adds the inverse direction, which is the workflow reported in the paper. An inverse MLP maps a requested `(f_q, alpha)` pair to the three cross claw geometry parameters, namely claw length, ground spacing, and cross length. It is trained in tandem with the forward surrogate held frozen, so the predicted geometry is pushed back through the surrogate and the loss is evaluated in Hamiltonian space rather than in geometry space. Only the inverse model weights are updated. This sidesteps the one to many nature of the inverse problem, where different geometries can realize nearly the same Hamiltonian. Predicted designs are then rendered and validated with a conventional EM solver in the loop.
+The transmon cross Hamiltonian experiment adds the inverse direction. An inverse MLP maps a requested `(f_q, alpha)` pair to the three cross claw geometry parameters, namely claw length, ground spacing, and cross length. It is trained in tandem with the forward surrogate held frozen, so the predicted geometry is pushed back through the surrogate and the loss is evaluated in Hamiltonian space rather than in geometry space. Only the inverse model weights are updated. This sidesteps the one to many nature of the inverse problem, where different geometries can realize nearly the same Hamiltonian. Predicted designs are then rendered and validated with a conventional EM solver in the loop.
 
 ### Supporting work
 

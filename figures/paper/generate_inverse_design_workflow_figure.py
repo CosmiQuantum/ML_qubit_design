@@ -58,7 +58,7 @@ ARROW         = "#555555"
 FEEDBACK      = DUSTY_BLUE_DARK
 
 # Stage content.
-# Keep the figure terse. The manuscript text explains the details.
+# Keep the figure terse. The surrounding text explains the details.
 STAGES = [
     (
         "inputs",

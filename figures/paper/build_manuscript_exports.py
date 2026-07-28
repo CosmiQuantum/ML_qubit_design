@@ -849,7 +849,7 @@ def plot_tuner_correlations() -> None:
 def plot_inverse_surrogate_boxplot() -> None:
     use_paper_style()
 
-    # The 97 usable EM simulator-validated designs quoted in the manuscript
+    # The 97 usable EM simulator-validated designs
     # (median/mean f_q 0.532%/0.734%, alpha 1.138%/1.575%). Both box groups in
     # this figure cover these same 97 designs -- see the matching note below.
     records = json.loads(
@@ -1642,8 +1642,8 @@ def _plot_stress_pairs_panels(
 
 
 def plot_surrogate_stress_random_points_pairs() -> None:
-    # Main-text panel: claw_length vs cross_length, combined in the manuscript
-    # with the error-vs-NN-distance plot as one two-panel figure.
+    # Main panel: claw_length vs cross_length, pairs with the
+    # error-vs-NN-distance plot to form one two-panel figure.
     _plot_stress_pairs_panels(
         [(0, 2)],
         ["surrogate_stress_random_points_middle.pdf"],
