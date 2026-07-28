@@ -25,15 +25,11 @@ from matplotlib.ticker import LogFormatterMathtext, LogLocator
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PAPER_DIR = REPO_ROOT / "figures" / "paper"
 EXPORT_DIR = PAPER_DIR / "manuscript_exports"
-HYPER_DIR = EXPORT_DIR / "hypertuner_search_metrics"
-SIM_RESULTS_DIR = EXPORT_DIR / "simulated_results"
 
 TRANSMON_DIR = REPO_ROOT / "experiments" / "model_predict_qubit_TransmonCross_Hamiltonian_params"
 TRANSMON_ARTIFACT_DIR = REPO_ROOT / "experiments" / "model_predict_qubit-TransmonCross-Hamiltonian_params"
 NCAP_DIR = REPO_ROOT / "experiments" / "model_predict_coupler_NCap_cap_matrix"
 RESONATOR_DIR = REPO_ROOT / "experiments" / "model_predict_cavity_claw_RouteMeander_eigenmode"
-
-COMPILED_PDF = REPO_ROOT / "Component_Level_Inverse_Design_of_Transmon_Qubits_Using_Neural_Networks.pdf"
 
 FULL_WIDTH_IN = 7.10
 COLUMN_WIDTH_IN = 3.35
@@ -98,8 +94,6 @@ def flowchart_palette() -> dict[str, str]:
 
 def ensure_dirs() -> None:
     EXPORT_DIR.mkdir(exist_ok=True)
-    HYPER_DIR.mkdir(exist_ok=True)
-    SIM_RESULTS_DIR.mkdir(exist_ok=True)
 
 
 def use_paper_style() -> None:
@@ -172,56 +166,6 @@ def save_figure(fig: plt.Figure, out_path: Path) -> None:
     fig.savefig(out_path, bbox_inches="tight", pad_inches=0.04)
     print(f"wrote {out_path.relative_to(REPO_ROOT)}")
     plt.close(fig)
-
-
-def get_pymupdf():
-    try:
-        import fitz  # type: ignore[import-not-found]
-    except Exception as exc:
-        raise RuntimeError(
-            "PDF cropping requires PyMuPDF, imported as 'fitz'. "
-            "Install it with `python -m pip install PyMuPDF`. "
-            "If you installed the unrelated package named `fitz`, remove it with "
-            "`python -m pip uninstall fitz`."
-        ) from exc
-
-    if not hasattr(fitz, "open") or not hasattr(fitz, "Rect"):
-        raise RuntimeError(
-            "The imported 'fitz' module is not PyMuPDF. "
-            "Run `python -m pip uninstall fitz` and then `python -m pip install PyMuPDF`."
-        )
-    return fitz
-
-
-def crop_pdf_page(page_number: int, clip_rect: tuple[float, float, float, float], out_path: Path) -> None:
-    if not COMPILED_PDF.exists() and out_path.exists():
-        print(f"reused existing {out_path.relative_to(REPO_ROOT)}")
-        return
-    fitz = get_pymupdf()
-    src_doc = fitz.open(COMPILED_PDF)
-    src_page = src_doc.load_page(page_number - 1)
-    clip = fitz.Rect(*clip_rect)
-    out_doc = fitz.open()
-    out_page = out_doc.new_page(width=clip.width, height=clip.height)
-    out_page.show_pdf_page(out_page.rect, src_doc, page_number - 1, clip=clip)
-    out_doc.save(out_path)
-    out_doc.close()
-    src_doc.close()
-    print(f"cropped pdf -> {out_path.relative_to(REPO_ROOT)}")
-
-
-def crop_png_page(page_number: int, clip_rect: tuple[float, float, float, float], out_path: Path, zoom: float = 2.5) -> None:
-    if not COMPILED_PDF.exists() and out_path.exists():
-        print(f"reused existing {out_path.relative_to(REPO_ROOT)}")
-        return
-    fitz = get_pymupdf()
-    src_doc = fitz.open(COMPILED_PDF)
-    src_page = src_doc.load_page(page_number - 1)
-    clip = fitz.Rect(*clip_rect)
-    pix = src_page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), clip=clip, alpha=False)
-    pix.save(out_path)
-    src_doc.close()
-    print(f"cropped png -> {out_path.relative_to(REPO_ROOT)}")
 
 
 def load_transmon_trials() -> pd.DataFrame:
@@ -604,6 +548,12 @@ def plot_surrogate_data_amount_sweep() -> None:
         (r"$\alpha$", "surrogate_test_alpha_mean_pct", PURPLE, PURPLE_LIGHT, "s"),
     ]
 
+    # The CSV stores percent errors; report fractional error so this panel uses
+    # the same "Error" convention as the Hamiltonian/capacitance boxplots.
+    tuned_df = tuned_df.copy()
+    for _, col, *_ in metrics:
+        tuned_df[col] = tuned_df[col] / 100.0
+
     fig, ax = plt.subplots(figsize=(COLUMN_WIDTH_IN, 2.45))
     for label, col, color, fill, marker in metrics:
         tuned = tuned_df.groupby("training_percent")[col].agg(["mean", "std"]).reset_index()
@@ -631,7 +581,7 @@ def plot_surrogate_data_amount_sweep() -> None:
     ax.set_xticks(x_ticks)
     ax.set_xticklabels([f"{v:.0f}" for v in x_ticks])
     ax.set_xlabel("Training set used [%]")
-    ax.set_ylabel("Mean test error [%]")
+    ax.set_ylabel("Mean test error")
     ax.set_title("Surrogate training fraction sweep")
     ax.grid(axis="y", linestyle=":", color=GRID)
     close_plot_box(ax)
@@ -2036,25 +1986,6 @@ def plot_inverse_architecture_standalone() -> None:
     plt.close(fig)
 
 
-def export_pdf_fallbacks() -> None:
-    crop_pdf_page(19, (98, 48, 502, 346), EXPORT_DIR / "predicted_vs_reference_design_comparsion.pdf")
-
-
-def export_png_fallbacks() -> None:
-    # testing_pipeline.png is deliberately absent: the figure is built from
-    # source by generate_forward_testing_pipeline_figure.py. Cropping it out of
-    # an older compiled PDF resurrected a stale panel (pyEPR instead of the
-    # scqubits LOM analysis, vendor-named solver, clipped caption).
-    crop_png_page(21, (22, 232, 280, 350), SIM_RESULTS_DIR / "transmon2.png")
-    crop_png_page(21, (18, 462, 280, 552), SIM_RESULTS_DIR / "transmon3.png")
-    crop_png_page(21, (312, 236, 562, 390), SIM_RESULTS_DIR / "predicted_vs_ref_ccapacitance.png")
-
-    crop_png_page(24, (86, 63, 248, 246), EXPORT_DIR / "param_sweep_ncap.png")
-    crop_png_page(24, (319, 62, 560, 247), HYPER_DIR / "coupling_cap.png")
-    crop_png_page(24, (88, 296, 250, 482), EXPORT_DIR / "param_sweep_res.png")
-    crop_png_page(24, (319, 294, 560, 484), HYPER_DIR / "3D_Val_Loss_vs_Learning_Rate_and_Total_Params_with_Lowest.png")
-
-
 def main() -> None:
     ensure_dirs()
     regenerate_generated_sources()
@@ -2073,8 +2004,6 @@ def main() -> None:
     plot_surrogate_stress_random_points_pairs()
     plot_model_architecture_combined()
     plot_inverse_architecture_standalone()
-    export_pdf_fallbacks()
-    export_png_fallbacks()
 
 
 if __name__ == "__main__":

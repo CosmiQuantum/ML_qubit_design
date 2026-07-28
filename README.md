@@ -10,7 +10,6 @@ This repository contains notebook driven machine learning experiments for predic
 4. Structure
 5. Experiment Scripts
 6. Completed Work
-7. Desired Flow
 
 ## Features
 
@@ -47,7 +46,7 @@ Do this first. See [docs/environment_setup.md](docs/environment_setup.md) for se
 Create the conda environment.
 
 ```bash
-./scripts/environment/create_conda_env.sh
+conda env create -f environment.yml
 conda activate cryo-modelling-env
 ```
 
@@ -97,7 +96,7 @@ jupyter-lab
 
 ### Potential Optimization Strategy
 
-In `parameters.py`, start with `KERAS_TUNER=True`. After the automated hyperparameter search finishes, copy the best values into `parameters.py`. Then rerun with `KERAS_TUNER=False` to inspect how the model learns over the epoch count. You can also increase the number of epochs and fine tune the selected hyperparameters.
+Each experiment folder has its own `parameters*.py` configuration file, one per training variant. Start with `KERAS_TUNER=True`. After the automated hyperparameter search finishes, copy the best values back into that same file. Then rerun with `KERAS_TUNER=False` to inspect how the model learns over the epoch count. You can also increase the number of epochs and fine tune the selected hyperparameters.
 
 ## Structure
 
@@ -111,11 +110,10 @@ The main folders contain scripts and notebooks that use machine learning to pred
 Supporting folders
 
 1. `figures` contains paper figure sources, generation scripts, and checked in outputs.
-2. `scripts` contains environment helpers and notebook maintenance utilities.
-3. `docs` contains setup notes and static reference images.
-4. `environment.yml` defines the conda environment used by the helper scripts.
+2. `docs` contains setup notes and reference material.
+3. `environment.yml` defines the conda environment. `environment-eaf-gpu.yml` defines the GPU variant used on the Fermilab EAF.
 
-More detailed folder guides live in [experiments/README.md](experiments/README.md), [figures/README.md](figures/README.md), [scripts/README.md](scripts/README.md), and [docs/README.md](docs/README.md).
+More detailed folder guides live in [experiments/README.md](experiments/README.md), [figures/README.md](figures/README.md), and [docs/README.md](docs/README.md).
 
 ## Experiment Scripts
 
@@ -123,23 +121,37 @@ Within each experiment folder, the common notebooks follow this pattern.
 
 1. `ml_00_data_analysis` loads the data and parses it into a model ready format.
 2. `ml_01_train_keras` trains the model using an MLP.
-3. `ml_03_hyperparameter_search_analysis` plots the hyperparameter search results.
-4. `ml_02_print_results` loads a model and makes predictions with it.
-5. `ml_10` through `ml_22` notebooks contain surrogate and defined loss variants.
+3. `ml_02_print_results` loads a model and makes predictions with it.
+4. `ml_03_hyperparameter_search_analysis` plots the hyperparameter search results.
+5. `ml_10` through `ml_22` contain surrogate and defined loss variants.
 6. `validation` notebooks contain EM simulation and downstream validation studies.
+
+The transmon cross Hamiltonian experiment is the furthest developed and does not follow this numbering exactly. It begins at `ml_10`, since data preparation is shared with the capacitance matrix experiment, and continues past `ml_22` with the studies reported in the paper.
+
+1. `ml_14` runs the nearest neighbor surrogate stress test.
+2. `ml_22` prints results and writes the single call runtime benchmark.
+3. `ml_30` and `ml_31` produce and plot the batch size runtime sweep.
+4. `ml_32` through `ml_40` cover training data amount sweeps, architecture sweeps, and multi seed diagnostics.
 
 Each experiment directory also contains local `parameters*.py` configuration files plus generated CSV and plot outputs that stay next to the notebooks that produced them.
 
 ## Completed Work
 
-1. Three main models have been trained with optimized hyperparameters from Keras Tuner.
-2. Each model predicts Quantum Metal parameters for parts of a transmon cross chip and resonator design.
-3. Encoding values were tested and optimized for categorical output parameters.
-4. Scaling techniques were implemented for both inputs and outputs.
-5. Training and validation sets were explicitly separated.
+### Forward models
 
-## Desired Flow
+Three component level MLPs predict simulated electromagnetic behavior from Quantum Metal geometry. Each was trained with hyperparameters selected by a Keras Tuner search.
 
-The desired flow is to stitch the three models together to predict a Quantum Metal design from a set of desired `Top_Level_X` Hamiltonian values. This uses the `X_2.0` values simulated from the `y` values predicted by each individual model.
+1. **Cavity claw resonator** (`model_predict_cavity_claw_RouteMeander_eigenmode`) predicts route meander eigenmode quantities for the readout resonator.
+2. **NCap coupler** (`model_predict_coupler_NCap_cap_matrix`) predicts the coupler capacitance matrix.
+3. **Transmon cross qubit** is modeled in two target spaces. `model_predict_qubit_TransmonCross_cap_matrix` predicts the raw capacitance matrix, and `model_predict_qubit_TransmonCross_Hamiltonian_params` predicts the derived Hamiltonian parameters, qubit frequency `f_q` and anharmonicity `alpha`.
 
-![Desired Flow](docs/images/desired_flow.png)
+### Inverse plus surrogate flow
+
+The transmon cross Hamiltonian experiment adds the inverse direction, which is the workflow reported in the paper. An inverse MLP maps a requested `(f_q, alpha)` pair to the three cross claw geometry parameters, namely claw length, ground spacing, and cross length. It is trained in tandem with the forward surrogate held frozen, so the predicted geometry is pushed back through the surrogate and the loss is evaluated in Hamiltonian space rather than in geometry space. Only the inverse model weights are updated. This sidesteps the one to many nature of the inverse problem, where different geometries can realize nearly the same Hamiltonian. Predicted designs are then rendered and validated with a conventional EM solver in the loop.
+
+### Supporting work
+
+1. Encoding values were tested and optimized for categorical output parameters.
+2. Scaling techniques were implemented for both inputs and outputs, with the scalers saved so predictions convert back to physical units.
+3. Training, validation, and test sets were explicitly separated.
+4. Training data amount sweeps, architecture sweeps, and a nearest neighbor stress test characterize where the surrogate stays reliable.
