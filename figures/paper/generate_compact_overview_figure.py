@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate a three-panel overview figure for the manuscript.
+Generate a three-panel overview figure.
 
 The figure is composed directly as vector PDF with PyMuPDF so the panel labels,
 wording, and font sizes stay under source control. The layout keeps panels
