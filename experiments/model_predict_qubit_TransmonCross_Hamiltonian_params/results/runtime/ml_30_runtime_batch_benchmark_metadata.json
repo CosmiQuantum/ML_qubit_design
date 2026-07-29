@@ -1,10 +1,11 @@
 {
-  "created_by": "ml_30_runtime_batch_benchmark.ipynb",
-  "system": "Linux 6.3.12-200.fc38.x86_64",
+  "created_by": "ml_30_runtime_batch_benchmark.py",
+  "system": "Linux 4.18.0-553.136.1.el8_10.x86_64",
   "machine": "x86_64",
   "processor": "x86_64",
-  "python": "3.10.13",
+  "python": "3.11.15",
   "tensorflow": "2.20.0",
+  "keras": "3.11.3",
   "gpu_available": true,
   "gpu_devices": [
     "PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')"
@@ -25,7 +26,9 @@
   ],
   "n_warmup": 20,
   "n_repeat": 50,
-  "combined_model_path": "/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_keras_model_surrogate_defined_loss.keras",
-  "surrogate_model_path": "/home/olivias/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_keras_model_model2_surrogate.keras",
+  "run_cpu": true,
+  "run_gpu": true,
+  "combined_model_path": "/gpfs/home/xqy7330/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/surrogate_loss_2in_3out_best_model.keras",
+  "surrogate_model_path": "/gpfs/home/xqy7330/ML_qubit_design/experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_keras_model_model2_surrogate.keras",
   "ansys_seconds_per_sample": 120.0
 }
