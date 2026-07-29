@@ -35,3 +35,8 @@ experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/plots/runtime_c
 fontlist-v*.json
 
 .DS_Store
+
+## Committed models for the transmon Hamiltonian experiment.
+## Small enough for git and keeps the notebooks runnable without the supplemental download.
+!experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/best_keras_model_model2_surrogate.keras
+!experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model/surrogate_loss_2in_3out_best_model.keras

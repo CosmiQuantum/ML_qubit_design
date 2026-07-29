@@ -75,9 +75,16 @@ conda activate cryo-modelling-env-gpu
 
 Please feel free to contribute instructions if you use a GPU somewhere else.
 
-### Large Files
+### Models and Large Files
 
-Some model checkpoints and intermediate datasets are too large for GitHub. If you are not planning to rerun all notebooks, parse all data, and retrain all models, download the supplemental files from the shared Google Drive folder.
+Two trained models for the transmon cross Hamiltonian experiment are committed here, since they are small and are the ones most people will want.
+
+1. `best_keras_model_model2_surrogate.keras` is the forward surrogate, mapping cross claw geometry to `(f_q, alpha)`.
+2. `surrogate_loss_2in_3out_best_model.keras` is the combined inverse plus surrogate pipeline.
+
+Both live in `experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model`.
+
+Every other model checkpoint, along with the intermediate datasets and scalers, is too large or too incidental to keep in git. Those live in the shared Google Drive folder instead. Download them if you plan to rerun all notebooks, parse all data, or retrain all models.
 
 [Google Drive supplemental files](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing)
 
