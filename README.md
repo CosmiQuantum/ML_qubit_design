@@ -77,18 +77,16 @@ Please feel free to contribute instructions if you use a GPU somewhere else.
 
 ### Models and Large Files
 
-Two trained models for the transmon cross Hamiltonian experiment are committed here, since they are small and are the ones most people will want.
+Two trained models for the transmon cross Hamiltonian experiment are committed here, since they are small.
 
 1. `best_keras_model_model2_surrogate.keras` is the forward surrogate, mapping cross claw geometry to `(f_q, alpha)`.
 2. `surrogate_loss_2in_3out_best_model.keras` is the combined inverse plus surrogate pipeline.
 
 Both live in `experiments/model_predict_qubit_TransmonCross_Hamiltonian_params/model`.
 
-Every other model checkpoint, along with the intermediate datasets and scalers, is too large or too incidental to keep in git. Those live in the shared Google Drive folder instead. Download them if you plan to rerun all notebooks, parse all data, or retrain all models.
+Other models are too large to keep in git. Those live in the shared Google Drive folder instead:
 
 [Google Drive supplemental files](https://drive.google.com/drive/folders/1WVHR4b4g1M4xdOUghbwNKrABafRz-YaQ?usp=sharing)
-
-The drive contains three directories. Each directory contains a zip file. Unzip each file into its matching folder in your cloned repo. These files are already in `.gitignore`, so you can use the notebooks without committing the large generated artifacts.
 
 If you have access issues, please send a note to `olivias@fnal.gov`.
 
