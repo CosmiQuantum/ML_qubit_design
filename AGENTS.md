@@ -11,13 +11,17 @@ Keep the science reproducible, preserve the existing repository shape, and make 
 Complete these steps before changing anything.
 
 1. Read this file completely.
-2. Read `README.md` for the project purpose and workflow.
-3. Run `bash init.sh` and stop if initialization fails.
-4. Inspect the current Git status and preserve all user changes.
-5. Identify the smallest task that produces the requested result.
-6. Read every topic document below that applies to the task.
-7. Read the nearest README for each area the task will change.
-8. Define observable completion criteria and relevant checks.
+2. Read `progress.md` for the latest verified state, blocker, and next action.
+3. Read `DECISIONS.md` for important decisions and their reasons.
+4. Read `feature_list.json` and select the unfinished feature with the lowest priority number. If the feature list is empty, add the first real requested feature before starting work.
+5. Keep no more than one feature marked `in_progress`.
+6. Read `README.md` for the project purpose and workflow.
+7. Run `bash init.sh` and stop if initialization fails.
+8. Inspect the current Git status and preserve all user changes.
+9. Identify the smallest task that produces the requested result.
+10. Read every topic document below that applies to the task.
+11. Read the nearest README for each area the task will change.
+12. Define observable completion criteria and relevant checks.
 
 ## Topic documents
 
@@ -75,3 +79,15 @@ Convert repeated failures into mechanical checks when practical instead of colle
 A task is complete only when the requested observable result is present, applicable checks pass, generated outputs are reviewed, documentation matches the work, and no unrelated files changed.
 
 The final report must list evidence, assumptions, and anything that could not be verified.
+
+## End each session
+
+Update `DECISIONS.md` only when the session made an important decision that future sessions need to preserve.
+
+Update `feature_list.json` with the true status and evidence for the selected feature.
+
+Update `progress.md` with completed work, verification, evidence, commits, files changed, risks, blockers, and the next best step.
+
+Keep unfinished or blocked work visible. Do not mark work passing without evidence.
+
+Commit a clean checkpoint when it is safe and authorized.

@@ -1,0 +1,29 @@
+{
+  "project": "ML qubit design",
+  "purpose": "Track real project features, their state, verification steps, and evidence",
+  "instructions": [
+    "Add one entry for each real feature before work begins",
+    "Give lower priority numbers to work that should happen first",
+    "Keep no more than one feature in progress",
+    "Mark a feature as passing only after its verification steps pass and evidence is recorded",
+    "Do not remove unfinished work to make the project look complete"
+  ],
+  "allowed_statuses": [
+    "not_started",
+    "in_progress",
+    "blocked",
+    "passing"
+  ],
+  "required_feature_fields": [
+    "id",
+    "priority",
+    "area",
+    "title",
+    "user_visible_behavior",
+    "status",
+    "verification",
+    "evidence",
+    "notes"
+  ],
+  "features": []
+}

@@ -106,15 +106,19 @@ Each experiment folder has its own `parameters*.py` configuration file, one per 
 
 ## Harness Engineering
 
+The root `DECISIONS.md` file records important choices, why they were made, and when they should be reviewed. It stays beside the other core session files so a new agent or human can find it before starting work.
+
 This repository includes a small harness that helps coding agents and new contributors understand the project before making changes.
 
 The root `AGENTS.md` is a short automatic entry point. It routes agents to focused task documents under `harness_engineering` so they only load rules that apply to the current work.
 
 The focused documents cover repository structure, environment versions, artifact locations, notebook safety, writing style, scientific workflows, verification expectations, and the definition of done. The root `init.sh` prepares the normal Conda environment and verifies the baseline dependencies.
 
+The root `progress.md` records the latest verified state, blockers, completed session work, and next best action. The root `feature_list.json` tracks one feature at a time with machine readable status, verification steps, and evidence.
+
 The tutorial style core files remain in the repository root so they are easy to discover. See [harness_engineering/README.md](harness_engineering/README.md) for the planned layout and guidance for supporting harness documentation.
 
-This first stage includes repository rules and a repeatable initialization path. Progress tracking and other tutorial files can be added as the harness grows.
+The four tutorial starter files now exist in the repository root. They provide agent instructions, initialization, session continuity, and feature tracking.
 
 ## Structure
 

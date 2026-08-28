@@ -10,10 +10,10 @@ The tutorial recommends beginning with four discoverable root files.
 
 * `AGENTS.md` provides the project overview, startup path, global constraints, and topic routes.
 * `init.sh` prepares and checks the working environment.
-* `claude-progress.md` preserves verified state between sessions.
+* `progress.md` preserves verified state between sessions without using a tool specific filename.
 * `feature_list.json` tracks work, verification steps, and evidence.
 
-`AGENTS.md` and `init.sh` exist today. Add the other root files as those tutorial stages are implemented.
+All four root files exist today. Read `progress.md` and `feature_list.json` before selecting work. Update both before ending a session.
 
 ## Focused instruction files
 
