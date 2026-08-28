@@ -7,9 +7,10 @@ This repository contains notebook driven machine learning experiments for predic
 1. Features
 2. Contributions
 3. Quick Start
-4. Structure
-5. Experiment Scripts
-6. Completed Work
+4. Harness Engineering
+5. Structure
+6. Experiment Scripts
+7. Completed Work
 
 ## Features
 
@@ -103,6 +104,18 @@ jupyter-lab
 
 Each experiment folder has its own `parameters*.py` configuration file, one per training variant. Start with `KERAS_TUNER=True`. After the automated hyperparameter search finishes, copy the best values back into that same file. Then rerun with `KERAS_TUNER=False` to inspect how the model learns over the epoch count. You can also increase the number of epochs and fine tune the selected hyperparameters.
 
+## Harness Engineering
+
+This repository includes a small harness that helps coding agents and new contributors understand the project before making changes.
+
+The root `AGENTS.md` is a short automatic entry point. It routes agents to focused task documents under `harness_engineering` so they only load rules that apply to the current work.
+
+The focused documents cover repository structure, environment versions, artifact locations, notebook safety, writing style, scientific workflows, verification expectations, and the definition of done. The root `init.sh` prepares the normal Conda environment and verifies the baseline dependencies.
+
+The tutorial style core files remain in the repository root so they are easy to discover. See [harness_engineering/README.md](harness_engineering/README.md) for the planned layout and guidance for supporting harness documentation.
+
+This first stage includes repository rules and a repeatable initialization path. Progress tracking and other tutorial files can be added as the harness grows.
+
 ## Structure
 
 The main folders contain scripts and notebooks that use machine learning to predict Quantum Metal design parameters from target Hamiltonian or electromagnetic values.
@@ -116,7 +129,8 @@ Supporting folders
 
 1. `figures` contains figure sources, generation scripts, and checked in outputs.
 2. `docs` contains setup notes and reference material.
-3. `environment.yml` defines the conda environment. `environment-eaf-gpu.yml` defines the GPU variant used on the Fermilab EAF.
+3. `harness_engineering` contains focused task instructions that the root `AGENTS.md` loads when they apply.
+4. `environment.yml` defines the conda environment. `environment-eaf-gpu.yml` defines the GPU variant used on the Fermilab EAF.
 
 More detailed folder guides live in [experiments/README.md](experiments/README.md), [figures/README.md](figures/README.md), and [docs/README.md](docs/README.md).
 
